@@ -243,7 +243,7 @@ p#top-quote {
        
 }
 
-img {
+#switch-button-img {
     width: 40px;
     height: 40px;
     position: relative;
@@ -263,8 +263,6 @@ img {
     position: fixed;
     right:10px;
     bottom:20px;
-
-    background: url(images/loop.png)
 
     z-index: 1000;
 }
