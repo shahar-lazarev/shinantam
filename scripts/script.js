@@ -58,7 +58,7 @@ function makeAcronym() {
   // })
 }
 
-let mishnaFontSize = 24;
+let mishnaFontSize = 26;
 let mishnaNumFontSize = 16;
 let mishnaNumRMargin = 5;
 

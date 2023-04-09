@@ -7,19 +7,20 @@
 
 body {
     background-color: rgb(255, 255, 255);
-    
-    /* padding: 5vw; */
-    /* padding-left: 3vw; */
-    /* width: 90vw; */
-    /* height: 200vh; */
-    /* justify-content: center; */
-    /* align-content: center; */
     /* -webkit-print-color-adjust:exact !important;
     print-color-adjust:exact !important; */
+}
 
-    /* border: 2px solid blue; */
-    
-    
+h1 {
+    font-weight: bold;
+    font: 40px 'Noto Rashi Hebrew';
+    font-weight: 100;
+    font-size: 40px;
+    margin: 0;
+}
+
+p {
+    font-family: Heebo;
 }
 
 #nav-bar {
@@ -37,7 +38,7 @@ body {
 }
 #nav-box {
     /* margin: auto; */
-    width: 40%;
+    width: 70%;
     max-width: 270px;
     min-width: 150px;
     height: 80%;
@@ -207,12 +208,19 @@ p#top-quote {
     padding: 15px;
     padding-left: 5px;
     line-height: 1.4em;
-    
     /* margin-right: 50px; */
     
-    font-size: 24px;
+    font-size: 26px;
     /* opacity: 50%; */
     position: relative;
+
+    font-family: "times";
+}
+
+.hid {
+    opacity: 100%;
+    /* display: inline; */
+    font-family: "times";
 }
 
 .mishna-num {
@@ -233,11 +241,6 @@ p#top-quote {
     top: 20px;
     right: 10px;
        
-}
-
-.hid {
-    opacity: 100%;
-    /* display: inline; */
 }
 
 #switch-button {
