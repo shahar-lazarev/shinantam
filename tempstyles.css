@@ -1,0 +1,78 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    direction: rtl;
+    
+}
+
+body {
+    background-color: rgb(255, 255, 255);
+    
+    padding: 5vw;
+    padding-left: 3vw;
+    width: 90vw;
+    /* height: 200vh; */
+    /* justify-content: center; */
+    /* align-content: center; */
+    /* -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important; */
+    
+    
+}
+
+.mishna-unit {
+    display: table-row;
+
+}
+
+.mishna-num {
+    
+    background-color: rgb(231, 231, 231); 
+    font-size: 1.4em;
+    
+    width: max-content;
+    height: max-content;
+    border: 2px solid black;
+    padding: 3px;
+    border-radius: 3px;
+
+    margin-left: 20px;
+    
+}
+
+.mishna {
+    background-color: rgb(231, 231, 231); 
+    border-radius: 10px;
+    padding: 20px;
+    padding-left: 15px;
+    font-size: 1.8em;
+    opacity: 100%;
+    display: table-cell;
+    
+}
+
+.hid {
+    opacity: 100%;
+    /* display: inline; */
+}
+
+#switch-button {
+    font-size: 30px;
+    font-weight: bold;
+    padding-top: 2px;
+    display: block;
+    background-color: #ffefd5;
+    border: 3px solid black;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    position:fixed;
+    right:10px;
+    bottom:20px;
+}
+
+#switch-button:active {
+    background-color: #ffdca4;
+    /* border-width: 3px; */
+    transform: translateY(0px);
+  }

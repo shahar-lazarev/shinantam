@@ -1,0 +1,14 @@
+https://medium.com/codingthesmartway-com-blog/pure-javascript-building-a-real-world-application-from-scratch-5213591cfcd6
+https://www.youtube.com/watch?v=riDzcEQbX6k
+
+http://www.knowthetorahbyheart.com/
+https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
+ 
+
+TODO: 
+- Scrolling drop down
+- Add json of mishnayot
+- put on github pages
+- print option
+- about page
+- learning suggestions page
