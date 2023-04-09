@@ -244,10 +244,11 @@ p#top-quote {
 }
 
 #switch-button-img {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     position: relative;
     top: 3px;
+    margin: auto;
 }
 
 #switch-button {
