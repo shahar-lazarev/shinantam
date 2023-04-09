@@ -110,20 +110,6 @@ function showOptions() {
   document.getElementById("minus-button").style.bottom = minus;
 }
 
-a = `הֵם אָמְרוּ שְׁלשָׁה שְׁלשָׁה דְּבָרִים.
-
-רַבִּי אֱלִיעֶזֶר אוֹמֵר:
-יְהִי כְּבוֹד חֲבֵרְךָ חָבִיב עָלֶיךָ כְּשֶׁלְּךָ,
-וְאַל תְּהִי נוֹחַ לִכְעֹס;
-וְשׁוּב יוֹם אֶחָד לִפְנֵי מִיתָתְךָ.
-וֶהֱוֵי מִתְחַמֵּם כְּנֶגֶד אוּרָן שֶׁל חֲכָמִים,
-וֶהֱוֵי זָהִיר בְּגַחַלְתָּן שֶׁלֹּא תִּכָּוֶה;
-שֶׁנְּשִׁיכָתָן נְשִׁיכַת שׁוּעָל,
-וַעֲקִיצָתָן עֲקִיצַת עַקְרָב,
-וּלְחִישָׁתָן לְחִישַׁת שָׂרָף,
-וְכָל דִּבְרֵיהֶם כְּגַחֲלֵי אֵשׁ:`
-
-
 
 const switchButton = document.getElementById("switch-button");
 switchButton.addEventListener("click", makeAcronym)
@@ -205,6 +191,15 @@ window.addEventListener("scroll", function(e) {
       showPerakim();
     }
   }
+});
+
+var doubleTouchStartTimestamp = 0;
+document.addEventListener("touchstart", function(event){
+    var now = +(new Date());
+    if (doubleTouchStartTimestamp + 500 > now){
+        event.preventDefault();
+    };
+    doubleTouchStartTimestamp = now;
 });
 
 let currentPerek = 'א';
