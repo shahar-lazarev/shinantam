@@ -10,7 +10,7 @@ function acronymizer(input) {
     if (/[\u0591-\u05C7]/.test(cur)) {
       output += cur;
     }
-    else if ([' ', ',', '.', ':', ';', '?', '!', '-', '–',')', '(', '\n'].indexOf(cur) >= 0) {
+    else if ([' ', ',', '.', ':', ';', '?', '!', '-', '–',')', '(', '\n', '"'].indexOf(cur) >= 0) {
       // currently not a letter
       if (prevWasLetter) {
         output += `</span>`
@@ -120,7 +120,25 @@ plusButton.addEventListener("click", () => {changeFontSize(2)})
 const minusButton = document.getElementById("minus-button");
 minusButton.addEventListener("click", () => {changeFontSize(-2)})
 
+function mouseOutside(mouse, left, right, top, bottom) {
+  return ( !(mouse.clientX > left & mouse.clientX < right & mouse.clientY > top & mouse.clientY < bottom) );
+}
+
+// hover to reveal and conceal options for text size.
 const optionsButton = document.getElementById("options-button");
+
+optionsButton.addEventListener("mouseover", () => {
+  // it'll be changed to true in showOptions() in next line.
+  showing = false; 
+  showOptions();
+});
+const optionsContainer = document.getElementById("option-container");
+document.getElementById("option-container").addEventListener("mouseleave", () => {
+  // it'll be changed to false in showOptions() in next line.
+  showing = true; 
+  showOptions();
+});
+
 optionsButton.addEventListener("click", showOptions);
 
 function displayEntirePerek(perek) {
@@ -159,15 +177,11 @@ function switchPerek(text) {
   document.getElementById("perek-nav").innerText = text;
 }
 
-function mouseOutside(mouse, left, right, top, bottom) {
-  return ( !(mouse.clientX > left & mouse.clientX < right & mouse.clientY > top & mouse.clientY < bottom) );
-}
-
 document.body.addEventListener("click", function(e) {
   if (mouseOutside(e, 0, 60, window.innerHeight-180, window.innerHeight)) {
     // console.log("OUTSIDE");
-    if (showing) {
-      showOptions();
+    if (showing) { // if currently showing, then it will unshow
+      // showOptions();
     }
   }
   if (showingPerakim) {
@@ -179,12 +193,6 @@ document.body.addEventListener("click", function(e) {
 });
 
 window.addEventListener("scroll", function(e) {
-  if (mouseOutside(e, 0, 60, window.innerHeight-180, window.innerHeight)) {
-    // console.log("OUTSIDE");
-    if (showing) {
-      showOptions();
-    }
-  }
   if (showingPerakim) {
     const rect = document.getElementById("all-perek").getBoundingClientRect();
     if (mouseOutside(e, rect.left, rect.right, 0, rect.bottom)) {

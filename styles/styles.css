@@ -16,11 +16,11 @@ h1 {
     font: 40px 'Noto Rashi Hebrew';
     font-weight: 100;
     font-size: 40px;
-    margin: 0;
+    margin: 0 20px;
     display: inline;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 550px) {
     h1 {
       display: none;
     }
@@ -282,6 +282,15 @@ p#top-quote {
     transform: translateY(0px);
 }
 
+#option-container {
+    height: 170px;
+    width: 60px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    /* background-color: aqua; */
+}
+
 #options-button {
     font-size: 15px;
     font-weight: bold;
@@ -302,8 +311,7 @@ p#top-quote {
 #options-button:active {
     background-color: #ffdca4;
     /* border-width: 3px; */
-    transform: translateY(0px);
-    
+    transform: translateY(0px);   
 }
 
 #plus-button {
@@ -317,7 +325,7 @@ p#top-quote {
     height: 40px;
     border-radius: 50%;
 
-    position: fixed;
+    position: absolute;
     left: 15px;
     bottom: 20px;
     z-index: 999;
