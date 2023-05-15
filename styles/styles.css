@@ -11,6 +11,9 @@ body {
     print-color-adjust:exact !important; */
 }
 
+#cover {position: fixed; height: 100%; width: 100%; top:55px; left: 0; background: #fff; z-index:9999;}
+
+
 h1 {
     font-weight: bold;
     font: 40px 'Noto Rashi Hebrew';
@@ -250,6 +253,10 @@ p#top-quote {
        
 }
 
+a.normal:visited {
+    color: blue;
+}
+
 #switch-button-img {
     width: 30px;
     height: 30px;
@@ -358,8 +365,6 @@ p#top-quote {
     transition: bottom 0.2s;
     
 }
-
-
 
 #minus-button:active {
     background-color: #aaa;

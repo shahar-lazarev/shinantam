@@ -163,6 +163,12 @@ function displayEntirePerek(perek) {
     if (mishna.num != '') mishnaUnitDiv.appendChild(mishnaNumDiv);
     mishnaUnitDiv.appendChild(mishnaTextDiv);
   });
+
+  // ADJUST new elements to current font size
+  let mishnas = document.querySelectorAll('.mishna-text');
+  for (let mishna of mishnas) {
+    mishna.style.fontSize = (mishnaFontSize) + 'px';
+  } // END ADJUST
 }
 
 function switchPerek(text) {
@@ -177,11 +183,12 @@ function switchPerek(text) {
   document.getElementById("perek-nav").innerText = text;
 }
 
+
 document.body.addEventListener("click", function(e) {
   if (mouseOutside(e, 0, 60, window.innerHeight-180, window.innerHeight)) {
     // console.log("OUTSIDE");
     if (showing) { // if currently showing, then it will unshow
-      // showOptions();
+      showOptions();
     }
   }
   if (showingPerakim) {
@@ -215,4 +222,9 @@ let currentMasechet = 'אבות';
 function currentPage() {return currentMasechet + ' ' + currentPerek}
 
 displayEntirePerek(mishnaData[currentPage()]);
+
+
+window.addEventListener("load", () => {
+  document.getElementById("cover").style.display = "none";
+});
 
