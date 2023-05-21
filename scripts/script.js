@@ -84,14 +84,7 @@ function changeFontSize(increment) {
     let mishnaNums = document.querySelectorAll('.mishna-num');
     for (let mn of mishnaNums) {
       mn.style.fontSize = (mishnaNumFontSize) + 'px';
-      mn.style.right = (26-mishnaNumFontSize) + 'px';
-
-      // if (mishnaFontSize <= 20) {
-      //   mn.style.top = '10px';
-      // }
-      // else {
-      //   mn.style.top = '20px';
-      // }
+      // mn.style.right = (26-mishnaNumFontSize) + 'px';
     }
   }
 
