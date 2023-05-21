@@ -10,7 +10,8 @@ function acronymizer(input) {
     if (/[\u0591-\u05C7]/.test(cur)) {
       output += cur;
     }
-    else if ([' ', ',', '.', ':', ';', '?', '!', '-', '–',')', '(', '\n', '"'].indexOf(cur) >= 0) {
+    else if ([' ', ',', '.', ':', ';', '?', '!', '-', '–', 
+    '(', ')', '[', ']', '\n', '"'].indexOf(cur) >= 0) {
       // currently not a letter
       if (prevWasLetter) {
         output += `</span>`
@@ -61,24 +62,47 @@ function makeAcronym() {
 let mishnaFontSize = 26;
 let mishnaNumFontSize = 16;
 let mishnaNumRMargin = 5;
+let minMishnaFontSize = 12;
+let maxMishnaFontSize = 40;
 
 function changeFontSize(increment) {
-  if (increment > 0 && mishnaFontSize >= 40) return;
-  if (increment < 0 && mishnaFontSize <= 20) return;
-  mishnaFontSize += increment;
-  let mishnas = document.querySelectorAll('.mishna-text');
-  for (let mishna of mishnas) {
-    mishna.style.fontSize = (mishnaFontSize) + 'px';
+  // MISHNA TEXT
+  if (!(increment > 0 && mishnaFontSize >= maxMishnaFontSize) &&
+  !(increment < 0 && mishnaFontSize <= minMishnaFontSize)) {
+    mishnaFontSize += increment;
+    let mishnas = document.querySelectorAll('.mishna-text');
+    for (let mishna of mishnas) {
+      mishna.style.fontSize = (mishnaFontSize) + 'px';
+    }
+    
   }
 
-  if (increment > 0 && mishnaNumFontSize >= 20) return;
-  if (increment < 0 && mishnaNumFontSize <= 14) return;
-  mishnaNumFontSize += increment/2
-  let mishnaNums = document.querySelectorAll('.mishna-num');
-  for (let mn of mishnaNums) {
-    mn.style.fontSize = (mishnaNumFontSize) + 'px';
-    mn.style.right = (26-mishnaNumFontSize) + 'px';
+  // MISHNA NUM
+  if (increment > 0 && mishnaNumFontSize <= 20 ||
+     increment < 0 && mishnaNumFontSize >= 14) {
+    mishnaNumFontSize += increment/2
+    let mishnaNums = document.querySelectorAll('.mishna-num');
+    for (let mn of mishnaNums) {
+      mn.style.fontSize = (mishnaNumFontSize) + 'px';
+      mn.style.right = (26-mishnaNumFontSize) + 'px';
+
+      // if (mishnaFontSize <= 20) {
+      //   mn.style.top = '10px';
+      // }
+      // else {
+      //   mn.style.top = '20px';
+      // }
+    }
   }
+
+  // MISHNA UNIT PADDING & MARGINS
+  // let padding = (12/26*mishnaFontSize) + 'px';
+  // let margin = (12/26*mishnaFontSize) + 'px';
+  // console.log(padding);
+  // for (let mishna of mishnas) {
+  //   mishna.style.padding = padding  + ' 15px ' + padding +  ' 5px';
+  //   mishna.style.marginBottom = margin;
+  // }
 }
 
 let showingPerakim = false;
@@ -146,22 +170,33 @@ function displayEntirePerek(perek) {
     // mishna unit
     // mishna num
     // mishna text
+
+    // MISHNA UNIT
     const mishnaUnitDiv = document.createElement('div');
     mishnaUnitDiv.classList.add("mishna-unit");
 
+    // MISHNA NUM
     const mishnaNumDiv = document.createElement('div');
     mishnaNumDiv.innerText = mishna.num;
     if (mishna.num != '') {
       mishnaNumDiv.classList.add("mishna-num");
     }
 
+    // MISHNA TEXT
     const mishnaTextDiv = document.createElement('div');
     mishnaTextDiv.innerHTML = acronymizer(mishna.text);
     mishnaTextDiv.classList.add("mishna-text");
 
+    // MISHNA TEXT
+    const mishnaPrintDiv = document.createElement('div');
+    mishnaPrintDiv.innerHTML = acronymizer(mishna.text);
+    mishnaPrintDiv.classList.add("mishna-text");
+    mishnaPrintDiv.classList.add("mishna-print");
+
     document.getElementById("mishna-content").appendChild(mishnaUnitDiv);
     if (mishna.num != '') mishnaUnitDiv.appendChild(mishnaNumDiv);
     mishnaUnitDiv.appendChild(mishnaTextDiv);
+    mishnaUnitDiv.appendChild(mishnaPrintDiv);
   });
 
   // ADJUST new elements to current font size

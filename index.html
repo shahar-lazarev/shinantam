@@ -9,6 +9,7 @@
     <title>Shinantam</title>
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <link type="text/css" href="styles/styles.css" media="all" rel="stylesheet">
+    <link type="text/css" href="styles/print.css" media="print" rel="stylesheet">
     <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
     <link href="//fonts.googleapis.com/css2?family=Noto+Rashi+Hebrew:wght@900&display=swap" rel="stylesheet">
     <link href="//fonts.googleapis.com/css2?family=Heebo&display=swap" rel="stylesheet">
@@ -27,17 +28,20 @@
     <br>(קידושין ל.)</p>
     <div id="mishna-content"></div>
 
-<button type="button" class="text-btn" id="switch-button"><img id="switch-button-img" src="images/loop.png" alt="↻"></button>
+<button type="button" class="text-btn" id="switch-button">
+  <img id="switch-button-img" src="images/favicon.png" alt="↻"></button>
+
 <div id="option-container">
   <button type="button" class="text-btn" id="plus-button">א+</button>
   <button type="button" class="text-btn" id="minus-button">א–</button>
   <button type="button" class="text-btn" id="options-button">•••</button>
 </div>
 
+<div id="BSD">בס"ד</div>
 
 <nav id="nav-bar">
   <h1 style="font-weight: bold;">וְשִׁנַּנְתָּם</h1>
-  <h1 style="font-weight: bold; direction: ltr; float: left;">beta</h1>
+  <h1 id="beta" style="font-weight: bold; direction: ltr; float: left;">beta</h1>
   <div id="nav-box">
     <div id="mishna-nav-container">
       <button id="mishna-nav">אבות</button>
@@ -59,11 +63,14 @@
   
 </nav>
 
-<div id="all-mishna"></div>
+<div id="all-mishna"></div> <!-- Javascript fills the content here -->
 
-<p style="direction: ltr;"">Please consider visiting <a class="normal" href="http://www.knowthetorahbyheart.com/">KnowTheTorahByHeart.com</a>. Unaffiliated. It is a great resource.</p>
-<p style="direction: ltr;"">Thank you to <a class="normal" href="https://tikkun.io/">https://tikkun.io/</a> for the inspiration for this project!</p>
-<div style="height: 100px;"></div>
+<div class="footnote">
+  <p style="direction: ltr;"">Please consider visiting <a class="normal" href="http://www.knowthetorahbyheart.com/">KnowTheTorahByHeart.com</a>. Unaffiliated. It is a great resource.</p>
+  <p style="direction: ltr;"">Thank you to <a class="normal" href="https://tikkun.io/">https://tikkun.io/</a> for the inspiration for this project!</p>
+</div>
+
+<div class="footnote" style="padding-bottom: 100px; width: 50px;"></div>
 
     <!-- <script src="main.js"></script> -->
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

@@ -2,7 +2,6 @@
     box-sizing: border-box;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     direction: rtl;
-    
 }
 
 body {
@@ -139,7 +138,7 @@ li > button:active {
     margin: 0px;
     padding: 0px;
 
-    overflow: hidden; 
+    overflow: clip; 
     border-radius: 50px;
 }
 
@@ -201,6 +200,10 @@ p#top-quote {
     font-style: italic;
 }
 
+#BSD {
+    display: none;
+}
+
 .mishna-unit {
     /* padding-left: 10px; */
     margin: auto;
@@ -208,6 +211,7 @@ p#top-quote {
     /* border: 2px solid black; */
     width: 80%;
     max-width: 700px;
+    position: relative;    
 }
 
 .mishna-text {
@@ -219,8 +223,9 @@ p#top-quote {
     padding-left: 5px;
     line-height: 1.4em;
     /* margin-right: 50px; */
-    
     font-size: 26px;
+    
+    
     /* opacity: 50%; */
     position: relative;
 
@@ -245,42 +250,49 @@ p#top-quote {
     border-radius: 3px;
     text-align: center; 
     
-    position: relative;
-    margin-right: -50px;
-    float: right;
+    position: absolute;
+    /* margin-right: -50px; */
+    /* float: right; */
     top: 20px;
-    right: 10px;
+    right: -40px;
        
+}
+
+.mishna-print {
+    display: none;
 }
 
 a.normal:visited {
     color: blue;
 }
 
-#switch-button-img {
-    width: 30px;
-    height: 30px;
-    position: relative;
-    top: 3px;
-    margin: auto;
-    -webkit-appearance: none;
-}
-
 #switch-button {
     font-size: 30px;
     font-weight: bold;
-    padding: auto;
+
     display: block;
     background-color: #ffefd5;
     border: 3px solid black;
+    border-radius: 50%;
+    
+    padding: 0;
     width: 70px;
     height: 70px;
-    border-radius: 50%;
+    
     position: fixed;
     right:10px;
     bottom:20px;
-
     z-index: 1000;
+
+}
+
+#switch-button-img {
+    width: 40px;
+    position: relative;
+    top: 3px;
+    left: 0px;
+    
+    -webkit-appearance: none;
 }
 
 #switch-button:active {
