@@ -11,7 +11,7 @@ function acronymizer(input) {
       output += cur;
     }
     else if ([' ', ',', '.', ':', ';', '?', '!', '-', '–', 
-    '(', ')', '[', ']', '\n', '"'].indexOf(cur) >= 0) {
+    '(', ')', '[', ']', '\n', '"', "'", '“', '”', "‘", "’"].indexOf(cur) >= 0) {
       // currently not a letter
       if (prevWasLetter) {
         output += `</span>`
