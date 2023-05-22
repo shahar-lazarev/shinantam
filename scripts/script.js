@@ -127,6 +127,26 @@ function showOptions() {
   document.getElementById("minus-button").style.bottom = minus;
 }
 
+var coll = document.getElementsByClassName("expand");
+var i;
+console.log(coll.length);
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    console.log(content.scrollHeight)
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+      // content.style.display = "none";
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+      // content.style.display = "block";
+    } 
+  });
+}
+
 
 const switchButton = document.getElementById("switch-button");
 switchButton.addEventListener("click", makeAcronym)

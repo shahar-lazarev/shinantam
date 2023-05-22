@@ -53,6 +53,25 @@ h1 {
     display: none;
 }
 
+.expand {
+    display: none;
+}
+
+.active {
+    font-size: 20px;
+    margin: 0px;
+    color: black;
+    display: block;
+}
+
+.active::after {
+    display: none;
+}
+
+/* .expand-content p {
+    display: none;
+} */
+
 .mishna-unit {
     /* border: 0.1px solid white; */
     width: 90%;
