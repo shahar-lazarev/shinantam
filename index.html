@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Shinantam</title>
-    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
-    <link type="text/css" href="styles/styles.css" media="all" rel="stylesheet">
-    <link type="text/css" href="styles/print.css" media="print" rel="stylesheet">
-    <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
-    <link href="//fonts.googleapis.com/css2?family=Noto+Rashi+Hebrew:wght@900&display=swap" rel="stylesheet">
-    <link href="//fonts.googleapis.com/css2?family=Heebo&display=swap" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script defer src="scripts/data.js" "></script>
-    <script defer src="scripts/getData.js" "></script>
-    <script defer src="scripts/script.js" "></script>
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+<head>
+  <meta charset="utf-8">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Shinantam</title>
+  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+  <link type="text/css" href="styles/styles.css" media="all" rel="stylesheet">
+  <link type="text/css" href="styles/print.css" media="print" rel="stylesheet">
+  <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
+  <link href="//fonts.googleapis.com/css2?family=Noto+Rashi+Hebrew:wght@900&display=swap" rel="stylesheet">
+  <link href="//fonts.googleapis.com/css2?family=Heebo&display=swap" rel="stylesheet">
+  <script defer src="mishnas.js" "></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script defer src=" scripts/getData.js" "></script>
+  <script defer src=" scripts/script.js" "></script>
+  <!-- <link rel=" stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
   </head>
   <body>    
     <div id="cover"></div>
@@ -36,7 +38,7 @@
       </p>
       <ol>
         <li>
-          Study the original text a few times to get used to the text.
+          Read the original text a few times to get used to the text.
           If the mishna is too long, then break it up into smaller parts and 
           complete them one part at a time.</li>
         <li>
@@ -49,52 +51,157 @@
 
     <div id="mishna-content"></div>
 
-<button type="button" class="text-btn" id="switch-button">
-  <img id="switch-button-img" src="images/favicon.png" alt="↻"></button>
+  <button type="button" class="text-btn" id="switch-button">
+    <img id="switch-button-img" src="images/favicon.png" alt="↻"></button>
 
-<div id="option-container">
-  <button type="button" class="text-btn" id="plus-button">א+</button>
-  <button type="button" class="text-btn" id="minus-button">א–</button>
-  <button type="button" class="text-btn" id="options-button">•••</button>
-</div>
+  <div id="option-container">
+    <button type="button" class="text-btn" id="plus-button">א+</button>
+    <button type="button" class="text-btn" id="minus-button">א–</button>
+    <button type="button" class="text-btn" id="options-button">•••</button>
+  </div>
 
-<div id="BSD">בס"ד</div>
+  <div id="BSD">בס"ד</div>
 
 <nav id="nav-bar">
   <h1 style="font-weight: bold;">וְשִׁנַּנְתָּם</h1>
   <h1 id="beta" style="font-weight: bold; direction: ltr; float: left;">beta</h1>
-  <div id="nav-box">
+  <div id="nav-box" onclick="togglePane()">
     <div id="mishna-nav-container">
       <button id="mishna-nav">אבות</button>
     </div>
     <div id="perek-nav-container">
-      <div id="all-perek">
-        <ul>
-          <li><button onclick="switchPerek(this.innerText)">א</button></li>
-          <li><button onclick="switchPerek(this.innerText)">ב</button></li>
-          <li><button onclick="switchPerek(this.innerText)">ג</button></li>
-          <li><button onclick="switchPerek(this.innerText)">ד</button></li>
-          <li><button onclick="switchPerek(this.innerText)">ה</button></li>
-          <li><button onclick="switchPerek(this.innerText)">ו</button></li>
-        </ul>
-      </div> <!-- all-perek -->
-      <button id="perek-nav" onclick="showPerakim()">א</button>
-    </div>    
-  </div>
+      <button id="perek-nav">א</button>
+    </div>    <!-- perek-nav-container -->
+  </div> <!-- nav box-->
   
 </nav>
+
+<div class="nav-pane nav-pane--hide">
+  <button class="exit-btn" onclick="togglePane()">&times;</button>
+  <div class="nav-pane__section nav-pane__t-section nav-pane__r-section"><div class="nav-pane__title">מסכת</div></div>
+  <div class="nav-pane__section nav-pane__t-section nav-pane__l-section"><div class="nav-pane__title">פרק</div></div>
+  <div class="nav-pane__section nav-pane__b-section nav-pane__r-section">
+    <div class="nav-pane__seder">
+      <div class="nav-pane__seder__title">זרעים</div>
+
+      <button class="nav-pane__item">ברכות</button>
+      <button class="nav-pane__item">פאה</button>
+      <button class="nav-pane__item">דמאי</button>
+      <button class="nav-pane__item">כלאים</button>
+      <button class="nav-pane__item">שביעית</button>
+      <button class="nav-pane__item">תרומות</button>
+      <button class="nav-pane__item">מעשרות</button>
+      <button class="nav-pane__item">מעשר שני</button>
+      <button class="nav-pane__item">חלה</button>
+      <button class="nav-pane__item">ערלה</button>
+      <button class="nav-pane__item">בכורים</button>
+      
+
+    </div> <!-- nav-pane__seder -->
+    <div class="nav-pane__seder">
+      <div class="nav-pane__seder__title">מועד</div>
+
+      <div class="nav-pane__item">שבת</div>
+      <div class="nav-pane__item">עירובין</div>
+      <div class="nav-pane__item">פסחים</div>
+      <div class="nav-pane__item">שקלים</div>
+      <div class="nav-pane__item">יומא</div>
+      <div class="nav-pane__item">סוכה</div>
+      <div class="nav-pane__item">ביצה</div>
+      <div class="nav-pane__item">ראש השנה</div>
+      <div class="nav-pane__item">תענית</div>
+      <div class="nav-pane__item">מגילה</div>
+      <div class="nav-pane__item">מועד קטן</div>
+      <div class="nav-pane__item">חגיגה</div>
+    </div> <!-- nav-pane__seder -->
+    <div class="nav-pane__seder">
+      <div class="nav-pane__seder__title">נשים</div>
+
+      <div class="nav-pane__item">יבמות</div>
+      <div class="nav-pane__item">כתובות</div>
+      <div class="nav-pane__item">נדרים</div>
+      <div class="nav-pane__item">נזיר</div>
+      <div class="nav-pane__item">סוטה</div>
+      <div class="nav-pane__item">גיטין</div>
+      <div class="nav-pane__item">קידושין</div>
+    </div> <!-- nav-pane__seder -->
+    <div class="nav-pane__seder">
+      <div class="nav-pane__seder__title">נזיקין</div>
+      <div class="nav-pane__item">בבא קמא</div>
+      <div class="nav-pane__item">בבא מציעא</div>
+      <div class="nav-pane__item">בבא בתרא</div>
+      <div class="nav-pane__item">סנהדרין</div>
+      <div class="nav-pane__item">מכות</div>
+      <div class="nav-pane__item">שבועות</div>
+      <div class="nav-pane__item">עדייות</div>
+      <div class="nav-pane__item">עבודה זרה</div>
+      <div class="nav-pane__item nav-pane__item--select">אבות</div>
+      <div class="nav-pane__item">הוריות</div>
+    </div> <!-- nav-pane__seder -->
+    <div class="nav-pane__seder">
+      <div class="nav-pane__seder__title">קדשים</div>
+      
+      <div class="nav-pane__item">זבחים</div>
+      <div class="nav-pane__item">מנחות</div>
+      <div class="nav-pane__item">חולין</div>
+      <div class="nav-pane__item">בכורות</div>
+      <div class="nav-pane__item">ערכין</div>
+      <div class="nav-pane__item">תמורה</div>
+      <div class="nav-pane__item">כרתות</div>
+      <div class="nav-pane__item">מעילה</div>
+      <div class="nav-pane__item">תמיד</div>
+      <div class="nav-pane__item">מידות</div>
+      <div class="nav-pane__item">קינים</div>
+    </div> <!-- nav-pane__seder -->
+    <div class="nav-pane__seder">
+      <div class="nav-pane__seder__title">טהרות</div>
+
+      <div class="nav-pane__item">כלים</div>
+      <div class="nav-pane__item">אוהלות</div>
+      <div class="nav-pane__item">נגעים</div>
+      <div class="nav-pane__item">פרה</div>
+      <div class="nav-pane__item">טהרות</div>
+      <div class="nav-pane__item">מקוות</div>
+      <div class="nav-pane__item">נידה</div>
+      <div class="nav-pane__item">מכשירין</div>
+      <div class="nav-pane__item">זבים</div>
+      <div class="nav-pane__item">טבול יום</div>
+      <div class="nav-pane__item">ידיים</div>
+      <div class="nav-pane__item">עוקצים</div>
+    </div> <!-- nav-pane__seder --> 
+
+    <div style="float: right;width: 80%; height: 40px;"></div>
+
+  </div> <!-- nav-pane__section -->
+  <div class="nav-pane__section nav-pane__b-section nav-pane__l-section">
+    <div class="nav-pane__item">א</div>
+    <div class="nav-pane__item">ב</div>
+    <div class="nav-pane__item">ג</div>
+    <div class="nav-pane__item">ד</div>
+    <div class="nav-pane__item">ה</div>
+    <div class="nav-pane__item">ו</div>
+    <div style="float: right;width: 80%; height: 40px;"></div>
+  </div>
+  </div>
+  
+  
+  
+
+
+</div> <!-- nav-pane -->
 
 <div id="all-mishna"></div> <!-- Javascript fills the content here -->
 
 <div class="footnote">
-  <p style="direction: ltr;"">Please consider visiting <a class="normal" href="http://www.knowthetorahbyheart.com/">KnowTheTorahByHeart.com</a>. Unaffiliated. It is a great resource.</p>
-  <p style="direction: ltr;"">Thank you to <a class="normal" href="https://tikkun.io/">https://tikkun.io/</a> for the inspiration for this project!</p>
+  <p style="direction: ltr; text-align: center;"">Please consider visiting <a class="normal" href="http://www.knowthetorahbyheart.com/">KnowTheTorahByHeart.com</a>. Unaffiliated. It is a great resource.</p>
+  <p style="direction: ltr; text-align: center;"">Thank you to <a class="normal" href="https://tikkun.io/">https://tikkun.io/</a> for the inspiration for this project!</p>
 </div>
 
 <div class="footnote" style="padding-bottom: 100px; width: 50px;"></div>
 
     <!-- <script src="main.js"></script> -->
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
   </body>
+
 </html>

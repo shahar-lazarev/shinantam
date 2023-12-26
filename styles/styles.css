@@ -56,7 +56,6 @@ p {
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    /* border: 2px solid blue; */
 }
 
 #all-perek {
@@ -110,6 +109,180 @@ p {
     width: 100%;
 }
 
+.disable-scroll{
+    overflow-y: hidden;
+}
+
+.nav-pane {
+    display: block;
+
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    height: 90%;
+    max-width: 800px;
+    /* left: 50%; */
+    z-index: 1000;
+
+    background-color: white;
+    /* border: solid 1px black; */
+    box-shadow: 0px 0px 5px 2px #555;
+    opacity: 95%;
+
+    direction: ltr;
+    overflow-y: hidden;
+
+    user-select: none;
+}
+
+.nav-pane--hide { display: none; }
+
+.nav-pane__section {
+    /* border-b: solid black 1px; */
+    padding: 2px;
+    width: 50px;
+    height:  50px;
+    float: right;
+}
+
+.nav-pane__section--active {
+    background-color: #eee;
+}
+
+.nav-pane__t-section {
+    height: 40px;
+    border-bottom: solid black 1px;;
+}
+
+.nav-pane__b-section {
+    height: 100%;   
+}
+
+.nav-pane__r-section {
+    width: 80%;
+}
+
+.nav-pane__l-section {
+    width: 20%;
+}
+
+/* bottom right */
+.nav-pane__r-section.nav-pane__b-section {
+    direction: ltr;
+    overflow-y: auto;
+}
+
+/* bottom left */
+.nav-pane__l-section.nav-pane__b-section {
+    padding: 8px;
+    overflow-y: auto;
+}
+
+.nav-pane__title {
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 30px;
+    font-weight: 900;
+}
+
+.nav-pane__seder {
+    min-height: content;
+    /* height: 46%; */
+    /* max-height: 280px; */
+    width: 45%;
+    min-width: 49px;
+    /* max-width: 300px; */
+
+    float: right;
+    /* display: inline-block; */
+    margin: 10px;
+    /* margin-left: 1.66%;
+    margin-right: 1.66%; */
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    border-radius: 8px;
+    /* box-shadow: ; */
+    background-color: #ddd;
+    padding: 0 7px;
+    
+    text-align: center;
+    /* overflow-y: scroll; */
+}
+
+/* @media screen and (max-width: 880px) {
+    .nav-pane__seder {
+        background-color: #eee;
+        width: 45%;
+        /* margin-left: 2.5%;
+        margin-right: 2.5%; 
+    } 
+} */
+
+@media screen and (max-width: 520px) {
+    .nav-pane__seder {
+        background-color: lightgreen;
+        width: 94%;
+        /* margin-left: 3%;
+        margin-right: 3%; */
+    } 
+}
+
+.nav-pane__seder__title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 5px 30px;
+    padding-bottom: 4px;
+    border-bottom: solid #555;
+}
+
+
+.nav-pane__item {
+    display: block;
+    margin: 7px 0;
+    padding: 2px;
+    border-radius: 5px;
+    border: black solid 2px;
+    text-align: center;
+    min-width: 26px;
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 16px;
+    background-color: lightblue;
+}
+
+.nav-pane__item:hover {
+    background-color: deepskyblue;
+    cursor: pointer;
+}
+
+.nav-pane__item--select, .nav-pane__item--select:hover {
+    background-color: aqua;
+}
+
+
+.exit-btn {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    padding: 0px;
+    
+
+    background-color: transparent;
+    border: none;
+    width: 20px;
+    height: 25px;
+    font-size: 30px;
+    color: #999;
+}
+
+.exit-btn:hover {
+    color: #333;
+    cursor: pointer;
+}
+
 li > button {
     width: 100%;
     height: 30px;
@@ -128,6 +301,7 @@ li > button:active {
 }
 
 #mishna-nav {
+    /* border: 2px solid yellow; */
     /* display: inline-block;
     border-radius: 50px;
     /* border: none; */
@@ -235,12 +409,13 @@ p#top-quote {
     float: right;
     margin-top: 5px;
     margin-left: 5px;
-    margin-right: 10px;
+    margin-right: 12px;
     font-family: Arial, Helvetica, sans-serif;
 }
 
 .active:after {
     content: "▼"; /* Unicode character for "minus" sign (-) */
+    margin-right: 10px;
 }
 .expand-content {
     padding-left: 24px;
@@ -302,6 +477,7 @@ p#top-quote {
     padding-left: 5px;
     line-height: 1.4em;
     /* margin-right: 50px; */
+
     font-size: 26px;
     
     /* opacity: 50%; */
@@ -313,7 +489,11 @@ p#top-quote {
 .hid {
     opacity: 100%;
     /* display: inline; */
-    font-family: "times";
+    font-family: inherit;
+}
+
+.break-up {
+    /* display: none; */
 }
 
 .mishna-num {
@@ -468,3 +648,9 @@ a.normal:visited {
         visibility: hidden;
     }
 }
+
+/* 
+
+
+
+*/
