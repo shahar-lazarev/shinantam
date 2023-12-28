@@ -14,9 +14,11 @@
   <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
   <link href="//fonts.googleapis.com/css2?family=Noto+Rashi+Hebrew:wght@900&display=swap" rel="stylesheet">
   <link href="//fonts.googleapis.com/css2?family=Heebo&display=swap" rel="stylesheet">
-  <script defer src="mishnas.js" "></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script defer src=" scripts/getData.js" "></script>
+  <script defer src=" scripts/utils.js" "></script>
+  <script defer src=" scripts/ui-functions.js" "></script>
+  <script defer src=" scripts/pane.js" "></script>
+  <script defer src=" scripts/main-ui.js" "></script>
   <script defer src=" scripts/script.js" "></script>
   <!-- <link rel=" stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
   integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
@@ -51,13 +53,14 @@
 
     <div id="mishna-content"></div>
 
-  <button type="button" class="text-btn" id="switch-button">
-    <img id="switch-button-img" src="images/favicon.png" alt="↻"></button>
+  <button type="button" class="text-btn" id="shinantam-button" onclick="makeAcronym()">
+    <img id="shinantam-button-img" src="images/favicon.png" alt="↻"></button>
 
-  <div id="option-container">
-    <button type="button" class="text-btn" id="plus-button">א+</button>
-    <button type="button" class="text-btn" id="minus-button">א–</button>
-    <button type="button" class="text-btn" id="options-button">•••</button>
+  <div id="option-container" onmouseleave="hideOptions()">
+    <button type="button" class="text-btn" id="print-button" onclick="window.print()">🖶</button>
+    <button type="button" class="text-btn" id="plus-button" onclick="changeFontSize(2)">א+</button>
+    <button type="button" class="text-btn" id="minus-button" onclick="changeFontSize(-2)">א–</button>
+    <button type="button" class="text-btn" id="options-button" onclick="toggleOptions()" onmouseover="showOptions()">•••</button>
   </div>
 
   <div id="BSD">בס"ד</div>
@@ -174,7 +177,7 @@
 
   </div> <!-- nav-pane__section -->
   <div class="nav-pane__section nav-pane__b-section nav-pane__l-section">
-    <div class="nav-pane__item">א</div>
+    <div class="nav-pane__item nav-pane__item--select">א</div>
     <div class="nav-pane__item">ב</div>
     <div class="nav-pane__item">ג</div>
     <div class="nav-pane__item">ד</div>
@@ -184,10 +187,6 @@
   </div>
   </div>
   
-  
-  
-
-
 </div> <!-- nav-pane -->
 
 <div id="all-mishna"></div> <!-- Javascript fills the content here -->

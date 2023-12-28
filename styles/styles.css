@@ -26,7 +26,7 @@ h1 {
     h1 {
       display: none;
     }
-  }
+}
 
 p {
     font-family: Heebo;
@@ -148,7 +148,7 @@ p {
 }
 
 .nav-pane__section--active {
-    background-color: #eee;
+    /* background-color: #eee; */
 }
 
 .nav-pane__t-section {
@@ -260,6 +260,10 @@ p {
 
 .nav-pane__item--select, .nav-pane__item--select:hover {
     background-color: aqua;
+}
+
+.nav-pane__item--glow {
+    outline: #ffdca4 3px solid;
 }
 
 
@@ -455,7 +459,7 @@ p#top-quote {
     width: 18px;
     position: relative;
     top: 3px;
-    alt: "\switch"\""
+    alt: "Shinanatam Switch"
 }
 
 .mishna-unit {
@@ -524,7 +528,7 @@ a.normal:visited {
     color: blue;
 }
 
-#switch-button {
+#shinantam-button {
     font-size: 30px;
     font-weight: bold;
 
@@ -544,7 +548,7 @@ a.normal:visited {
 
 }
 
-#switch-button-img {
+#shinantam-button-img {
     width: 40px;
     position: relative;
     top: 3px;
@@ -553,14 +557,14 @@ a.normal:visited {
     -webkit-appearance: none;
 }
 
-#switch-button:active {
+#shinantam-button:active {
     background-color: #ffdca4;
     /* border-width: 3px; */
     transform: translateY(0px);
 }
 
 #option-container {
-    height: 170px;
+    height: 225px;
     width: 60px;
     position: fixed;
     left: 0;
@@ -602,9 +606,9 @@ a.normal:visited {
     height: 40px;
     border-radius: 50%;
 
-    position: absolute;
+    position: fixed;
     left: 15px;
-    bottom: 20px;
+    bottom: 20px; /* Location!!! */
     z-index: 999;
 
     transition: bottom 0.2s;
@@ -629,7 +633,7 @@ a.normal:visited {
 
     position: fixed;
     left: 15px;
-    bottom: 20px;
+    bottom: 20px; /* Location!!! */
     z-index: 999;
 
     transition: bottom 0.2s;
@@ -640,6 +644,55 @@ a.normal:visited {
     background-color: #aaa;
     /* border-width: 3px; */
     transform: translateY(0px);
+}
+
+#print-button {
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 0px;
+    display: block;
+    background-color: #eee;
+    border: 2px solid black;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+
+    position: fixed;
+    left: 15px;
+    bottom: 20px; /* Location!!! */
+    z-index: 999;
+
+    transition: bottom 0.2s;
+}
+
+#print-button:active {
+    background-color: #aaa;
+    /* border-width: 3px; */
+    transform: translateY(0px);
+}
+
+#plus-button:active {
+    background-color: #aaa;
+    /* border-width: 3px; */
+    transform: translateY(0px);
+}
+
+@media screen and (min-width: 550px) {
+    #options-button {
+      display: none;
+    }
+
+    html, body {
+        position: relative;
+    }
+
+    /* #print-button { top: 60px; }
+    #plus-button { top: 110px; }
+    #minus-button { top: 160px; } */
+
+    #print-button { bottom: 120px; }
+    #plus-button { bottom: 70px; }
+    #minus-button { bottom: 20px; }
 }
 
 
