@@ -57,9 +57,13 @@
     <img id="shinantam-button-img" src="images/favicon.png" alt="↻"></button>
 
   <div id="option-container" onmouseleave="hideOptions()">
-    <button type="button" class="text-btn" id="print-button" onclick="window.print()">🖶</button>
-    <button type="button" class="text-btn" id="plus-button" onclick="changeFontSize(2)">א+</button>
-    <button type="button" class="text-btn" id="minus-button" onclick="changeFontSize(-2)">א–</button>
+
+    <button type="button" class="text-btn" id="print-button" onclick="window.print()">
+      <img id="print-button-img" src="images/print.svg" alt="🖶"></button>
+    <button type="button" class="text-btn" id="plus-button" onclick="changeFontSize(2)">
+      <img id="plus-button-img" src="images/increase.svg" alt="א+"></button>
+    <button type="button" class="text-btn" id="minus-button" onclick="changeFontSize(-2)">
+      <img id="minus-button-img" src="images/decrease.svg" alt="א–"></button>
     <button type="button" class="text-btn" id="options-button" onclick="toggleOptions()" onmouseover="showOptions()">•••</button>
   </div>
 
