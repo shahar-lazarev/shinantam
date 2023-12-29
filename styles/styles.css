@@ -585,6 +585,7 @@ a.normal:visited {
     transform: translateY(0px);
 }
 
+
 #option-container {
     height: 225px;
     width: 60px;
@@ -592,6 +593,10 @@ a.normal:visited {
     left: 0;
     bottom: 0;
     /* background-color: aqua; */
+}
+
+button.text-btn {
+    position: relative;
 }
 
 #options-button {
@@ -615,6 +620,18 @@ a.normal:visited {
     background-color: #ffdca4;
     /* border-width: 3px; */
     transform: translateY(0px);
+}
+
+#options-button-img {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    /* position: relative;
+    top: 2px;
+    left: 0px; */
+    -webkit-appearance: none;
 }
 
 #plus-button {
@@ -644,10 +661,15 @@ a.normal:visited {
 }
 
 #plus-button-img {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    
     width: 22px;
-    position: relative;
-    top: 2px;
-    left: -1px;
+    /* position: relative; */
+    /* top: 2px;
+    left: -1px; */
     -webkit-appearance: none;
 }
 
@@ -679,10 +701,15 @@ a.normal:visited {
 }
 
 #minus-button-img {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+
     width: 22px;
-    position: relative;
+    /* position: relative;
     top: 2px;
-    left: -1px;
+    left: -1px; */
     -webkit-appearance: none;
 }
 
@@ -713,10 +740,14 @@ a.normal:visited {
 }
 
 #print-button-img {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
     width: 20px;
-    position: relative;
+    /* position: relative;
     top: 2px;
-    left: 0px;
+    left: 0px; */
     -webkit-appearance: none;
 }
 

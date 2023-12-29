@@ -130,7 +130,7 @@ function displayEntirePerek(perek) {
 var doubleTouchStartTimestamp = 0;
 document.addEventListener("touchstart", function (event) {
 	var now = +(new Date());
-	if (doubleTouchStartTimestamp + 500 > now) {
+	if (doubleTouchStartTimestamp + 1000 > now) {
 		event.preventDefault();
 	};
 	doubleTouchStartTimestamp = now;
