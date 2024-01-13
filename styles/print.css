@@ -1,4 +1,3 @@
-/* * {border: 1px solid green;} */
 
 body {
     position: relative;
@@ -111,7 +110,10 @@ h1 {
     color: transparent;
 }
 
-.footnote {
+.mishna-site {
     display: none;
 }
 
+.footnote {
+    display: none;
+}

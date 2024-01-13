@@ -11,7 +11,6 @@ function makeAcronym() {
 	let newOpacity;
 	document.querySelector(".hid").style.opacity == "0" ? newOpacity = "100" : newOpacity = "0";
 	invLetters.forEach(letter => {
-		console.log("-" + letter.style.opacity + "-")
 		letter.style.opacity = newOpacity;
 	})
 }
