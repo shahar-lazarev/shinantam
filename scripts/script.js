@@ -26,7 +26,7 @@ function acronymizer(input) {
 			}
 			else { // it's not a first letter
 				if (prevFirstLetter) {
-					output += `<span class="hid">`;
+					output += `<span class="nonFirst">`;
 					prevFirstLetter = false;
 				}
 				output += cur;
@@ -107,17 +107,25 @@ function displayEntirePerek(perek) {
 		const mishnaTextDiv = document.createElement('div');
 		mishnaTextDiv.innerHTML = addBreaks(acronymizer(mishna));
 		mishnaTextDiv.classList.add("mishna-text");
+		// mishnaTextDiv.classList.add("mishna-site");
 
 		// MISHNA TEXT PRINT
 		const mishnaPrintDiv = document.createElement('div');
 		mishnaPrintDiv.innerHTML = addBreaks(acronymizer(mishna));
 		mishnaPrintDiv.classList.add("mishna-text");
 		mishnaPrintDiv.classList.add("mishna-print");
+		
+		// // MISHNA TEXT PRINT 2
+		// const mishnaPrintDiv2 = document.createElement('div');
+		// mishnaPrintDiv2.innerHTML = addBreaks((mishna));
+		// mishnaPrintDiv2.classList.add("mishna-text");
+		// mishnaPrintDiv2.classList.add("mishna-print");
 
 		document.getElementById("mishna-content").appendChild(mishnaUnitDiv);
 		if (key != '') mishnaUnitDiv.appendChild(mishnaNumDiv);
 		mishnaUnitDiv.appendChild(mishnaTextDiv);
 		mishnaUnitDiv.appendChild(mishnaPrintDiv);
+		// mishnaUnitDiv.appendChild(mishnaPrintDiv2);
 	});
 
 	// ADJUST new elements to current font size
@@ -135,6 +143,14 @@ document.addEventListener("touchstart", function (event) {
 	};
 	doubleTouchStartTimestamp = now;
 });
+
+// Make sure the right-handed text is "full" and not Rashei Teivot before print
+// window.addEventListener("beforeprint", () => {
+// 	if (document.querySelector(".hid").style.opacity == "0") {
+// 		makeAcronym();
+// 		onafterprint = () => { makeAcronym(); };
+// 	} else { onafterprint = () => {}; }
+// })
 
 
 /* data: {Brachot A: {A: מאימתי..., B: מאימיתי קורין...,.}, 

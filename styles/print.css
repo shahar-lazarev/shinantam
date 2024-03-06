@@ -106,9 +106,16 @@ h1 {
     float: left;
 }
 
-.mishna-print .hid {
-    color: transparent;
+
+.mishna-text .hid, .mishna-text .nonFirst {
+    color: black;
+    opacity: 100%;
 }
+
+.mishna-print .hid, .mishna-print .nonFirst {
+    opacity: 0%;
+}
+
 
 .mishna-site {
     display: none;

@@ -512,10 +512,14 @@ p#top-quote {
     font-family: "times";
 }
 
-.hid {
+.nonFirst {
     opacity: 100%;
     /* display: inline; */
     font-family: inherit;
+}
+
+.hid {
+    opacity: 0;
 }
 
 .break-up {

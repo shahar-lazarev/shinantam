@@ -7,11 +7,11 @@ function togglePane() {
 }
 
 function makeAcronym() {
-	const invLetters = document.querySelectorAll(".hid");
+	const invLetters = document.querySelectorAll(".nonFirst");
 	let newOpacity;
-	document.querySelector(".hid").style.opacity == "0" ? newOpacity = "100" : newOpacity = "0";
+	document.querySelector(".nonFirst").style.opacity == "0" ? newOpacity = "100" : newOpacity = "0";
 	invLetters.forEach(letter => {
-		letter.style.opacity = newOpacity;
+		letter.classList.toggle("hid");
 	})
 }
 
