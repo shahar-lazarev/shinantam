@@ -70,15 +70,18 @@
   <div id="BSD">בס"ד</div>
 
 <nav id="nav-bar">
-  <h1 style="font-weight: bold;">וְשִׁנַּנְתָּם</h1>
-  <h1 id="beta" style="font-weight: bold; direction: ltr; float: left;">beta</h1>
-  <div id="nav-box" onclick="togglePane()">
+  <h1 style="font-weight: bold; user-select: none;">שִׁנַּנְתָּם</h1>
+  <h1 id="beta" style="font-weight: bold; direction: ltr; float: left; user-select: none;">beta</h1>
+  <div id="nav-box">
+    <button class="arrow-btn" onclick="switchToPrevPerek()">
+      <img id="arrow-btn-img" src="images/right_arrow.png" alt="→"></button>
     <div id="mishna-nav-container">
-      <button id="mishna-nav">אבות</button>
+      <button id="mishna-nav" onclick="togglePane()">אבות</button>
     </div>
     <div id="perek-nav-container">
-      <button id="perek-nav">א</button>
+      <button id="perek-nav" onclick="togglePane()">א</button>
     </div>    <!-- perek-nav-container -->
+    <button class="arrow-btn" onclick="switchToNextPerek()"><img id="arrow-btn-img" src="images/left_arrow.png" alt="←"></button>
   </div> <!-- nav box-->
   
 </nav>
@@ -196,8 +199,8 @@
 <div id="all-mishna"></div> <!-- Javascript fills the content here -->
 
 <div class="footnote">
-  <p style="direction: ltr; text-align: center;"">Please consider visiting <a class="normal" href="http://www.knowthetorahbyheart.com/">KnowTheTorahByHeart.com</a>. Unaffiliated. It is a great resource.</p>
-  <p style="direction: ltr; text-align: center;"">Thank you to <a class="normal" href="https://tikkun.io/">https://tikkun.io/</a> for the inspiration for this project!</p>
+  <p style="direction: ltr; text-align: center;">Please consider visiting <a class="normal" href="http://www.knowthetorahbyheart.com/">KnowTheTorahByHeart.com</a>. Unaffiliated. It is a great resource.</p>
+  <p style="direction: ltr; text-align: center;">Thank you to <a class="normal" href="https://tikkun.io/">https://tikkun.io/</a> for the inspiration for this project!</p>
 </div>
 
 <div class="footnote" style="padding-bottom: 100px; width: 50px;"></div>

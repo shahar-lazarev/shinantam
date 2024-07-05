@@ -67,6 +67,7 @@ p {
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    /* border: skyblue 3px solid; */
 }
 
 #all-perek {
@@ -337,17 +338,64 @@ li>button:active {
     border-radius: 50px;
 }
 
+.arrow-btn {
+    font-size: 15px;
+    font-weight: bold;
+    padding-bottom: 0px;
+    display: block;
+    background-color: #eee;
+    border: 2px solid black;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-block;
+    position:relative;
+    top: -7px;
+
+    /* line-height: 30px;  */
+    text-align: center;
+}
+
+.arrow-btn:active {
+    background-color: #aaa;
+    /* border-width: 3px; */
+}
+
+.arrow-btn--off {
+    background-color: #eee;
+    border: 2px solid #ccc;
+    color:#ccc;
+
+}
+
+.arrow-btn--off:active {
+    background-color: #eee;
+}
+
+#arrow-btn-img {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 15px;
+    /* position: relative;
+    top: 2px;
+    left: 0px; */
+    -webkit-appearance: none;
+}
+
+
 #mishna-nav-container {
     display: inline-block;
 
     /* border: none; */
-    width: 65%;
+    width: 50%;
     height: 100%;
     margin: 0px;
     margin-right: 2%;
     padding: 0px;
 
-    /* border: 2px solid green; */
+    /* border: 2px solid rgb(128, 0, 248); */
 }
 
 #mishna-nav:active {
@@ -360,14 +408,14 @@ li>button:active {
     position: relative;
     /* top: -10px;    */
 
-    width: 25%;
+    width: 15%;
     height: 100%;
 
     margin: 0px;
     margin-left: 2%;
     padding: 0px;
 
-    /* border: 2px solid green; */
+    /* border: 2px solid rgb(255, 149, 0); */
 }
 
 #perek-nav {

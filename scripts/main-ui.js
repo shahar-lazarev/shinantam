@@ -4,6 +4,13 @@ function togglePane() {
 	pane.classList.toggle("nav-pane--hide");
 	document.body.classList.toggle("disable-scroll");
 	document.querySelector(".nav-pane__l-section.nav-pane__b-section").classList.remove("nav-pane__section--active");
+	deselectCurrentMasechetAndPerekInPane();
+	selectPaneMasechetAndPerek(currentMasechet, currentPerek);
+}
+
+function paneIsOpen() {
+	let pane = document.getElementsByClassName("nav-pane")[0];
+	return !pane.classList.contains("nav-pane--hide");
 }
 
 function makeAcronym() {

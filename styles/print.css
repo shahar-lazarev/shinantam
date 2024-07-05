@@ -19,6 +19,10 @@ body {
     border: 2px solid black;
 }
 
+.arrow-btn {
+    display: none;
+}
+
 #mishna-nav {
     border: none;
     background-color: transparent;
