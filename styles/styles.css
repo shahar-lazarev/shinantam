@@ -339,18 +339,24 @@ li>button:active {
 }
 
 .arrow-btn {
-    font-size: 15px;
-    font-weight: bold;
-    padding-bottom: 0px;
-    display: block;
+
+    display: inline-block;
+
+    /* border: none; */
+    /* width: 50%; */
+    /* height: 100%; */
+    margin: 0px;
+    /* margin-right: 2%; */
+    padding: 0px;
+
     background-color: #eee;
     border: 2px solid black;
     width: 30px;
     height: 30px;
     border-radius: 50%;
     display: inline-block;
-    position:relative;
-    top: -7px;
+    position: relative;
+    top: -3px;
 
     /* line-height: 30px;  */
     text-align: center;
@@ -373,14 +379,14 @@ li>button:active {
 }
 
 #arrow-btn-img {
-    top: 50%;
-    left: 50%;
-    position: absolute;
-    transform: translate(-50%, -50%);
+    /* top: 50%; */
+    /* left: 50%; */
+    position: relative;
+    /* transform: translate(-50%, -50%); */
     width: 15px;
-    /* position: relative;
+    position: relative;
     top: 2px;
-    left: 0px; */
+    /* left: 0px; */
     -webkit-appearance: none;
 }
 
