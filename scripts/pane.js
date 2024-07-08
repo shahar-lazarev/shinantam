@@ -21,9 +21,9 @@ function showPanePerekOptions(num, makeGlow=true) {
 	let blank = document.createElement("div");
 	blank.style.cssText = "float: right; width: 80%; height: 40px;";
 	section.appendChild(blank);
-
-
+	listenPerekBtns();
 }
+
 // switch to the perek indicated by "thisMasechet" & "perek"
 function switchPerek(thisMasechet, perek) {
 	document.getElementById("mishna-content").innerHTML = "";
@@ -56,7 +56,6 @@ function switchPerek(thisMasechet, perek) {
 		let prev = document.getElementsByClassName("arrow-btn")[1];
 		prev.classList.remove("arrow-btn--off");
 	}
-
 	// TODO: SHOW THE NEW CONTENT
 }
 
@@ -74,6 +73,7 @@ function listenPerekBtns() {
 			currentMasechet = selectedMasechetBtnName;
 			currentPerek = selectedPerekBtnName;
 			switchPerek(currentMasechet, currentPerek);
+			return;
 		}
 	}
 }
@@ -93,7 +93,8 @@ function listenMasechetBtns() {
 			masechetBtn.classList.add("nav-pane__item--select"); // select the new perek
 
 			showPanePerekOptions(masechetToPerekAmount[masechetBtn.innerHTML]);
-			listenPerekBtns();
+			// listenPerekBtns();
+			return;
 		}
 	}
 }
@@ -139,8 +140,7 @@ function getNextMasechet() {
 
 function switchToNextPerek() {
 	if (nums_eng_to_heb[masechetToPerekAmount[currentMasechet]] == currentPerek) { // last perek in current masechet
-		// console.log("It's the last perek!");
-		if (currentMasechet == "עוקצים") {} // eedo nothing // console.log("last perek of last masechet!"); // last masechet
+		if (currentMasechet == "עוקצים") {} // do nothing // last masechet
 		else {
 			currentMasechet = getNextMasechet()
 			currentPerek = "א";
