@@ -54,6 +54,7 @@ p {
     box-shadow: 0 0 4px 0.1px black;
     opacity: 97%;
     z-index: 1000;
+    user-select: none;
 }
 
 #nav-box {
@@ -240,7 +241,7 @@ p {
 
 @media screen and (max-width: 520px) {
     .nav-pane__seder {
-        background-color: lightgreen;
+        /* background-color: lightgreen; */
         width: 94%;
         /* margin-left: 3%;
         margin-right: 3%; */
@@ -322,22 +323,6 @@ li>button:active {
     background-color: rgba(0, 0, 0, 0.3);
 }
 
-#mishna-nav {
-    /* border: 2px solid yellow; */
-    /* display: inline-block;
-    border-radius: 50px;
-    /* border: none; */
-    font-size: 25px;
-    width: 100%;
-    height: 100%;
-
-    margin: 0px;
-    padding: 0px;
-
-    overflow: clip;
-    border-radius: 50px;
-}
-
 .arrow-btn {
 
     display: inline-block;
@@ -356,10 +341,50 @@ li>button:active {
     border-radius: 50%;
     display: inline-block;
     position: relative;
-    top: -3px;
+    top: -5px;
 
     /* line-height: 30px;  */
     text-align: center;
+}
+
+#mishna-nav-new {
+    /* border: 2px solid yellow; */
+    /* display: inline-block; */
+    /* border-radius: 50px; */
+    /* border: lightcoral 2px solid; */
+    display: inline-block;
+
+    font-size: 25px;
+    width: 70%;
+    height: 100%;
+
+    margin: 0px;
+    padding: 0px;
+
+    overflow: clip;
+    border-radius: 50px;
+    text-align: center;
+}
+
+#mishna-nav-new:active {
+    background-color: #aaa;
+}
+
+.perek-nav-text-container {
+    /* border: solid 1.5px lightseagreen; */
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    display: inline-block;
+    padding-top: 5px;
+    /* position: relative; */
+}
+
+.perek-nav-text {
+    display: inline-block;
+    position: relative;
+    bottom: 4px;
+    /* border: 2px solid yellow; */
 }
 
 .arrow-btn:active {
@@ -391,6 +416,25 @@ li>button:active {
 }
 
 
+
+#mishna-nav {
+    /* border: 2px solid yellow; */
+    /* display: inline-block;
+    border-radius: 50px;
+    /* border: none; */
+    /* border-left: #333 2px solid; */
+    font-size: 25px;
+    width: 65%;
+    height: 100%;
+
+    /* margin: 0px 0 0 3px; */
+    /* margin-left: 1px; */
+    padding: 0px;
+
+    /* overflow: clip; */
+    /* border-radius: 50px; */
+}
+
 #mishna-nav-container {
     display: inline-block;
 
@@ -405,7 +449,7 @@ li>button:active {
 }
 
 #mishna-nav:active {
-    background-color: #aaa;
+    /* background-color: #aaa; */
 }
 
 #perek-nav-container {
@@ -431,14 +475,14 @@ li>button:active {
     margin-left: 2%;
 
     padding: 0px;
-    width: 100%;
-    border-radius: 50px;
-    font-size: 25px;
+    width: 15%;
+    /* border-radius: 50px; */
+    /* font-size: 25px; */
 
 }
 
 #perek-nav:active {
-    background-color: #aaa;
+    /* background-color: #aaa; */
 }
 
 p#top-quote {

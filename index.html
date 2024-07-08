@@ -75,12 +75,22 @@
   <div id="nav-box">
     <button class="arrow-btn" onclick="switchToPrevPerek()">
       <img id="arrow-btn-img" src="images/right_arrow.png" alt="→"></button>
-    <div id="mishna-nav-container">
-      <button id="mishna-nav" onclick="togglePane()">אבות</button>
-    </div>
-    <div id="perek-nav-container">
-      <button id="perek-nav" onclick="togglePane()">א</button>
-    </div>    <!-- perek-nav-container -->
+
+    <button id="mishna-nav-new" onclick="togglePane()">    <!-- new -->
+      <div class="perek-nav-text-container">
+        <div id="mishna-nav" class="perek-nav-text">אבות</div>
+        <!-- <div style="width: 0px; height: 50%; display: inline-block; border-right: #333 2px solid  ; margin: 0 0.5px; position: relative; "></div> -->
+        <div style="width: 2px; height: 80%; display: inline-block; background-color: rgb(120, 120, 120); margin: 0 1px; position: relative; "></div>
+        <div id="perek-nav" class="perek-nav-text">א</div>
+      </div>
+    </button>   <!-- new -->
+
+    <!-- <div id="mishna-nav-container"> -->
+      <!-- <button id="mishna-nav" onclick="togglePane()">אבות</button> -->
+    <!-- </div> -->
+    <!-- <div id="perek-nav-container"> -->
+      <!-- <button id="perek-nav" onclick="togglePane()">א</button> -->
+    <!-- </div>    perek-nav-container -->
     <button class="arrow-btn" onclick="switchToNextPerek()"><img id="arrow-btn-img" src="images/left_arrow.png" alt="←"></button>
   </div> <!-- nav box-->
   
