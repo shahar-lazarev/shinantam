@@ -15,48 +15,59 @@
   <link href="//fonts.googleapis.com/css2?family=Noto+Rashi+Hebrew:wght@900&display=swap" rel="stylesheet">
   <link href="//fonts.googleapis.com/css2?family=Heebo&display=swap" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script defer src=" scripts/utils.js" "></script>
-  <script defer src=" scripts/pane.js" "></script>
-  <script defer src=" scripts/main-ui.js" "></script>
-  <script defer src=" scripts/script.js" "></script>
+  <script defer src=" scripts/utils.js"></script>
+  <script defer src=" scripts/pane.js"></script>
+  <script defer src=" scripts/main-ui.js"></script>
+  <script defer src=" scripts/script.js"></script>
   <!-- <link rel=" stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
   integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
-  </head>
-  <body>    
-    <div id="cover"></div>
-    <!-- והיו הדברים האלה אשר אנכי מצוך היום על לבבך ושננתם...<br><br> -->
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BMM2NTY71V"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-    <div style="height: 60px;"></div>
-    <!-- <h1 style="font-weight: bold; margin-top: 50px;">משנה על לבבך</h1> -->
-    <p id="top-quote">
-    שיהו דברי תורה מחודדים בפיך. שאם ישאל לך אדם דבר אל תגמגם ותאמר לו, אלא אמור לו מיד.
-    <br>(קידושין ל.)</p>
+    gtag('config', 'G-BMM2NTY71V');
+  </script>
+</head>
+<body>    
+  <div id="cover"></div>
+  <!-- והיו הדברים האלה אשר אנכי מצוך היום על לבבך ושננתם...<br><br> -->
 
-    <button class="expand">How to use this site</button>
-    <div class="expand-content">
-      <p>The <img class="in-text" src="images/button.png"> button in the bottom-right transforms the text to only show
-        the first letter of each word, the "Rashei Teivot."
-      </p>
-      <ol>
-        <li>
-          Read the original text a few times to get used to the text.
-          If the mishna is too long, then break it up into smaller parts and 
-          complete them one part at a time.</li>
-        <li>
-          Next click the <img class="in-text" src="images/button.png"> button and practice saying the text using 
-        the "Rashei Teivot" about 2 to 5 times, or until you are comfortable saying 
-        the whole text easily.</li>
-        <li>Try saying the text by heart!</li>
-      </ol> 
-    </div>
+  <div style="height: 60px;"></div>
+  <!-- <h1 style="font-weight: bold; margin-top: 50px;">משנה על לבבך</h1> -->
+  <p id="top-quote">
+  שיהו דברי תורה מחודדים בפיך. שאם ישאל לך אדם דבר אל תגמגם ותאמר לו, אלא אמור לו מיד.
+  <br>(קידושין ל.)</p>
 
-    <div id="mishna-content"></div>
+  <button class="expand">How to use this site</button>
+  <div class="expand-content">
+    <p>The <img class="in-text" src="images/button.png"> button in the bottom-right transforms the text to only show
+      the first letter of each word, the "Rashei Teivot."
+    </p>
+    <ol>
+      <li>
+        Read the original text a few times to get used to the text.
+        If the mishna is too long, then break it up into smaller parts and 
+        complete them one part at a time.</li>
+      <li>
+        Next click the <img class="in-text" src="images/button.png"> button and practice saying the text using 
+      the "Rashei Teivot" about 2 to 5 times, or until you are comfortable saying 
+      the whole text easily.</li>
+      <li>Try saying the text by heart!</li>
+    </ol> 
+  </div>
+
+  <div id="mishna-content"></div>
 
   <button type="button" class="text-btn" id="shinantam-button" onclick="makeAcronym()">
     <img id="shinantam-button-img" src="images/favicon.png" alt="↻"></button>
 
   <div id="option-container" onmouseleave="hideOptions()">
-
+    
+    <button type="button" class="text-btn" id="personal-button" onclick="displayInputUI()">
+      <img id="personal-button-img" src="images/personal.png" alt="👤"></button>
     <button type="button" class="text-btn" id="print-button" onclick="window.print()">
       <img id="print-button-img" src="images/print.svg" alt="🖶"></button>
     <button type="button" class="text-btn" id="plus-button" onclick="changeFontSize(2)">

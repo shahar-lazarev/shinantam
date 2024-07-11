@@ -1,30 +1,44 @@
 // TODO print option
 // TODO acronym maker option
 
+function isHebrewLetter(letter) {
+	if (isHebrewVowel(letter)) return false; // vowel
+	if ((/[\u0590-\u05FF]/).test(letter)) return true; // letters and vowels
+}
 
-function acronymizer(input) {
+
+function isHebrewVowel(letter) {
+	return (/[\u0591-\u05C7]/.test(letter));
+}
+
+function isPunctuation(letter) {
+	return [' ', ',', '.', ':', ';', '?', '!', '-', '–',
+		'(', ')', '[', ']', '\n', '"', "'", '“', '”', "‘", "’"].indexOf(letter) >= 0;
+}
+
+function isPossibleLetter(letter) {
+	return letter == '"' || letter == "'";
+}
+	
+function isLetter(letter) {
+	return !isHebrewVowel(letter) && !isPunctuation(letter);
+}
+
+function acronymizer(text) {
 	var output = "";
 	let prevWasLetter = false;
 	let prevFirstLetter = false;
-	for (const cur of input) {
-		if (/[\u0591-\u05C7]/.test(cur)) {
+	for (let i = 0; i < text.length; i++) {
+		const cur = text[i];
+		if (isHebrewVowel(cur)) { // if it's a Hebrew vowel
 			output += cur;
-		}
-		else if ([' ', ',', '.', ':', ';', '?', '!', '-', '–',
-			'(', ')', '[', ']', '\n', '"', "'", '“', '”', "‘", "’"].indexOf(cur) >= 0) {
-			// currently not a letter
-			if (prevWasLetter) {
-				output += `</span>`
-			}
-			output += cur;
-			prevWasLetter = false; // for the next loop
-		}
-		else { // it's a letter
-			if (!prevWasLetter) { // it's a first letter
+
+		} else if ((!isPunctuation(cur)) || (isPossibleLetter(cur) && prevWasLetter && i+1 < text.length && isLetter(text[i+1]))) {
+			if (!prevWasLetter) { // it's right now a first letter
 				output += cur;
 				prevFirstLetter = true;
 			}
-			else { // it's not a first letter
+			else { // if the prev was a letter - then now it's not a first letter
 				if (prevFirstLetter) {
 					output += `<span class="nonFirst">`;
 					prevFirstLetter = false;
@@ -32,6 +46,14 @@ function acronymizer(input) {
 				output += cur;
 			}
 			prevWasLetter = true; // for the next loop
+
+		} else if (isPunctuation(cur)) { 
+			// currently not a letter			
+			if (prevWasLetter) {
+				output += `</span>`
+			}
+			output += cur;
+			prevWasLetter = false; // for the next loop
 		}
 	}
 	return output;
@@ -83,6 +105,112 @@ function changeFontSize(increment) {
 	// }
 }
 
+
+// document.getElementById("mishna-content").innerHTML = "";
+let showingInputUI = false;
+function displayInputUI() {
+	if (!showingInputUI) { // it will now enter the input-UI
+		document.getElementById("mishna-content").innerHTML = "";
+
+		const textArea = document.createElement('textarea');
+		textArea.id = "textarea";
+
+		const submitTextArea = document.createElement('button');
+		submitTextArea.addEventListener("click", submitTextAreaInput)
+		submitTextArea.style.marginTop = "10px";
+		submitTextArea.style.width = "60px";
+		submitTextArea.style.height = "40px";
+		submitTextArea.innerText = "Submit"
+
+		document.getElementById("mishna-content").appendChild(textArea);
+		document.getElementById("mishna-content").appendChild(document.createElement("br"));
+		document.getElementById("mishna-content").appendChild(submitTextArea);
+
+
+		for (entry of currentSessionInputs) {
+			submitTextAreaInputWithText(entry);
+		}
+
+		showingInputUI = true;
+		document.getElementById("personal-button").classList.add("personal-button--active");
+
+	} else { // it will now exit the input-UI
+		document.getElementById("mishna-content").innerHTML = "";
+		fetchData(currentMasechet)
+		.then(masechet => {
+			displayEntirePerek(masechet[currentPage()]) // currentPage() = e.g. אבות א
+		})
+		.catch(error => {
+			console.error(error);
+		});
+
+		showingInputUI = false;
+		document.getElementById("personal-button").classList.remove("personal-button--active");
+
+	}
+
+}
+
+let currentSessionInputs = []
+
+function submitTextAreaInput() {
+	let inputText = document.getElementById("textarea").value;
+	if (inputText == "") return;
+
+	currentSessionInputs.push(inputText);
+
+	submitTextAreaInputWithText(inputText);
+}
+
+function submitTextAreaInputWithText(text) {
+	if (nowIsAcronym) makeAcronym(); // change away from acronym to make sure everything is in the 'standard state' when adding a new text
+
+	const mishnaUnitDiv = document.createElement('div');
+	mishnaUnitDiv.classList.add("mishna-unit");
+
+	const mishnaTextDiv = document.createElement('div');
+	mishnaTextDiv.innerHTML = addBreaks(acronymizer(text));
+	mishnaTextDiv.classList.add("mishna-text");
+	if (!isHebrewLetter(text.charAt(0))) mishnaTextDiv.style.direction = "ltr";
+
+	// MISHNA TEXT PRINT
+	const mishnaPrintDiv = document.createElement('div');
+	mishnaPrintDiv.innerHTML = addBreaks(acronymizer(text));
+	mishnaPrintDiv.classList.add("mishna-text");
+	mishnaPrintDiv.classList.add("mishna-print");
+	if (!isHebrewLetter(text.charAt(0))) mishnaPrintDiv.style.direction = "ltr";
+
+	// mishna-content --> misha-unit --> div (mishnaText)
+	mishnaUnitDiv.appendChild(mishnaTextDiv);
+	mishnaUnitDiv.appendChild(mishnaPrintDiv);
+
+	document.getElementById("mishna-content").appendChild(mishnaUnitDiv);
+
+	// ADJUST new elements to current font size
+	let mishnas = document.querySelectorAll('.mishna-text');
+	for (let mishna of mishnas) {
+		mishna.style.fontSize = (mishnaFontSize) + 'px';
+	} // END ADJUST
+
+	document.getElementById("textarea").value = "";
+	
+
+}
+
+function addMishnaUnitBlocks(text) {
+	const mishnaUnitDiv = document.createElement('div');
+	mishnaUnitDiv.classList.add("mishna-unit");
+
+	const mishnaTextDiv = document.createElement('div');
+	mishnaTextDiv.innerHTML = addBreaks(acronymizer(t));
+	mishnaTextDiv.classList.add("mishna-text");
+
+	if (!textIsHebrew) mishnaTextDiv.style.direction = "ltr";
+
+	mishnaUnitDiv.appendChild(mishnaTextDiv);
+
+	document.getElementById("mishna-content").appendChild(mishnaUnitDiv);
+}
 
 function displayEntirePerek(perek) {
 

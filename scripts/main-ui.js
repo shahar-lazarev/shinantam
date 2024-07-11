@@ -13,7 +13,9 @@ function paneIsOpen() {
 	return !pane.classList.contains("nav-pane--hide");
 }
 
+let nowIsAcronym = false;
 function makeAcronym() {
+	nowIsAcronym = !nowIsAcronym;
 	const invLetters = document.querySelectorAll(".nonFirst");
 	let newOpacity;
 	document.querySelector(".nonFirst").style.opacity == "0" ? newOpacity = "100" : newOpacity = "0";
@@ -34,6 +36,7 @@ function toggleOptions() {
 
 function showOptions() {
 	if (window.innerWidth > 550) { return; }
+	document.getElementById("personal-button").style.bottom = "230px";
 	document.getElementById("print-button").style.bottom = "180px";
 	document.getElementById("plus-button").style.bottom = "130px";
 	document.getElementById("minus-button").style.bottom = "80px";
@@ -41,6 +44,7 @@ function showOptions() {
 
 function hideOptions() {
 	if (window.innerWidth > 550) { return; }
+	document.getElementById("personal-button").style.bottom = "20px";
 	document.getElementById("print-button").style.bottom = "20px";
 	document.getElementById("plus-button").style.bottom = "20px";
 	document.getElementById("minus-button").style.bottom = "20px";
@@ -48,6 +52,7 @@ function hideOptions() {
 
 window.addEventListener("resize", function() {
 	if (window.innerWidth > 550) {
+		document.getElementById("personal-button").style.bottom = "170px";
 		document.getElementById("print-button").style.bottom = "120px";
 		document.getElementById("plus-button").style.bottom = "70px";
 		document.getElementById("minus-button").style.bottom = "20px";
