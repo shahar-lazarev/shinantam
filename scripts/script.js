@@ -6,6 +6,17 @@ function isHebrewLetter(letter) {
 	if ((/[\u0590-\u05FF]/).test(letter)) return true; // letters and vowels
 }
 
+function textIsHebrew(text) {
+	for (let letter of text) {
+		if (letter) {
+			if (isHebrewLetter(letter)) { // Hebrew Unicode range
+				return true;
+			} else if (!isPunctuation(letter)) return false;
+		} 
+	}
+	// reached the end - so only punctuation --> return true (so default is rtl)
+	return true;
+}
 
 function isHebrewVowel(letter) {
 	return (/[\u0591-\u05C7]/.test(letter));
@@ -13,7 +24,8 @@ function isHebrewVowel(letter) {
 
 function isPunctuation(letter) {
 	return [' ', ',', '.', ':', ';', '?', '!', '-', '–',
-		'(', ')', '[', ']', '\n', '"', "'", '“', '”', "‘", "’"].indexOf(letter) >= 0;
+		'(', ')', '[', ']', '\n', '"', "'", '“', '”',
+		 "‘", "’", "״"].indexOf(letter) >= 0;
 }
 
 function isPossibleLetter(letter) {
@@ -114,17 +126,27 @@ function displayInputUI() {
 
 		const textArea = document.createElement('textarea');
 		textArea.id = "textarea";
+		textArea.placeholder = "הוסף כל טקסט שתרצה...  ...Add any text you want"
+		
 
 		const submitTextArea = document.createElement('button');
+		submitTextArea.id = "textarea-submit-btn";
 		submitTextArea.addEventListener("click", submitTextAreaInput)
-		submitTextArea.style.marginTop = "10px";
-		submitTextArea.style.width = "60px";
-		submitTextArea.style.height = "40px";
-		submitTextArea.innerText = "Submit"
+		submitTextArea.innerText = "שלח / Submit"
 
-		document.getElementById("mishna-content").appendChild(textArea);
-		document.getElementById("mishna-content").appendChild(document.createElement("br"));
-		document.getElementById("mishna-content").appendChild(submitTextArea);
+		const mishnaUnitDiv = document.createElement('div');
+		mishnaUnitDiv.classList.add("mishna-unit");
+
+		mishnaUnitDiv.appendChild(textArea);
+		// mishnaUnitDiv.appendChild(document.createElement("br"));
+		mishnaUnitDiv.appendChild(submitTextArea);
+
+		document.getElementById("mishna-content").appendChild(mishnaUnitDiv);
+		// document.getElementById("mishna-content").appendChild(textArea);
+		// document.getElementById("mishna-content").appendChild(document.createElement("br"));
+		// document.getElementById("mishna-content").appendChild(submitTextArea);
+
+		adjustTextAreaDirection();
 
 
 		for (entry of currentSessionInputs) {
@@ -171,7 +193,11 @@ function submitTextAreaInputWithText(text) {
 	const mishnaTextDiv = document.createElement('div');
 	mishnaTextDiv.innerHTML = addBreaks(acronymizer(text));
 	mishnaTextDiv.classList.add("mishna-text");
-	if (!isHebrewLetter(text.charAt(0))) mishnaTextDiv.style.direction = "ltr";
+	if (!textIsHebrew(text)) { //
+		console.log("HELLO")
+		mishnaTextDiv.style.direction = "ltr";
+		mishnaTextDiv.style.paddingLeft = "15px";
+	}
 
 	// MISHNA TEXT PRINT
 	const mishnaPrintDiv = document.createElement('div');
@@ -193,7 +219,33 @@ function submitTextAreaInputWithText(text) {
 	} // END ADJUST
 
 	document.getElementById("textarea").value = "";
-	
+}
+
+function adjustTextAreaDirection() {
+	const textarea = document.getElementById('textarea');
+	console.log("FOUND");
+	console.log(textarea);
+
+	textarea.addEventListener('input', function() {
+		console.log("RUNNINGGGGG");
+		if (textIsHebrew(textarea.value.trim())) textarea.style.direction = 'rtl';
+		else textarea.style.direction = 'ltr';
+		// const text = textarea.value.trim();
+		// for (let letter of text) {
+		// 	if (letter) {
+		// 		if (isHebrewLetter(letter)) { // Hebrew Unicode range
+		// 			textarea.style.direction = 'rtl';
+		// 			return;
+		// 		} else if (!isPunctuation(letter)) {
+		// 			textarea.style.direction = 'ltr';
+		// 			return;
+		// 		}
+		// 	} else {
+		// 		textarea.style.direction = 'ltr'; // Default to ltr if empty or no valid first char
+		// 	}
+
+		// }
+	})
 
 }
 

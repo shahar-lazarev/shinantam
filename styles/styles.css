@@ -939,11 +939,40 @@ button.text-btn {
     }
 }
 
-textarea {
-    position: relative;
-    right: 65px;
-    width: 80%;
+#mishna-content {
+    /* text-align: center; */
+}
+
+#textarea {
+    /* right: 65px; */
+    width: 100%;
     height: 20vh;
+    padding: 10px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    margin-bottom: 5px;
+    /* border: 2px solid black; */
+    max-width: 700px;
+    resize: vertical;
+}
+
+#textarea-submit-btn {
+    /* margin-top: 10px;  */
+    /* margin-right: 80px; */
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    /* margin: auto; */
+    width: 100px; 
+    height: 40px;
+    border-radius: 50px;
+    display: block;
+}
+
+#textarea-submit-btn:active {
+    background-color: #aaa;
 }
 
 
