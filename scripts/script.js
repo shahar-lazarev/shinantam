@@ -107,7 +107,7 @@ function changeFontSize(increment) {
 
 
 // document.getElementById("mishna-content").innerHTML = "";
-let showingInputUI = false;
+let showingInputUI = false; // initialization (when website opens)
 function displayInputUI() {
 	if (!showingInputUI) { // it will now enter the input-UI
 		document.getElementById("mishna-content").innerHTML = "";

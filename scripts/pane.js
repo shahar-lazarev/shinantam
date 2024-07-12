@@ -41,6 +41,7 @@ function switchPerek(thisMasechet, perek) {
 	document.getElementById("mishna-nav").innerHTML = thisMasechet;
 	document.getElementById("perek-nav").innerText = perek;
 	if (paneIsOpen()) togglePane();
+	if (showingInputUI) displayInputUI();
 
 	if (currentPerek == "א" & currentMasechet == "ברכות") {
 		let prev = document.getElementsByClassName("arrow-btn")[0];
