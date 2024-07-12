@@ -677,7 +677,8 @@ a.normal:visited {
     position: relative;
     top: 3px;
     left: 0px;
-
+    
+    user-select: none;
     -webkit-appearance: none;
 }
 
@@ -733,6 +734,7 @@ button.text-btn {
     /* position: relative;
     top: 2px;
     left: 0px; */
+    user-select: none;
     -webkit-appearance: none;
 }
 
@@ -772,6 +774,7 @@ button.text-btn {
     /* position: relative; */
     /* top: 2px;
     left: -1px; */
+    user-select: none;
     -webkit-appearance: none;
 }
 
@@ -811,6 +814,7 @@ button.text-btn {
     /* position: relative;
     top: 2px;
     left: -1px; */
+    user-select: none;
     -webkit-appearance: none;
 }
 
@@ -849,6 +853,7 @@ button.text-btn {
     /* position: relative;
     top: 2px;
     left: 0px; */
+    user-select: none;
     -webkit-appearance: none;
 }
 
@@ -899,6 +904,7 @@ button.text-btn {
     /* position: relative;
     top: 2px;
     left: -1px; */
+    user-select: none;
     -webkit-appearance: none;
 }
 

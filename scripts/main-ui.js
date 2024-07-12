@@ -15,6 +15,10 @@ function paneIsOpen() {
 
 let nowIsAcronym = false;
 function makeAcronym() {
+	if (showingInputUI & currentSessionInputs.length == 0) {
+		return;
+	}
+
 	nowIsAcronym = !nowIsAcronym;
 	const invLetters = document.querySelectorAll(".nonFirst");
 	let newOpacity;

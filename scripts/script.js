@@ -106,21 +106,14 @@ function changeFontSize(increment) {
 			// mn.style.right = (26-mishnaNumFontSize) + 'px';
 		}
 	}
-
-	// MISHNA UNIT PADDING & MARGINS
-	// let padding = (12/26*mishnaFontSize) + 'px';
-	// let margin = (12/26*mishnaFontSize) + 'px';
-	// console.log(padding);
-	// for (let mishna of mishnas) {
-	//   mishna.style.padding = padding  + ' 15px ' + padding +  ' 5px';
-	//   mishna.style.marginBottom = margin;
-	// }
 }
 
 
 // document.getElementById("mishna-content").innerHTML = "";
 let showingInputUI = false; // initialization (when website opens)
 function displayInputUI() {
+	if (nowIsAcronym) makeAcronym();
+
 	if (!showingInputUI) { // it will now enter the input-UI
 		document.getElementById("mishna-content").innerHTML = "";
 
@@ -180,7 +173,6 @@ function submitTextAreaInput() {
 	if (inputText == "") return;
 
 	currentSessionInputs.push(inputText);
-
 	submitTextAreaInputWithText(inputText);
 }
 
@@ -194,7 +186,6 @@ function submitTextAreaInputWithText(text) {
 	mishnaTextDiv.innerHTML = addBreaks(acronymizer(text));
 	mishnaTextDiv.classList.add("mishna-text");
 	if (!textIsHebrew(text)) { //
-		console.log("HELLO")
 		mishnaTextDiv.style.direction = "ltr";
 		mishnaTextDiv.style.paddingLeft = "15px";
 	}
@@ -223,28 +214,10 @@ function submitTextAreaInputWithText(text) {
 
 function adjustTextAreaDirection() {
 	const textarea = document.getElementById('textarea');
-	console.log("FOUND");
-	console.log(textarea);
 
 	textarea.addEventListener('input', function() {
-		console.log("RUNNINGGGGG");
 		if (textIsHebrew(textarea.value.trim())) textarea.style.direction = 'rtl';
 		else textarea.style.direction = 'ltr';
-		// const text = textarea.value.trim();
-		// for (let letter of text) {
-		// 	if (letter) {
-		// 		if (isHebrewLetter(letter)) { // Hebrew Unicode range
-		// 			textarea.style.direction = 'rtl';
-		// 			return;
-		// 		} else if (!isPunctuation(letter)) {
-		// 			textarea.style.direction = 'ltr';
-		// 			return;
-		// 		}
-		// 	} else {
-		// 		textarea.style.direction = 'ltr'; // Default to ltr if empty or no valid first char
-		// 	}
-
-		// }
 	})
 
 }
