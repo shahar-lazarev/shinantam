@@ -24,6 +24,71 @@ function showPanePerekOptions(num, makeGlow=true) {
 	listenPerekBtns();
 }
 
+// Detect initial page load
+window.addEventListener('load', onHashChange);
+
+// Detect back/forward navigation
+window.addEventListener('hashchange', onHashChange);
+
+function navigateTo(hash) {
+	window.location.hash = hash;
+
+	if (hash == "") {
+		currentMasechet = "אבות";
+		currentPerek = "א";
+		switchPerek(currentMasechet, currentPerek);
+	}
+}
+
+function onHashChange()	{
+	const url = decodeURI(window.location.href);
+	// http://127.0.0.1:5501/#/אבות-ש
+	let hash = window.location.hash;
+
+	if (hash != "" && hash.substring(0,2) != "#/") {
+		// window.history.replaceState(null, "", "");
+		// window.location.href = "";
+		navigateTo("");
+		return;
+	}
+
+	hash = decodeURIComponent(hash.substring(2));
+
+	if (hash == "") {
+		navigateTo("");
+	}
+	else {
+		let masechet = hash.split("-")[0];
+		let perek = hash.split("-")[1];
+
+		if (allMasechtot.includes(masechet)) {
+
+			if (!heb_to_nums[perek]|| masechetToPerekAmount[masechet] < heb_to_nums[perek]) { // abnormal perek
+				// window.location.href = "";
+				navigateTo("");
+
+			} else { // normal masechet & normal perek
+	
+				const nextURL = `#/${masechet}-${perek}`;
+				const nextTitle = 'Shinantam';
+				const nextState = { additionalInformation: `Update to ${masechet} ${perek}` };
+				// window.history.pushState(nextState, nextState, nextURL);
+				navigateTo(nextURL);
+
+				currentMasechet = masechet;
+				currentPerek = perek;
+
+				switchPerek(currentMasechet, currentPerek);
+			}
+
+		} else { 
+			// window.history.pushState({additionalInformation: `Update to home`}, "", "");
+			navigateTo("");
+		}
+	}
+	
+}
+
 // switch to the perek indicated by "thisMasechet" & "perek"
 function switchPerek(thisMasechet, perek) {
 	document.getElementById("mishna-content").innerHTML = "";
@@ -58,6 +123,17 @@ function switchPerek(thisMasechet, perek) {
 		prev.classList.remove("arrow-btn--off");
 	}
 	// TODO: SHOW THE NEW CONTENT
+
+	const currentHash = decodeURI(window.location.hash);
+	const nextURL = `#/${thisMasechet}-${perek}`;
+
+	if (!(currentHash == "" && nextURL == "#/אבות-א") && currentHash != nextURL) {
+		const nextTitle = 'Shinantam';
+		const nextState = { additionalInformation: `Update to ${thisMasechet} ${perek}` };
+	
+		// window.history.pushState(nextState, `${thisMasechet} ${perek}`, nextURL);
+		navigateTo(nextURL);
+	}
 }
 
 // checks if a perek button in the pane is pressed
