@@ -14,15 +14,15 @@ function paneIsOpen() {
 }
 
 let nowIsAcronym = false;
-function makeAcronym() {
-	if (showingInputUI & currentSessionInputs.length == 0) {
+function makeAcronym() {  // CLEAN THIS UP
+	if (showingInputUI && currentSessionInputs.length == 0) {
 		return;
 	}
 
 	nowIsAcronym = !nowIsAcronym;
 	const invLetters = document.querySelectorAll(".nonFirst");
 	let newOpacity;
-	document.querySelector(".nonFirst").style.opacity == "0" ? newOpacity = "100" : newOpacity = "0";
+	// document.querySelector(".nonFirst").style.opacity == "0" ? newOpacity = "100" : newOpacity = "0";
 	invLetters.forEach(letter => {
 		letter.classList.toggle("hid");
 	})

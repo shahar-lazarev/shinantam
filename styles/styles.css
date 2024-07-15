@@ -624,6 +624,28 @@ p#top-quote {
     /* display: none; */
 }
 
+.mishna-text__x-btn {
+    background-color: #ff7575;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 12px;
+    padding: 0;
+
+    position: absolute;
+    top: -10px;
+    left: -0px;
+}
+
+.mishna-text__x-btn:hover {
+    background-color: #df4e4e
+}
+
+.mishna-text__x-btn--hide {
+    display: none;
+}
+
 .mishna-num {
 
     background-color: rgb(231, 231, 231);
@@ -962,6 +984,8 @@ button.text-btn {
     /* border: 2px solid black; */
     max-width: 700px;
     resize: vertical;
+
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 #textarea-submit-btn {

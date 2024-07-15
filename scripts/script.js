@@ -112,16 +112,16 @@ function changeFontSize(increment) {
 // document.getElementById("mishna-content").innerHTML = "";
 let showingInputUI = false; // initialization (when website opens)
 function displayInputUI() { // initiate the change in state
-	if (nowIsAcronym) makeAcronym();
-
+	
 	if (!showingInputUI) { // it will now enter the input-UI
+		if (nowIsAcronym) makeAcronym();
 		document.getElementById("mishna-content").innerHTML = "";
 
 		const textArea = document.createElement('textarea');
 		textArea.id = "textarea";
 		textArea.placeholder = "הוסף כל טקסט שתרצה...  ...Add any text you want"
 		
-
+		// create button
 		const submitTextArea = document.createElement('button');
 		submitTextArea.id = "textarea-submit-btn";
 		submitTextArea.addEventListener("click", submitTextAreaInput)
@@ -135,13 +135,11 @@ function displayInputUI() { // initiate the change in state
 		mishnaUnitDiv.appendChild(submitTextArea);
 
 		document.getElementById("mishna-content").appendChild(mishnaUnitDiv);
-		// document.getElementById("mishna-content").appendChild(textArea);
-		// document.getElementById("mishna-content").appendChild(document.createElement("br"));
-		// document.getElementById("mishna-content").appendChild(submitTextArea);
 
 		adjustTextAreaDirection();
 
 		for (entry of currentSessionInputs) {
+			if (entry == "") continue;
 			submitTextAreaInputWithText(entry);
 		}
 
@@ -170,7 +168,7 @@ function displayInputUI() { // initiate the change in state
 
 let currentSessionInputs = []
 
-function submitTextAreaInput() {
+function submitTextAreaInput() { // outputs the text into a box that can be acronymized
 	let inputText = document.getElementById("textarea").value;
 	if (inputText == "") return;
 
@@ -183,7 +181,9 @@ function submitTextAreaInputWithText(text) {
 
 	const mishnaUnitDiv = document.createElement('div');
 	mishnaUnitDiv.classList.add("mishna-unit");
+	mishnaUnitDiv.id = `custom-${currentSessionInputs.length-1}`;
 
+	// MISHNA WEBPAGE TEXT
 	const mishnaTextDiv = document.createElement('div');
 	mishnaTextDiv.innerHTML = addBreaks(acronymizer(text));
 	mishnaTextDiv.classList.add("mishna-text");
@@ -191,6 +191,11 @@ function submitTextAreaInputWithText(text) {
 		mishnaTextDiv.style.direction = "ltr";
 		mishnaTextDiv.style.paddingLeft = "15px";
 	}
+
+	const closeBtn = document.createElement('button');
+	closeBtn.classList.add("mishna-text__x-btn");
+	closeBtn.classList.add("mishna-text__x-btn--hide");
+	closeBtn.innerText = "×";
 
 	// MISHNA TEXT PRINT
 	const mishnaPrintDiv = document.createElement('div');
@@ -200,10 +205,22 @@ function submitTextAreaInputWithText(text) {
 	if (!isHebrewLetter(text.charAt(0))) mishnaPrintDiv.style.direction = "ltr";
 
 	// mishna-content --> misha-unit --> div (mishnaText)
+	mishnaTextDiv.appendChild(closeBtn);
 	mishnaUnitDiv.appendChild(mishnaTextDiv);
 	mishnaUnitDiv.appendChild(mishnaPrintDiv);
 
 	document.getElementById("mishna-content").appendChild(mishnaUnitDiv);
+
+	mishnaTextDiv.onmouseover = function() { closeBtn.classList.remove("mishna-text__x-btn--hide"); }
+	mishnaTextDiv.onmouseout = function() { closeBtn.classList.add("mishna-text__x-btn--hide"); }
+
+	closeBtn.onclick = function () {
+		const indexToRemove = mishnaUnitDiv.id.split("-")[1];
+		console.log(indexToRemove);
+		currentSessionInputs[indexToRemove] = "";
+		mishnaUnitDiv.remove();
+
+	}
 
 	// ADJUST new elements to current font size
 	let mishnas = document.querySelectorAll('.mishna-text');

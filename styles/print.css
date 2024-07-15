@@ -125,6 +125,10 @@ h1 {
     display: none;
 }
 
+.mishna-text__x-btn {
+    display: none;
+}
+
 .footnote {
     display: none;
 }
