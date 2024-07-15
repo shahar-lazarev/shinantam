@@ -558,7 +558,7 @@ p#top-quote {
 
 .expand-content p {
     direction: ltr;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: 'Franklin Gothic Medium', 'Times New Roman','Arial Narrow', Arial, sans-serif;
 }
 
 .expand-content li {
@@ -965,6 +965,7 @@ button.text-btn {
 }
 
 #textarea-submit-btn {
+    font-weight: bold;
     /* margin-top: 10px;  */
     /* margin-right: 80px; */
     margin-left: auto;

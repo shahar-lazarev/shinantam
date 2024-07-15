@@ -30,8 +30,10 @@ window.addEventListener('load', onHashChange);
 // Detect back/forward navigation
 window.addEventListener('hashchange', onHashChange);
 
+let prevHash = window.location.hash;
 function navigateTo(hash) {
-	window.location.hash = hash;
+	prevHash = window.location.hash; // set the previous hash
+	window.location.hash = hash; // new hash
 
 	if (hash == "") {
 		currentMasechet = "אבות";
@@ -44,6 +46,11 @@ function onHashChange()	{
 	const url = decodeURI(window.location.href);
 	// http://127.0.0.1:5501/#/אבות-ש
 	let hash = window.location.hash;
+
+	if (hash == "#/custom") {
+		if (!showingInputUI) displayInputUI();
+		return;
+	}
 
 	if (hash != "" && hash.substring(0,2) != "#/") {
 		// window.history.replaceState(null, "", "");
@@ -68,19 +75,13 @@ function onHashChange()	{
 				navigateTo("");
 
 			} else { // normal masechet & normal perek
-	
-				const nextURL = `#/${masechet}-${perek}`;
-				const nextTitle = 'Shinantam';
-				const nextState = { additionalInformation: `Update to ${masechet} ${perek}` };
-				// window.history.pushState(nextState, nextState, nextURL);
-				navigateTo(nextURL);
+				navigateTo(`#/${masechet}-${perek}`);
 
 				currentMasechet = masechet;
 				currentPerek = perek;
 
 				switchPerek(currentMasechet, currentPerek);
 			}
-
 		} else { 
 			// window.history.pushState({additionalInformation: `Update to home`}, "", "");
 			navigateTo("");

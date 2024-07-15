@@ -111,7 +111,7 @@ function changeFontSize(increment) {
 
 // document.getElementById("mishna-content").innerHTML = "";
 let showingInputUI = false; // initialization (when website opens)
-function displayInputUI() {
+function displayInputUI() { // initiate the change in state
 	if (nowIsAcronym) makeAcronym();
 
 	if (!showingInputUI) { // it will now enter the input-UI
@@ -125,7 +125,7 @@ function displayInputUI() {
 		const submitTextArea = document.createElement('button');
 		submitTextArea.id = "textarea-submit-btn";
 		submitTextArea.addEventListener("click", submitTextAreaInput)
-		submitTextArea.innerText = "שלח / Submit"
+		submitTextArea.innerHTML = `שלח / <span style="font-family: 'Times new roman'";>Submit</span>`
 
 		const mishnaUnitDiv = document.createElement('div');
 		mishnaUnitDiv.classList.add("mishna-unit");
@@ -141,12 +141,12 @@ function displayInputUI() {
 
 		adjustTextAreaDirection();
 
-
 		for (entry of currentSessionInputs) {
 			submitTextAreaInputWithText(entry);
 		}
 
 		showingInputUI = true;
+		if (window.location.hash != "#/custom") navigateTo("#/custom");
 		document.getElementById("personal-button").classList.add("personal-button--active");
 
 	} else { // it will now exit the input-UI
@@ -160,7 +160,9 @@ function displayInputUI() {
 		});
 
 		showingInputUI = false;
+		navigateTo(prevHash);
 		document.getElementById("personal-button").classList.remove("personal-button--active");
+		
 
 	}
 
