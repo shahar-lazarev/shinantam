@@ -75,11 +75,12 @@ function onHashChange()	{
 				navigateTo("");
 
 			} else { // normal masechet & normal perek
-				navigateTo(`#/${masechet}-${perek}`);
-
+				// console.log(`${currentMasechet} == ${masechet} && ${currentPerek} == ${perek}`);
+				// if (currentMasechet == masechet && currentPerek == perek) return;
 				currentMasechet = masechet;
 				currentPerek = perek;
-
+				
+				// navigateTo(`#/${masechet}-${perek}`);
 				switchPerek(currentMasechet, currentPerek);
 			}
 		} else { 
@@ -94,7 +95,6 @@ function onHashChange()	{
 function switchPerek(thisMasechet, perek) {
 	document.getElementById("mishna-content").innerHTML = "";
 	currentPerek = perek;
-
 	fetchData(thisMasechet)
 		.then(masechet => {
 			displayEntirePerek(masechet[currentPage()]) // currentPage() = e.g. אבות א
@@ -127,8 +127,7 @@ function switchPerek(thisMasechet, perek) {
 
 	const currentHash = decodeURI(window.location.hash);
 	const nextURL = `#/${thisMasechet}-${perek}`;
-
-	if (!(currentHash == "" && nextURL == "#/אבות-א") && currentHash != nextURL) {
+	if (!(currentHash == "" && nextURL == "#/אבות-א")) {
 		const nextTitle = 'Shinantam';
 		const nextState = { additionalInformation: `Update to ${thisMasechet} ${perek}` };
 	
@@ -150,7 +149,8 @@ function listenPerekBtns() {
 
 			currentMasechet = selectedMasechetBtnName;
 			currentPerek = selectedPerekBtnName;
-			switchPerek(currentMasechet, currentPerek);
+			navigateTo(`#/${currentMasechet}-${currentPerek}`);
+			// switchPerek(currentMasechet, currentPerek);
 			return;
 		}
 	}
@@ -217,16 +217,20 @@ function getNextMasechet() {
 }
 
 function switchToNextPerek() {
+	console.log("left ARROW");
+
 	if (nums_eng_to_heb[masechetToPerekAmount[currentMasechet]] == currentPerek) { // last perek in current masechet
 		if (currentMasechet == "עוקצים") {} // do nothing // last masechet
 		else {
 			currentMasechet = getNextMasechet()
 			currentPerek = "א";
-			switchPerek(currentMasechet, currentPerek);
+			navigateTo(`#/${currentMasechet}-${currentPerek}`);
+			// switchPerek(currentMasechet, currentPerek);
 		}
 	} else {
 		currentPerek = nums_eng_to_heb[heb_to_nums[currentPerek] + 1];
-		switchPerek(currentMasechet, currentPerek);
+		navigateTo(`#/${currentMasechet}-${currentPerek}`);
+		// switchPerek(currentMasechet, currentPerek);
 	}
 }
 
@@ -237,17 +241,20 @@ function getPrevMasechet() {
 }
 
 function switchToPrevPerek() {
+	console.log("right ARROW");
 
 	if (currentPerek == "א") { // first perek in current masechet
 		if (currentMasechet == "ברכות") {} // last masechet
 		else {
 			currentMasechet = getPrevMasechet()
 			currentPerek = nums_eng_to_heb[masechetToPerekAmount[currentMasechet]];
-			switchPerek(currentMasechet, currentPerek);
+			navigateTo(`#/${currentMasechet}-${currentPerek}`);
+			// switchPerek(currentMasechet, currentPerek);
 		}
 	} else {
 		currentPerek = nums_eng_to_heb[heb_to_nums[currentPerek] - 1];
-		switchPerek(currentMasechet, currentPerek);
+		navigateTo(`#/${currentMasechet}-${currentPerek}`);
+		// switchPerek(currentMasechet, currentPerek);
 	}
 }
 

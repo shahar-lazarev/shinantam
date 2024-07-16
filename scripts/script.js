@@ -256,8 +256,11 @@ function addMishnaUnitBlocks(text) {
 	document.getElementById("mishna-content").appendChild(mishnaUnitDiv);
 }
 
+let pageBeingDisplayed = "";
 function displayEntirePerek(perek) {
+	if (pageBeingDisplayed == currentPage()) return; // the perek is already being display
 
+	pageBeingDisplayed = currentPage();
 	Object.keys(perek).forEach(key => {
 		let mishna = perek[key]
 		// mishna unit
