@@ -217,8 +217,6 @@ function getNextMasechet() {
 }
 
 function switchToNextPerek() {
-	console.log("left ARROW");
-
 	if (nums_eng_to_heb[masechetToPerekAmount[currentMasechet]] == currentPerek) { // last perek in current masechet
 		if (currentMasechet == "עוקצים") {} // do nothing // last masechet
 		else {
@@ -241,8 +239,6 @@ function getPrevMasechet() {
 }
 
 function switchToPrevPerek() {
-	console.log("right ARROW");
-
 	if (currentPerek == "א") { // first perek in current masechet
 		if (currentMasechet == "ברכות") {} // last masechet
 		else {

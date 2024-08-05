@@ -492,6 +492,15 @@ p#top-quote {
     margin-bottom: 1em;
     text-align: center;
     font-style: italic;
+    font-weight: bolder;
+}
+
+#reference {
+    
+}
+
+@media screen and (max-width: 900px) {
+    #top-quote-br { display: none; }
 }
 
 #BSD {
