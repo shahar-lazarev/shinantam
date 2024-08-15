@@ -332,13 +332,30 @@ document.addEventListener("touchstart", function (event) {
 					...
 				} */
 function fetchData(masechet) {
+
+	// Set a timeout to check if the request takes longer than 200 ms
+	let isRequestComplete = false;
+	const timer = setTimeout(function() {
+		if (!isRequestComplete) {
+			document.getElementById("mishna-content").innerHTML = "";
+			document.getElementById("loading").style.display="block";
+			window.scrollTo(0,0);
+		}
+	}, 300); // 300 ms
+
 	return new Promise((resolve, reject) => {
+
+		// document.getElementById("mishna-content").innerHTML = "";
+
 		// Step 1: Retrieve JSON data from the URL using $.getJSON
 		url = `https://raw.githubusercontent.com/shahar-lazarev/shinantam/data/data/${masechet}.json`;
 
 		$.getJSON(url, function (jsonData) {
 			// Step 2: Use JSON.parse to convert the JSON data to a JavaScript object
 			const parsedData = JSON.parse(JSON.stringify(jsonData));
+
+			isRequestComplete = true; // Mark the request as complete
+			clearTimeout(timer); // Clear the timeout since the request is complete
 
 			// Step 3: Resolve the Promise with the parsed data
 			resolve(parsedData);

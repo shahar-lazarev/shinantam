@@ -93,11 +93,10 @@ function onHashChange()	{
 
 // switch to the perek indicated by "thisMasechet" & "perek"
 function switchPerek(thisMasechet, perek) {
-	document.getElementById("mishna-content").innerHTML = "";
-	document.getElementById("loading").style.display="block";
-	currentPerek = perek;
 	fetchData(thisMasechet)
 		.then(masechet => {
+			document.getElementById("mishna-content").innerHTML = "";
+			currentPerek = perek;
 			document.getElementById("loading").style.display="none";
 			displayEntirePerek(masechet[currentPage()]) // currentPage() = e.g. אבות א
 		})
