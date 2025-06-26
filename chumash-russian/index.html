@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Русский Чумаш</title>
+  <style>
+    :root {
+      --primary-color: #1a202c;
+      --accent-color: #2b6cb0;
+      --bg-color: #f7fafc;
+      --text-color: #2d3748;
+      --border-radius: 12px;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      padding: 40px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 30px;
+    }
+
+    .dropdown-container {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .dropdown-container label {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cbd5e0;
+      border-radius: var(--border-radius);
+      margin-top: 5px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    select:focus, textarea:focus {
+      border-color: var(--accent-color);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(43, 108, 176, 0.3);
+    }
+
+    textarea {
+      height: 350px;
+      background-color: #ffffff;
+      margin-top: 20px;
+      resize: vertical;
+    }
+
+    .toggle-container {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .copy-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .copy-button:hover {
+      background-color: #2c5282;
+    }
+
+    .copy-button {
+    transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .copy-button:active {
+    transform: scale(0.97);
+    }
+
+  </style>
+</head>
+<body>
+  <h1>Чтение Алии на Русском</h1>
+
+  <div class="dropdown-container">
+    <label for="seferSelect">Сефер:
+      <select id="seferSelect"></select>
+    </label>
+
+    <label for="parashaSelect">Параша:
+      <select id="parashaSelect"></select>
+    </label>
+
+    <label for="aliyahSelect">Алия:
+      <select id="aliyahSelect"></select>
+    </label>
+  </div>
+
+  <div class="toggle-container">
+    <label for="formatToggle">Без номеров стихов:</label>
+    <input type="checkbox" id="formatToggle" />
+  </div>
+
+  <textarea id="textDisplay" readonly></textarea>
+
+  <button class="copy-button" onclick="copyText()">Скопировать текст</button>
+
+  <script>
+    const aliyotURL = './Алиёт.txt';
+    const chumashURL = './Русский-Чумаш.txt';
+
+    let aliyotMap = {};
+    let chumashLines = [];
+
+    async function loadData() {
+      try {
+        const [aliyotResp, chumashResp] = await Promise.all([
+          fetch(aliyotURL),
+          fetch(chumashURL)
+        ]);
+
+        const aliyotText = await aliyotResp.text();
+        const chumashText = await chumashResp.text();
+
+        parseAliyot(aliyotText);
+        chumashLines = chumashText.split('\n');
+        populateSeferDropdown();
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    }
+
+    function parseAliyot(text) {
+      const lines = text.split('\n');
+      let currentParasha = '';
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        if (!line.startsWith('Алия') && !line.startsWith('Мафтир')) {
+          const [parasha] = line.split(',');
+          currentParasha = parasha.trim();
+          aliyotMap[currentParasha] = {};
+        } else {
+          const [aliyahName, range] = line.split(',');
+          if (currentParasha && range) {
+            aliyotMap[currentParasha][aliyahName.trim()] = range.trim().split('-');
+          }
+        }
+      }
+    }
+
+    function populateSeferDropdown() {
+      const seferSet = new Set();
+      for (let parasha of Object.keys(aliyotMap)) {
+        const aliyot = aliyotMap[parasha];
+        const firstAliyah = Object.values(aliyot)[0];
+        if (firstAliyah) {
+          const sefer = firstAliyah[0].split(' ')[0];
+          seferSet.add(sefer);
+        }
+      }
+
+      const seferSelect = document.getElementById('seferSelect');
+      seferSelect.innerHTML = [...seferSet].map(sefer => `<option value="${sefer}">${sefer}</option>`).join('');
+      seferSelect.addEventListener('change', populateParashaDropdown);
+      populateParashaDropdown();
+    }
+
+    function populateParashaDropdown() {
+      const selectedSefer = document.getElementById('seferSelect').value;
+      const parashaSelect = document.getElementById('parashaSelect');
+      const parashot = Object.keys(aliyotMap).filter(p => {
+        const aliyot = aliyotMap[p];
+        const first = Object.values(aliyot)[0];
+        return first && first[0].startsWith(selectedSefer);
+      });
+      parashaSelect.innerHTML = parashot.map(p => `<option value="${p}">${p}</option>`).join('');
+      parashaSelect.addEventListener('change', populateAliyahDropdown);
+      populateAliyahDropdown();
+    }
+
+    function populateAliyahDropdown() {
+      const parasha = document.getElementById('parashaSelect').value;
+      const aliyot = aliyotMap[parasha] || {};
+      const aliyahSelect = document.getElementById('aliyahSelect');
+      aliyahSelect.innerHTML = Object.keys(aliyot).map(a => `<option value="${a}">${a}</option>`).join('');
+      aliyahSelect.addEventListener('change', displayAliyahText);
+      displayAliyahText();
+    }
+
+    function verseToComparable(ref, defaultBook = '') {
+      let book = defaultBook;
+      let chapVerse = ref.trim();
+
+      if (ref.includes(' ')) {
+        [book, chapVerse] = ref.trim().split(' ');
+      }
+
+      const [chap, verse] = chapVerse.split(':').map(Number);
+      return { book, chap, verse };
+    }
+
+    function compareRefs(a, b) {
+      if (a.book !== b.book) return a.book.localeCompare(b.book);
+      if (a.chap !== b.chap) return a.chap - b.chap;
+      return a.verse - b.verse;
+    }
+
+    function displayAliyahText() {
+      const parasha = document.getElementById('parashaSelect').value;
+      const aliyah = document.getElementById('aliyahSelect').value;
+      const noVerseNumbers = document.getElementById('formatToggle').checked;
+      if (!aliyotMap[parasha] || !aliyotMap[parasha][aliyah]) return;
+
+      const [startRef, endRef] = aliyotMap[parasha][aliyah];
+      const start = verseToComparable(startRef);
+      const end = verseToComparable(endRef, start.book);
+      const currentBook = start.book;
+
+      let capturing = false;
+      let currentChapter = 0;
+      let currentSefer = '';
+      const results = [];
+
+      for (let line of chumashLines) {
+        const seferMatch = line.match(/^([А-Яа-я\-]+) Глава (\d+)/);
+        if (seferMatch) {
+          currentSefer = seferMatch[1];
+          currentChapter = parseInt(seferMatch[2]);
+          continue;
+        }
+
+        const verseMatch = line.match(/^(\d+:\d+)\.\s*/);
+        if (verseMatch && currentSefer === currentBook) {
+          const [chap, verse] = verseMatch[1].split(':').map(Number);
+          const verseObj = { book: currentSefer, chap, verse };
+
+          if (compareRefs(verseObj, start) >= 0 && compareRefs(verseObj, end) <= 0) {
+            capturing = true;
+            results.push(noVerseNumbers ? line.replace(/^(\d+:\d+)\.\s*/, '') : line);
+          } else if (compareRefs(verseObj, end) > 0 && capturing) {
+            break;
+          }
+        } else if (capturing) {
+          results.push(line);
+        }
+      }
+
+      if (noVerseNumbers) {
+        results.unshift(`${parasha} ${aliyah}`);
+      }
+
+      document.getElementById('textDisplay').value = results.join('\n');
+    }
+
+    function copyText() {
+        const textarea = document.getElementById('textDisplay');
+        const button = document.querySelector('.copy-button');
+
+        textarea.select();
+        document.execCommand('copy');
+
+        // Provide visual feedback
+        const originalText = button.innerText;
+        button.innerText = '✅ Скопировано!';
+        button.disabled = true;
+
+        setTimeout(() => {
+            button.innerText = originalText;
+            button.disabled = false;
+        }, 1500);
+    }
+
+    document.getElementById('formatToggle').addEventListener('change', displayAliyahText);
+
+    loadData();
+  </script>
+</body>
+</html>
