@@ -462,7 +462,7 @@
 
           if (compareRefs(verseObj, start) >= 0 && compareRefs(verseObj, end) <= 0) {
             capturing = true;
-            results.push(!VerseNumbers ? line.replace(/^(\d+:\d+)\.\s*/, '') : line + " ");
+            results.push(!VerseNumbers ? line.replace(/^(\d+:\d+)\.\s*/, '') + " " : line + " ");
           } else if (compareRefs(verseObj, end) > 0 && capturing) {
             break;
           }
