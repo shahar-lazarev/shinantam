@@ -222,6 +222,71 @@
     const aliyotURL = 'https://raw.githubusercontent.com/shahar-lazarev/russian-chumash/refs/heads/main/%D0%90%D0%BB%D0%B8%D1%91%D1%82.txt';
     const chumashURL = 'https://raw.githubusercontent.com/shahar-lazarev/russian-chumash/main/%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9%20%D0%A7%D1%83%D0%BC%D0%B0%D1%88.txt';
 
+    const parashaTranslations = {
+      "Bereshit": "Брейшит",
+      "Noach": "Ноах",
+      "Lech-Lecha": "Лех-Леха",
+      "Vayera": "Вайера",
+      "Chayei Sara": "Хайей-Сара",
+      "Toldot": "Толдот",
+      "Vayetzei": "Вайеце",
+      "Vayishlach": "Вайишлах",
+      "Vayeshev": "Вайешев",
+      "Miketz": "Микец",
+      "Vayigash": "Вайигаш",
+      "Vayechi": "Вайехи",
+      "Shemot": "Шмот",
+      "Vaera": "Ваэра",
+      "Bo": "Бо",
+      "Beshalach": "Бэшалах",
+      "Yitro": "Итро",
+      "Mishpatim": "Мишпатим",
+      "Terumah": "Трума",
+      "Tetzaveh": "Тэцавэ",
+      "Ki Tisa": "Ки-Тиса",
+      "Vayakhel": "Вайакгел",
+      "Pekudei": "Пэкудэй",
+      "Vayikra": "Вайикра",
+      "Tzav": "Цав",
+      "Shemini": "Шмини",
+      "Tazria": "Тазриа",
+      "Metzora": "Мецора",
+      "Achrei Mot": "Ахарэй",
+      "Kedoshim": "Кдошим",
+      "Emor": "Эмор",
+      "Behar": "Бэар",
+      "Bechukotai": "Бэхукотай",
+      "Bamidbar": "Бэмидбар",
+      "Nasso": "Насо",
+      "Beha'alotcha": "Бэаалотха",
+      "Sh'lach": "Шлах",
+      "Korach": "Корах",
+      "Chukat": "Хукат",
+      "Balak": "Балак",
+      "Pinchas": "Пинхас",
+      "Matot": "Матот",
+      "Masei": "Масъэй",
+      "Devarim": "Дварим",
+      "Vaetchanan": "Ваэтханан",
+      "Eikev": "Эйкев",
+      "Re'eh": "Рээ",
+      "Shoftim": "Шофтим",
+      "Ki Teitzei": "Ки-Теце",
+      "Ki Tavo": "Ки-Таво",
+      "Nitzavim": "Ницавим",
+      "Vayelech": "Вайэлех",
+      "Ha'Azinu": "Аазину",
+      "V'Zot HaBerachah": "Вэзот-Абраха",
+
+      // Combined Parashot
+      "Vayakhel-Pekudei": "Вайакгел-Пэкудэй",
+      "Tazria-Metzora": "Тазриа-Мецора",
+      "Achrei Mot-Kedoshim": "Ахарэй-Кдошим",
+      "Behar-Bechukotai": "Бэар-Бэхукотай",
+      "Chukat-Balak": "Хукат-Балак",
+      "Matot-Masei": "Матот-Масъэй",
+      "Nitzavim-Vayelech": "Ницавим-Вайэлех",
+    };
     let aliyotMap = {};
     let chumashLines = [];
 
@@ -237,7 +302,13 @@
 
         parseAliyot(aliyotText);
         chumashLines = chumashText.split('\n');
-        populateSeferDropdown();
+
+        // Get current parasha (in Russian) from Hebcal
+        const currentParasha = await getCurrentParasha();
+
+        // Pass current parasha to your dropdown population function
+        populateSeferDropdown(currentParasha);
+
       } catch (error) {
         console.error("Error loading data:", error);
       }
@@ -261,7 +332,21 @@
       }
     }
 
-    function populateSeferDropdown() {
+    async function getCurrentParasha() {
+      const url = 'https://www.hebcal.com/shabbat?cfg=json&geonameid=5128581&M=on';
+      const resp = await fetch(url);
+      const data = await resp.json();
+      const item = data.items.find(it => it.category === 'parashat');
+      const name = item.title.replace("Parashat ", "")
+
+      if (item && parashaTranslations[name]) { // remove 'Parashat' from 'Parashat Korach'
+        return parashaTranslations[name];
+      }
+      return null;
+    }
+
+
+    function populateSeferDropdown(preferredParasha) {
       const seferSet = new Set();
       for (let parasha of Object.keys(aliyotMap)) {
         const aliyot = aliyotMap[parasha];
@@ -274,11 +359,22 @@
 
       const seferSelect = document.getElementById('seferSelect');
       seferSelect.innerHTML = [...seferSet].map(sefer => `<option value="${sefer}">${sefer}</option>`).join('');
-      seferSelect.addEventListener('change', populateParashaDropdown);
-      populateParashaDropdown();
+
+      // If there's a preferredParasha, select its sefer
+      if (preferredParasha && aliyotMap[preferredParasha]) {
+        const aliyot = aliyotMap[preferredParasha];
+        const firstAliyah = Object.values(aliyot)[0];
+        if (firstAliyah) {
+          const sefer = firstAliyah[0].split(' ')[0];
+          seferSelect.value = sefer;
+        }
+      }
+
+      seferSelect.addEventListener('change', () => populateParashaDropdown());
+      populateParashaDropdown(preferredParasha); // pass along the parasha
     }
 
-    function populateParashaDropdown() {
+    function populateParashaDropdown(preferredParasha) {
       const selectedSefer = document.getElementById('seferSelect').value;
       const parashaSelect = document.getElementById('parashaSelect');
       const parashot = Object.keys(aliyotMap).filter(p => {
@@ -286,19 +382,36 @@
         const first = Object.values(aliyot)[0];
         return first && first[0].startsWith(selectedSefer);
       });
+
       parashaSelect.innerHTML = parashot.map(p => `<option value="${p}">${p}</option>`).join('');
+
+      // If preferredParasha is available and in this Sefer, select it
+      if (preferredParasha && parashot.includes(preferredParasha)) {
+        parashaSelect.value = preferredParasha;
+      }
+
       parashaSelect.addEventListener('change', populateAliyahDropdown);
-      populateAliyahDropdown();
+      populateAliyahDropdown(); // will use selected parasha
     }
 
-    function populateAliyahDropdown() {
+    function populateAliyahDropdown(preferredAliyah) {
       const parasha = document.getElementById('parashaSelect').value;
       const aliyot = aliyotMap[parasha] || {};
       const aliyahSelect = document.getElementById('aliyahSelect');
-      aliyahSelect.innerHTML = Object.keys(aliyot).map(a => `<option value="${a}">${a}</option>`).join('');
+
+      aliyahSelect.innerHTML = Object.keys(aliyot)
+        .map(a => `<option value="${a}">${a}</option>`)
+        .join('');
+
+      // If a preferredAliyah is provided and exists, pre-select it
+      if (preferredAliyah && aliyot[preferredAliyah]) {
+        aliyahSelect.value = preferredAliyah;
+      }
+
       aliyahSelect.addEventListener('change', displayAliyahText);
       displayAliyahText();
     }
+
 
     function verseToComparable(ref, defaultBook = '') {
       let book = defaultBook;
