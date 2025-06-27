@@ -24,7 +24,7 @@
     }
 
     .bsd {
-      position: absolute;
+      position: fixed;
       top: 20px;
       right: 20px;
       font-size: 1rem;
@@ -58,7 +58,7 @@
       font-weight: 600;
     }
 
-    select, textarea {
+    select {
       width: 100%;
       padding: 10px;
       border: 1px solid #cbd5e0;
@@ -68,29 +68,39 @@
       box-sizing: border-box;
     }
 
-    select:focus, textarea:focus {
+    select:focus {
       border-color: var(--accent-color);
       outline: none;
       box-shadow: 0 0 0 2px rgba(43, 108, 176, 0.3);
     }
 
-    textarea {
-      height: 350px;
-      background-color: #ffffff;
+    .text-display {
       margin-top: 20px;
-      resize: vertical;
+      padding: 20px;
+      background-color: white;
+      border: 1px solid #cbd5e0;
+      border-radius: var(--border-radius);
+      line-height: 1.7;
+      font-family: 'Georgia', serif;
+      white-space: pre-wrap;
+      font-size: 1.1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
 
     .toggle-container {
       margin-top: 20px;
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
       gap: 10px;
     }
 
     .copy-button {
-      margin-top: 20px;
-      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
       background-color: var(--accent-color);
       color: white;
       border: none;
@@ -114,20 +124,21 @@
       font-size: 0.9rem;
       color: #718096;
     }
+
     @media screen and (max-width: 600px) {
       body {
-        padding: 15px 50px;
+        padding: 15px 20px;
         max-width: 100%;
       }
 
       .dropdown-container {
-        flex-direction: column; /* stack vertically */
+        flex-direction: column;
         gap: 15px;
       }
 
       .dropdown-container label {
-        min-width: auto; /* remove fixed min-width */
-        flex: none; /* don't stretch */
+        min-width: auto;
+        flex: none;
       }
 
       select {
@@ -137,26 +148,19 @@
 
       .toggle-container {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
+        align-items: stretch;
+        gap: 10px;
         margin-top: 15px;
       }
 
-      label[for="formatToggle"] {
-        font-size: 1.05rem;
-      }
-
       .copy-button {
+        justify-content: center;
         width: 100%;
-        padding: 14px;
-        font-size: 1.1rem;
-        margin-top: 20px;
       }
 
-      textarea {
-        height: 280px;
+      .text-display {
         font-size: 1rem;
-        padding: 12px;
+        padding: 15px;
       }
 
       .bsd {
@@ -171,7 +175,6 @@
         padding: 10px 5px;
       }
     }
-
   </style>
 </head>
 <body>
@@ -193,13 +196,16 @@
   </div>
 
   <div class="toggle-container">
-    <label for="formatToggle">С номеров стихов:</label>
-    <input type="checkbox" id="formatToggle" />
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <label for="formatToggle">С номеров стихов:</label>
+      <input type="checkbox" id="formatToggle" />
+    </div>
+    <button class="copy-button" onclick="copyText(this)">
+      <span class="copy-icon">📋</span> Скопировать
+    </button>
   </div>
 
-  <textarea id="textDisplay" readonly></textarea>
-
-  <button class="copy-button" onclick="copyText(this)">Скопировать текст</button>
+  <div id="textDisplay" class="text-display"></div>
 
   <footer>
     Текст взят с сайта <a href="http://www.shabat-shalom.info/books/Tanach-ru/Chumash_Rashi/" target="_blank">shabat-shalom.info</a>
@@ -349,19 +355,19 @@
         results.unshift(`${parasha} ${aliyah}`);
       }
 
-      document.getElementById('textDisplay').value = results.join('\n');
+      document.getElementById('textDisplay').innerText = results.join('\n');
     }
 
     function copyText(button) {
-      const textarea = document.getElementById('textDisplay');
-      textarea.select();
-      document.execCommand('copy');
+      const text = document.getElementById('textDisplay').innerText;
+      navigator.clipboard.writeText(text);
 
-      const originalText = button.innerText;
-      button.innerText = '✅ Скопировано!';
+      const iconSpan = button.querySelector('.copy-icon');
+      iconSpan.textContent = '✅';
       button.disabled = true;
+
       setTimeout(() => {
-        button.innerText = originalText;
+        iconSpan.textContent = '📋';
         button.disabled = false;
       }, 1500);
     }
