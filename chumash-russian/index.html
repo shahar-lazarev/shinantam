@@ -2,6 +2,8 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Русский Хумаш</title>
   <style>
     :root {
@@ -112,9 +114,9 @@
       font-size: 0.9rem;
       color: #718096;
     }
-    @media (max-width: 600px) {
+    @media screen and (max-width: 600px) {
       body {
-        padding: 15px 10px;
+        padding: 15px 50px;
         max-width: 100%;
       }
 
@@ -191,7 +193,7 @@
   </div>
 
   <div class="toggle-container">
-    <label for="formatToggle">Без номеров стихов:</label>
+    <label for="formatToggle">С номеров стихов:</label>
     <input type="checkbox" id="formatToggle" />
   </div>
 
@@ -306,7 +308,7 @@
     function displayAliyahText() {
       const parasha = document.getElementById('parashaSelect').value;
       const aliyah = document.getElementById('aliyahSelect').value;
-      const noVerseNumbers = document.getElementById('formatToggle').checked;
+      const VerseNumbers = document.getElementById('formatToggle').checked;
       if (!aliyotMap[parasha] || !aliyotMap[parasha][aliyah]) return;
 
       const [startRef, endRef] = aliyotMap[parasha][aliyah];
@@ -334,7 +336,7 @@
 
           if (compareRefs(verseObj, start) >= 0 && compareRefs(verseObj, end) <= 0) {
             capturing = true;
-            results.push(noVerseNumbers ? line.replace(/^(\d+:\d+)\.\s*/, '') : line);
+            results.push(!VerseNumbers ? line.replace(/^(\d+:\d+)\.\s*/, '') : line);
           } else if (compareRefs(verseObj, end) > 0 && capturing) {
             break;
           }
@@ -343,7 +345,7 @@
         }
       }
 
-      if (noVerseNumbers) {
+      if (!VerseNumbers) {
         results.unshift(`${parasha} ${aliyah}`);
       }
 
