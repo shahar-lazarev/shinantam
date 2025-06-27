@@ -74,6 +74,13 @@
       box-shadow: 0 0 0 2px rgba(43, 108, 176, 0.3);
     }
 
+    .header-line {
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+
     .text-display {
       margin-top: 20px;
       padding: 20px;
@@ -352,10 +359,10 @@
       }
 
       if (!VerseNumbers) {
-        results.unshift(`${parasha} ${aliyah}`);
+        results.unshift(`<div class="header-line">${parasha} ${aliyah}</div>`);
       }
 
-      document.getElementById('textDisplay').innerText = results.join('\n');
+      document.getElementById('textDisplay').innerHTML = results.join('');
     }
 
     function copyText(button) {
