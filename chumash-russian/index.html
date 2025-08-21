@@ -220,8 +220,8 @@
   </footer>
 
   <script>
-    const aliyotURL = 'https://raw.githubusercontent.com/shahar-lazarev/russian-chumash/refs/heads/main/%D0%90%D0%BB%D0%B8%D1%91%D1%82.txt';
-    const chumashURL = 'https://raw.githubusercontent.com/shahar-lazarev/russian-chumash/main/%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9%20%D0%A7%D1%83%D0%BC%D0%B0%D1%88.txt';
+    const aliyotURL = 'https://raw.githubusercontent.com/shahar-lazarev/shinantam/refs/heads/main/chumash-russian/%D0%90%D0%BB%D0%B8%D1%91%D1%82.txt';
+    const chumashURL = 'https://raw.githubusercontent.com/shahar-lazarev/shinantam/refs/heads/main/chumash-russian/%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9-%D0%A7%D1%83%D0%BC%D0%B0%D1%88.txt';
 
     const parashaTranslations = {
       "Bereshit": "Брейшит",
@@ -259,8 +259,8 @@
       "Bechukotai": "Бэхукотай",
       "Bamidbar": "Бэмидбар",
       "Nasso": "Насо",
-      "Beha'alotcha": "Бэаалотха",
-      "Sh'lach": "Шлах",
+      "Beha’alotcha": "Бэаалотха",
+      "Sh’lach": "Шлах",
       "Korach": "Корах",
       "Chukat": "Хукат",
       "Balak": "Балак",
@@ -270,14 +270,14 @@
       "Devarim": "Дварим",
       "Vaetchanan": "Ваэтханан",
       "Eikev": "Эйкев",
-      "Re'eh": "Рээ",
+      "Re’eh": "Рээ",
       "Shoftim": "Шофтим",
       "Ki Teitzei": "Ки-Теце",
       "Ki Tavo": "Ки-Таво",
       "Nitzavim": "Ницавим",
       "Vayelech": "Вайэлех",
-      "Ha'Azinu": "Аазину",
-      "V'Zot HaBerachah": "Вэзот-Абраха",
+      "Ha’Azinu": "Аазину",
+      "V’Zot HaBerachah": "Вэзот-Абраха",
 
       // Combined Parashot
       "Vayakhel-Pekudei": "Вайакгел-Пэкудэй",
@@ -340,6 +340,8 @@
       const item = data.items.find(it => it.category === 'parashat');
       const name = item.title.replace("Parashat ", "")
 
+      console.log(parashaTranslations[name]);
+      console.log(name);
       if (item && parashaTranslations[name]) { // remove 'Parashat' from 'Parashat Korach'
         return parashaTranslations[name];
       }
