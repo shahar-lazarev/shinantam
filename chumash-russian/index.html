@@ -338,7 +338,8 @@
       const resp = await fetch(url);
       const data = await resp.json();
       const item = data.items.find(it => it.category === 'parashat');
-      const name = item.title.replace("Parashat ", "")
+      if (!item || !item.title) return null;
+      const name = item.title.replace("Parashat ", "");
 
       console.log(parashaTranslations[name]);
       console.log(name);
