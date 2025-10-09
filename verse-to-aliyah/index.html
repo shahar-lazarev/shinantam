@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Parasha & Aliyah Finder</title>
+<link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+<style>
+:root {
+  --primary-color: #1a202c;
+  --accent-color: #2b6cb0;
+  --bg-color: #f7fafc;
+  --text-color: #2d3748;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-color);
+  font-family: "Inter", "Roboto", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* top alignment */
+  min-height: 100vh;
+  padding-top: 15vh; /* push card to top 1/3 */
+}
+
+.bsd {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #4b5668;
+      z-index: 1000;
+      background: var(--bg-color);
+      padding: 4px 8px;
+      border-radius: var(--border-radius);
+    }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  padding: 2rem 2.5rem;
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+h1 {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.input-group {
+  display: flex;
+  width: 100%;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.input-group input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.input-group input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 4px rgba(43, 108, 176, 0.15);
+}
+
+.input-group button {
+  flex-shrink: 0;
+  background-color: var(--accent-color);
+  color: white;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.input-group button:hover {
+  background-color: #2c5282;
+}
+
+.input-group button:active {
+  transform: scale(0.97);
+}
+
+#result {
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--primary-color);
+  min-height: 1.2em;
+  text-align: center; /* center horizontally */
+}
+
+.autocomplete-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.autocomplete-list div {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.autocomplete-list div:hover {
+  background-color: #ebf4ff;
+}
+
+.footer {
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: #718096;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 1.5rem 1.5rem;
+  }
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .input-group {
+    flex-direction: column;
+  }
+  .input-group input,
+  .input-group button {
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+<div class="bsd">בס״ד</div>
+<div class="container">
+  <div class="card">
+    <h1>Parasha & Aliyah Finder</h1>
+    <div class="input-group">
+      <input id="reference" type="text" placeholder="e.g. Bereshit 2:5" />
+      <button onclick="findParasha()">Find</button>
+      <div id="autocomplete" class="autocomplete-list" style="display:none;"></div>
+    </div>
+    <div id="result"></div>
+  </div>
+  <div class="footer">© 2025 Shinantam</div>
+</div>
+
+<script>
+let parshiot = [];
+const aliyotURL = 'https://raw.githubusercontent.com/shahar-lazarev/shinantam/refs/heads/main/verse-to-aliyah/aliyotData.json';
+
+async function loadData() {
+  try {
+    const response = await fetch(aliyotURL);
+    if (!response.ok) throw new Error('Failed to load aliyotData.json');
+    parshiot = await response.json();
+  } catch (error) {
+    console.error(error);
+    document.getElementById('result').textContent =
+      'Error loading data. Check console or JSON file.';
+  }
+}
+
+function parseReference(ref) {
+  const match = ref.trim().match(/^(\w+)\s+(\d+):(\d+)$/);
+  if (!match) return null;
+  return { book: match[1], chapter: +match[2], verse: +match[3] };
+}
+
+function inRange(ch, v, start, end) {
+  if (!start || !end) return false;
+  const [sCh, sV] = start.split(':').map(Number);
+  const [eCh, eV] = end.split(':').map(Number);
+  if (ch < sCh || ch > eCh) return false;
+  if (ch === sCh && v < sV) return false;
+  if (ch === eCh && v > eV) return false;
+  return true;
+}
+
+async function findParasha() {
+  if (parshiot.length === 0) await loadData();
+  const input = document.getElementById('reference').value.trim();
+  const resultDiv = document.getElementById('result');
+  const ref = parseReference(input);
+
+  if (!ref) {
+    resultDiv.textContent = 'Invalid format. Try "Bereshit 2:5"';
+    return;
+  }
+
+  const bookData = parshiot.filter(
+    (p) => p.book && p.book.toLowerCase() === ref.book.toLowerCase()
+  );
+  if (bookData.length === 0) {
+    resultDiv.textContent = 'Book not found.';
+    return;
+  }
+
+  for (const p of bookData) {
+    if (!p.start || !p.end) continue;
+    if (inRange(ref.chapter, ref.verse, p.start, p.end)) {
+      for (const a of p.aliyot || []) {
+        if (!a.start || !a.end) continue;
+        if (inRange(ref.chapter, ref.verse, a.start, a.end)) {
+          resultDiv.textContent = `${p.parasha} — ${a.aliyah}`;
+          return;
+        }
+      }
+      resultDiv.textContent = `${p.parasha} — within parasha but aliyah not found.`;
+      return;
+    }
+  }
+
+  resultDiv.textContent = 'Reference not found.';
+}
+
+// Autocomplete
+const books = ["Bereshit","Shemot","Vayikra","Bamidbar","Devarim"];
+
+const inputEl = document.getElementById("reference");
+const autoDiv = document.getElementById("autocomplete");
+
+inputEl.addEventListener("input", showAutocomplete);
+inputEl.addEventListener("focus", showAutocomplete);
+inputEl.addEventListener("blur", () => setTimeout(() => autoDiv.style.display="none", 100));
+
+function showAutocomplete() {
+  const val = inputEl.value.toLowerCase();
+  autoDiv.innerHTML = "";
+  const filtered = books.filter(b => b.toLowerCase().startsWith(val)).slice(0,5);
+  if (filtered.length === 0) {
+    autoDiv.style.display = "none";
+    return;
+  }
+  filtered.forEach(book => {
+    const div = document.createElement("div");
+    div.textContent = book;
+    div.addEventListener("mousedown", () => {
+      inputEl.value = book + " ";
+      autoDiv.style.display = "none";
+      inputEl.focus();
+    });
+    autoDiv.appendChild(div);
+  });
+  autoDiv.style.display = "block";
+}
+</script>
+</body>
+</html>
