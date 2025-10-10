@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Parasha & Aliyah Finder</title>
+<title>Verse to Aliyah</title>
 <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 <style>
 :root {
@@ -21,21 +21,21 @@ body {
   justify-content: center;
   align-items: flex-start; /* top alignment */
   min-height: 100vh;
-  padding-top: 15vh; /* push card to top 1/3 */
+  padding-top: 5vh; /* push card to top 1/3 */
 }
 
 .bsd {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      font-size: 1rem;
-      font-weight: bold;
-      color: #4b5668;
-      z-index: 1000;
-      background: var(--bg-color);
-      padding: 4px 8px;
-      border-radius: var(--border-radius);
-    }
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #4b5668;
+  z-index: 1000;
+  background: var(--bg-color);
+  padding: 4px 8px;
+  border-radius: var(--border-radius);
+}
 
 .container {
   display: flex;
@@ -147,6 +147,9 @@ h1 {
 }
 
 @media (max-width: 480px) {
+  div.container {
+    padding-top: 8vh; 
+  }
   .card {
     padding: 1.5rem 1.5rem;
   }
@@ -170,9 +173,9 @@ h1 {
 <div class="bsd">בס״ד</div>
 <div class="container">
   <div class="card">
-    <h1>Parasha & Aliyah Finder</h1>
+    <h1>Verse to Aliyah</h1>
     <div class="input-group">
-      <input id="reference" type="text" placeholder="e.g. Bereshit 2:5" />
+      <input id="reference" type="text" placeholder="e.g. Bereshit 2:5 or Bereshit 2 5" />
       <button onclick="findParasha()">Find</button>
       <div id="autocomplete" class="autocomplete-list" style="display:none;"></div>
     </div>
@@ -198,10 +201,12 @@ async function loadData() {
 }
 
 function parseReference(ref) {
-  const match = ref.trim().match(/^(\w+)\s+(\d+):(\d+)$/);
+  const pattern = /^([\p{L}\-']+)\s+(\d+)\s*(?::|\s|,)\s*(\d+)$/iu;
+  const match = String(ref || '').trim().match(pattern);
   if (!match) return null;
-  return { book: match[1], chapter: +match[2], verse: +match[3] };
+  return { book: match[1], chapter: Number(match[2]), verse: Number(match[3]) };
 }
+
 
 function inRange(ch, v, start, end) {
   if (!start || !end) return false;
@@ -238,7 +243,9 @@ async function findParasha() {
       for (const a of p.aliyot || []) {
         if (!a.start || !a.end) continue;
         if (inRange(ref.chapter, ref.verse, a.start, a.end)) {
-          resultDiv.textContent = `${p.parasha} — ${a.aliyah}`;
+          // resultDiv.textContent = `${p.parasha} — ${a.aliyah}`;    REMOVE 
+          resultDiv.innerHTML = `${p.parasha} ${a.aliyah}`;
+          await displayAliyahText(ref, p.book, a.start, a.end);
           return;
         }
       }
@@ -250,36 +257,200 @@ async function findParasha() {
   resultDiv.textContent = 'Reference not found.';
 }
 
-// Autocomplete
-const books = ["Bereshit","Shemot","Vayikra","Bamidbar","Devarim"];
+// AUTOCOMPLETE //////////
+const books = ["Bereshit", "Shemot", "Vayikra", "Bamidbar", "Devarim"];
 
 const inputEl = document.getElementById("reference");
 const autoDiv = document.getElementById("autocomplete");
 
 inputEl.addEventListener("input", showAutocomplete);
 inputEl.addEventListener("focus", showAutocomplete);
-inputEl.addEventListener("blur", () => setTimeout(() => autoDiv.style.display="none", 100));
+
+// Prevent premature hiding when clicking an option
+let isSelecting = false;
+inputEl.addEventListener("blur", () => {
+  setTimeout(() => {
+    if (!isSelecting) autoDiv.style.display = "none";
+  }, 100);
+});
 
 function showAutocomplete() {
   const val = inputEl.value.toLowerCase();
   autoDiv.innerHTML = "";
-  const filtered = books.filter(b => b.toLowerCase().startsWith(val)).slice(0,5);
+  const filtered = books.filter(b => b.toLowerCase().startsWith(val)).slice(0, 5);
+
   if (filtered.length === 0) {
     autoDiv.style.display = "none";
     return;
   }
+
   filtered.forEach(book => {
     const div = document.createElement("div");
     div.textContent = book;
-    div.addEventListener("mousedown", () => {
+
+    // When user presses mouse down, mark selection in progress
+    div.addEventListener("mousedown", (e) => {
+      e.preventDefault(); // prevent blur
+      isSelecting = true;
       inputEl.value = book + " ";
+      inputEl.focus(); // keep typing active
       autoDiv.style.display = "none";
-      inputEl.focus();
+      setTimeout(() => (isSelecting = false), 200);
     });
+
     autoDiv.appendChild(div);
   });
+
   autoDiv.style.display = "block";
 }
+
+
+inputEl.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault(); // prevent accidental form submission
+    findParasha();
+  }
+});
+
+// DISPLAY ALIYAH TEXT ///////////
+async function displayAliyahText(ref, book, start, end) {
+  const textContainerId = "aliyah-text";
+  let textContainer = document.getElementById(textContainerId);
+
+  if (!textContainer) {
+    textContainer = document.createElement("div");
+    textContainer.id = textContainerId;
+    textContainer.style.marginTop = "1.5rem";
+    textContainer.style.padding = "1rem";
+    textContainer.style.background = "#ffffff";
+    textContainer.style.border = "1px solid #e2e8f0";
+    textContainer.style.borderRadius = "12px";
+    textContainer.style.maxHeight = "300px";
+    textContainer.style.overflowY = "auto";
+    textContainer.style.lineHeight = "2";
+    textContainer.style.fontSize = "1.1rem";
+    textContainer.style.textAlign = "right";
+    textContainer.style.direction = "rtl";
+    textContainer.style.fontFamily = "'Noto Sans Hebrew', 'Arial', sans-serif";
+    document.querySelector(".card").appendChild(textContainer);
+  }
+
+  textContainer.innerHTML = `<em>טוען את הטקסט של העלייה...</em>`;
+
+  try {
+    const sefariaRef = `${book}.${start.replace(":", ".")}-${end.replace(":", ".")}`;
+    const response = await fetch(`https://www.sefaria.org/api/texts/${sefariaRef}?lang=he&context=0`);
+    const data = await response.json();
+
+    if (!data.he || !data.he.length) {
+      textContainer.innerHTML = "הטקסט של העלייה אינו זמין.";
+      return;
+    }
+
+    textContainer.innerHTML = "";
+    let highlightElement = null;
+
+    // Parse start chapter and verse
+    let [startCh, startV] = start.split(":").map(Number);
+    
+    
+    // data.he might be a single-dimension array or multi, if single, make it multi
+    let hebArray = data.he;
+    if (!Array.isArray(hebArray[0])) hebArray = [hebArray];
+
+    hebArray.forEach((verseData, i) => {
+      console.log(data.he);
+      verseData.forEach((pasuk, i) => {
+        // let verseHtml = Array.isArray(verseData) ? verseData.join(" ") : String(verseData);
+        let verseHtml = pasuk;
+  
+        // Clean unwanted spans, footnotes, or extra characters
+        verseHtml = verseHtml
+          .replace(/<span[^>]*>.*?<\/span>/g, "")
+          .replace(/&nbsp;/g, " ")
+          .replace(/\*\([^)]*\)/g, "")
+          .replace(/\s*\(\s*\)\s*/g, "")
+          .trim();
+  
+        const verseNumber = startV + i; // compute the actual verse number
+
+        if (verseNumber == 1) {
+          const chap = document.createElement("div");
+          chap.style.display = "block";
+          chap.style.marginBottom = "0.5rem";
+          // chap.style.alignContent = "center";
+          chap.style.fontSize = "24"
+          chap.innerHTML = `${startCh}`
+          textContainer.appendChild(chap)
+        }
+  
+        const div = document.createElement("div");
+        div.style.display = "block";
+        div.style.marginBottom = "0.5rem";
+  
+        // Prefix with verse number
+        // let prefix = verseNumber == 1 ? `${startCh}:${verseNumber}` : `${verseNumber}`
+        div.innerHTML = `<small style="margin-left:0.5rem;">${verseNumber}</small> ${verseHtml}`;
+  
+        // Highlight only the inputted verse
+        if (ref.chapter === startCh && ref.verse === verseNumber) {
+          div.classList.add("highlighted-verse");
+          highlightElement = div;
+        }
+
+        
+  
+        textContainer.appendChild(div);
+        
+      })
+      startCh += 1;
+      startV = 1;
+    });
+
+    // Add highlight style if not already present
+    if (!document.getElementById("highlight-style")) {
+      const style = document.createElement("style");
+      style.id = "highlight-style";
+      style.textContent = `
+        .highlighted-verse {
+          font-weight: bold;
+          background: rgba(43, 108, 176, 0.15);
+          border-radius: 8px;
+          padding: 4px;
+          transition: background 0.4s ease-in-out;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    // Auto-scroll to highlighted verse
+    if (highlightElement) {
+      setTimeout(() => {
+        const containerRect = textContainer.getBoundingClientRect();
+        const elementRect = highlightElement.getBoundingClientRect();
+
+        // Calculate the element's position relative to the container
+        const offset = elementRect.top - containerRect.top;
+
+        // Scroll so the element is centered
+        textContainer.scrollTo({
+          top: textContainer.scrollTop + offset - textContainer.clientHeight / 2 + highlightElement.clientHeight / 2,
+          behavior: "smooth",
+        });
+
+      }, 300);
+    }
+  } catch (error) {
+    console.error(error);
+    textContainer.innerHTML = "שגיאה בטעינת טקסט העלייה.";
+  }
+}
+
+
+
+
+
+
 </script>
 </body>
 </html>
