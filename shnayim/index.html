@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shnayim Mikrah</title>
+  <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+  <style>
+    :root {
+      --primary-color: #1a202c;
+      --accent-color: #2b6cb0;
+      --bg-color: #f7fafc;
+      --text-color: #2d3748;
+      --border-radius: 12px;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      padding: 40px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .bsd {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #4b5668;
+      z-index: 1000;
+      background: var(--bg-color);
+      padding: 4px 8px;
+      border-radius: var(--border-radius);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 30px;
+    }
+
+    .dropdown-container {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: 600;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cbd5e0;
+      border-radius: var(--border-radius);
+      margin-top: 5px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    select:focus {
+      border-color: var(--accent-color);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(43, 108, 176, 0.3);
+    }
+
+    .text-display {
+      direction: rtl;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: white;
+      border: 1px solid #cbd5e0;
+      border-radius: var(--border-radius);
+      line-height: 1.8;
+      font-family: 'David Libre', 'Times New Roman', serif;
+      white-space: pre-wrap;
+      font-size: 1.3rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .copy-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .copy-button:hover {
+      background-color: #2c5282;
+    }
+
+    .copy-button:active {
+      transform: scale(0.97);
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #718096;
+    }
+
+    @media screen and (max-width: 600px) {
+      body {
+        padding: 15px 20px;
+        max-width: 100%;
+      }
+
+      .dropdown-container {
+        flex-direction: column;
+      }
+
+      .text-display {
+        font-size: 1.2rem;
+      }
+
+      .bsd {
+        font-size: 0.85rem;
+        top: 10px;
+        right: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bsd">בס״ד</div>
+  <h1>Shnayim Mikrah</h1>
+
+  <div class="dropdown-container">
+    <label>Sefer:
+      <select id="seferSelect"></select>
+    </label>
+    <label>Parasha:
+      <select id="parashaSelect"></select>
+    </label>
+    <label>Aliyah:
+      <select id="aliyahSelect"></select>
+    </label>
+  </div>
+
+  <button class="copy-button" onclick="copyText(this)">
+    <span class="copy-icon">📋</span> Copy Text
+  </button>
+
+  <div id="textDisplay" class="text-display"></div>
+
+  <footer>
+    Text provided by <a href="https://www.sefaria.org" target="_blank">Sefaria</a> • Parasha data by <a href="https://www.hebcal.com" target="_blank">Hebcal</a>
+  </footer>
+
+  <script>
+    const aliyotURL = 'https://raw.githubusercontent.com/shahar-lazarev/shinantam/refs/heads/main/shnayim/Aliyot.txt';
+    let aliyotMap = {};
+
+    async function loadData() {
+      try {
+        const resp = await fetch(aliyotURL);
+        const text = await resp.text();
+        parseAliyot(text);
+
+        const currentParasha = await getCurrentParasha();
+        populateSeferDropdown(currentParasha);
+      } catch (err) {
+        console.error('Error loading Aliyot:', err);
+      }
+    }
+
+    function parseAliyot(text) {
+      const lines = text.split('\n');
+      let shortParasha = '';
+      let currentParasha = '';
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        if (!line.startsWith('Aliyah') && !line.startsWith('Maftir')) {
+          shortParasha = line.split(',')[0];
+          currentParasha = line.trim();
+          aliyotMap[shortParasha] = {};
+        } else {          
+          const [aliyahName, range] = line.split(',');
+          if (shortParasha && range) {
+            aliyotMap[shortParasha][aliyahName.trim()] = range.trim();
+          }
+        }
+      }
+      
+    }
+
+    async function getCurrentParasha() {
+      const url = 'https://www.hebcal.com/shabbat?cfg=json&geonameid=3448439&M=on';
+      const resp = await fetch(url);
+      const data = await resp.json();
+      const item = data.items.find(it => it.category === 'parashat');
+      if (!item || !item.title) return null;
+      return item.title.replace('Parashat ', '').trim();
+    }
+
+    function populateSeferDropdown(preferredParasha) {
+      const seferSet = new Set();
+      for (let parasha of Object.keys(aliyotMap)) {
+        const aliyot = aliyotMap[parasha];
+        const firstRange = Object.values(aliyot)[0];
+        if (firstRange) {
+          const sefer = firstRange.split(' ')[0];
+          seferSet.add(sefer);
+        }
+      }
+      const seferSelect = document.getElementById('seferSelect');
+      seferSelect.innerHTML = [...seferSet].map(s => `<option value="${s}">${s}</option>`).join('');
+
+      if (preferredParasha && aliyotMap[preferredParasha]) {
+        const firstRange = Object.values(aliyotMap[preferredParasha])[0];
+        const sefer = firstRange.split(' ')[0];
+        seferSelect.value = sefer;
+      }
+
+      seferSelect.addEventListener('change', () => populateParashaDropdown());
+      populateParashaDropdown(preferredParasha);
+    }
+
+    function populateParashaDropdown(preferredParasha) {
+      const sefer = document.getElementById('seferSelect').value;
+      const parashaSelect = document.getElementById('parashaSelect');
+      const parashot = Object.keys(aliyotMap).filter(p => {
+        const firstRange = Object.values(aliyotMap[p])[0];
+        return firstRange.startsWith(sefer);
+      });
+
+      parashaSelect.innerHTML = parashot.map(p => `<option>${p.split(',')[0]}</option>`).join('');
+      if (preferredParasha && parashot.includes(preferredParasha)) {
+        parashaSelect.value = preferredParasha;
+      }
+
+
+      parashaSelect.addEventListener('change', populateAliyahDropdown);
+      populateAliyahDropdown();
+    }
+
+    function populateAliyahDropdown() {
+      const parasha = document.getElementById('parashaSelect').value;
+      
+      const aliyahSelect = document.getElementById('aliyahSelect');
+      const aliyot = aliyotMap[parasha] || {};
+
+      aliyahSelect.innerHTML = Object.keys(aliyot)
+        .map(a => `<option value="${a}">${a}</option>`)
+        .join('');
+
+      aliyahSelect.addEventListener('change', displayAliyahText);
+      displayAliyahText();
+    }
+
+    async function displayAliyahText() {
+      const parasha = document.getElementById('parashaSelect').value;
+      const aliyah = document.getElementById('aliyahSelect').value;
+      if (!aliyotMap[parasha] || !aliyotMap[parasha][aliyah]) return;
+      
+      const range = aliyotMap[parasha][aliyah];
+      const rangeForApi = range.replace(/\s+/g, '.').replaceAll(':', '.').replace('-', '-');
+      console.log(range);
+      console.log(rangeForApi);
+      const apiUrl = `https://www.sefaria.org/api/texts/${rangeForApi}?context=0`;
+      console.log(apiUrl);
+
+
+      try {
+        const resp = await fetch(apiUrl);
+        const data = await resp.json();
+        // let verseHtml = (data.he || []).join(' ');
+        let verseHtml = (data.he || []);
+        if (!Array.isArray(verseHtml[0])) verseHtml = [verseHtml];
+        
+        document.getElementById('textDisplay').innerHTML = `<div><b>${parasha} - ${aliyah}</b></div><br>`;
+        let verseNumber = range.split('-')[0].split(':')[1];
+
+          for (_ of verseHtml){
+            for (line of _) {
+            
+            line = line
+              .replace(/<span[^>]*>.*?<\/span>/g, "")
+              .replace(/&nbsp;/g, " ")
+              .replace(/\*\([^)]*\)/g, "")
+              .replace(/\s*\(\s*\)\s*/g, "")
+              .replace(/<span[^>]*>.*?<\/span>/g, "")
+              .replace(/<sup[^>]*class=["']footnote-marker["'][^>]*>.*?<\/sup>\s*<i[^>]*class=["']footnote["'][^>]*>.*?<\/i>/g, "")
+              .replace(/<i[^>]*class=["']footnote["'][^>]*>.*?<\/i>/g, "")
+              .replace(/&nbsp;/g, " ")
+              .replace(/\*\([^)]*\)/g, "")
+              .replace(/\s*\(\s*\)\s*/g, "")
+              .replaceAll("׃,", "׃ ")
+              .replaceAll(",", "")
+              .replaceAll("<br>", "")
+              .trim();
+
+            // for (let line of verse.split('׃ ')) {
+            if (line.trim() == '<br>') continue;
+            if (line.trim() == '' ) continue;
+            if (!line.endsWith('׃')) line = line + "׃";
+            const div = document.createElement("div");
+            div.style.display = "block";
+            div.style.marginBottom = "0.5rem";
+
+            // div.innerHTML = line;
+            div.innerHTML = `<small style="margin-left:0.5rem; font-size:0.8rem">${gematria(verseNumber)}</small> ${line}`
+            // div.innerHTML += ` <span style="color: skyblue">${line}</span>`;
+            document.getElementById('textDisplay').appendChild(div);
+
+            verseNumber++;
+              
+            // }
+            // ${verseHtml}
+            }
+          verseNumber = 1;
+          }
+      } catch (err) {
+        console.error('Error fetching text:', err);
+        document.getElementById('textDisplay').innerText = 'Error loading text.';
+      }
+    }
+
+    function copyText(button) {
+      const text = document.getElementById('textDisplay').innerText;
+      navigator.clipboard.writeText(text);
+      const icon = button.querySelector('.copy-icon');
+      icon.textContent = '✅';
+      button.disabled = true;
+      setTimeout(() => {
+        icon.textContent = '📋';
+        button.disabled = false;
+      }, 1500);
+    }
+
+    loadData();
+
+    function gematria(num) {
+      // Handle edge cases
+      if (num < 1 || num > 999) {
+        return "Number out of range";
+      }
+
+      const hundreds = ["", "ק", "ר", "ש", "ת"];
+      const tens = ["", "י", "כ", "ל", "מ", "נ", "ס", "ע", "פ", "צ"];
+      const ones = ["", "א", "ב", "ג", "ד", "ה", "ו", "ז", "ח", "ט"];
+      
+      let result = "";
+
+      // Handle hundreds
+      const hundredValue = Math.floor(num / 100);
+      result += hundreds[hundredValue];
+      num %= 100;
+
+      // Handle tens and ones
+      // Special case for 15 (יה) and 16 (יו)
+      if (num === 15) {
+        result += "טו";
+      } else if (num === 16) {
+        result += "טז";
+      } else {
+        const tenValue = Math.floor(num / 10);
+        result += tens[tenValue];
+        num %= 10;
+        result += ones[num];
+      }
+
+      // // Add the punctuation mark (gershayim) for numbers > 1
+      // if (result.length > 1) {
+      //   // Insert gershayim before the last letter
+      //   result = result.slice(0, -1) + '״' + result.slice(-1);
+      // } else if (result.length === 1) {
+      //   // Add geresh for single-letter numbers
+      //   result += '׳';
+      // }
+
+      return result;
+    }
+  </script>
+</body>
+</html>
