@@ -282,42 +282,45 @@
         const data = await resp.json();
         // let verseHtml = (data.he || []).join(' ');
         let verseHtml = (data.he || []);
+        console.log(verseHtml);
         if (!Array.isArray(verseHtml[0])) verseHtml = [verseHtml];
         
-        document.getElementById('textDisplay').innerHTML = `<div><b>${parasha} - ${aliyah}</b></div><br>`;
+        document.getElementById('textDisplay').innerHTML = `<div style="text-align: center;"><b>${parasha} - ${aliyah}</b></div>`;
         let verseNumber = range.split('-')[0].split(':')[1];
 
-          for (_ of verseHtml){
-            for (line of _) {
+          for (group of verseHtml){
+            for (line of group) {
+              // <span class=\"mam-spi-pe\">{פ}</span>
             
             line = line
-              .replace(/<span[^>]*>.*?<\/span>/g, "")
-              .replace(/&nbsp;/g, " ")
-              .replace(/\*\([^)]*\)/g, "")
-              .replace(/\s*\(\s*\)\s*/g, "")
-              .replace(/<span[^>]*>.*?<\/span>/g, "")
-              .replace(/<sup[^>]*class=["']footnote-marker["'][^>]*>.*?<\/sup>\s*<i[^>]*class=["']footnote["'][^>]*>.*?<\/i>/g, "")
-              .replace(/<i[^>]*class=["']footnote["'][^>]*>.*?<\/i>/g, "")
-              .replace(/&nbsp;/g, " ")
-              .replace(/\*\([^)]*\)/g, "")
-              .replace(/\s*\(\s*\)\s*/g, "")
-              .replaceAll("׃,", "׃ ")
-              .replaceAll(",", "")
+              .replaceAll(/<span[^>]*>\{פ\}<\/span>/g, "{פ}") // removes <span>{פ}</span>, and replaces it with {פ}
+              .replaceAll(/<span[^>]*>.*?<\/span>/g, "")
+              .replaceAll(/&nbsp;/g, " ")
+              .replaceAll(/\*\([^)]*\)/g, "")
+              .replaceAll(/\s*\(\s*\)\s*/g, "")
+              .replaceAll(/<sup[^>]*class=["']footnote-marker["'][^>]*>.*?<\/sup>\s*<i[^>]*class=["']footnote["'][^>]*>.*?<\/i>/g, "")
+              .replaceAll(/<i[^>]*class=["']footnote["'][^>]*>.*?<\/i>/g, "")
+              .replaceAll(/&nbsp;/g, " ")
+              .replaceAll(/\*\([^)]*\)/g, "")
+              .replaceAll(/\s*\(\s*\)\s*/g, "")
+              // .replaceAll("׃,", "׃ ")
+              .replaceAll(",", " ")
               .replaceAll("<br>", "")
+              .replaceAll(" {פ}", `&nbsp;<span style="color: darkgrey; font-size:1.0rem; vertical-align: 0.15em;">{פ}</span><br>`) // removes {פ}, and replaces it with \t\t
               .trim();
 
             // for (let line of verse.split('׃ ')) {
             if (line.trim() == '<br>') continue;
             if (line.trim() == '' ) continue;
-            if (!line.endsWith('׃')) line = line + "׃";
-            const div = document.createElement("div");
-            div.style.display = "block";
-            div.style.marginBottom = "0.5rem";
+            // if (!line.endsWith('׃')) line = line + "׃";
+            const span = document.createElement("span");
+            span.style.display = "inline";
+            span.style.marginBottom = "0.5rem";
 
-            // div.innerHTML = line;
-            div.innerHTML = `<small style="margin-left:0.5rem; font-size:0.8rem">${gematria(verseNumber)}</small> ${line}`
-            // div.innerHTML += ` <span style="color: skyblue">${line}</span>`;
-            document.getElementById('textDisplay').appendChild(div);
+            // span.innerHTML = line;
+            span.innerHTML = `<small style="margin-right: 0.5rem; margin-left:0.5rem; vertical-align: 0.2em; font-size:0.8rem">${gematria(verseNumber)}</small>&nbsp;${line} `
+            // span.innerHTML += ` <span style="color: skyblue">${line}</span>`;
+            document.getElementById('textDisplay').appendChild(span);
 
             verseNumber++;
               
