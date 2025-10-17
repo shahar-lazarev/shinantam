@@ -195,6 +195,91 @@ h1 {
 </div>
 
 <script>
+    HEBREW_MAP = {
+      "Bereshit": "בראשית",
+      "Noach": "נח",
+      "Lech-Lecha": "לך לך",
+      "Vayera": "וירא",
+      "Chayei Sara": "חיי שרה",
+      "Toldot": "תולדות",
+      "Vayetzei": "ויצא",
+      "Vayishlach": "וישלח",
+      "Vayeshev": "וישב",
+      "Miketz": "מקץ",
+      "Vayigash": "ויגש",
+      "Vayechi": "ויחי",
+      "Shemot": "שמות",
+      "Vaera": "וארא",
+      "Bo": "בא",
+      "Beshalach": "בשלח",
+      "Yitro": "יתרו",
+      "Mishpatim": "משפטים",
+      "Terumah": "תרומה",
+      "Tetzaveh": "תצוה",
+      "Ki Tisa": "כי תשא",
+      "Vayakhel": "ויקהל",
+      "Pekudei": "פקודי",
+      "Vayikra": "ויקרא",
+      "Tzav": "צוה",
+      "Shemini": "שמיני",
+      "Tazria": "תזריע",
+      "Metzora": "מצורע",
+      "Achrei Mot": "אחרי מות",
+      "Kedoshim": "קדושים",
+      "Emor": "אמור",
+      "Behar": "בהר",
+      "Bechukotai": "בחקותי",
+      "Bamidbar": "במדבר",
+      "Nasso": "נשא",
+      "Beha'alotcha": "בהעלותך",
+      "Sh'lach": "שלח",
+      "Korach": "קורח",
+      "Chukat": "חוקת",
+      "Balak": "בלק",
+      "Pinchas": "פינחס",
+      "Matot": "מטות",
+      "Masei": "מסעי",
+      "Devarim": "דברים",
+      "Vaetchanan": "ואתחנן",
+      "Eikev": "עקב",
+      "Re'eh": "ראה",
+      "Shoftim": "שופטים",
+      "Ki Teitzei": "כי תצא",
+      "Ki Tavo": "כי תבוא",
+      "Nitzavim": "ניצבים",
+      "Vayeilech": "וילך",
+      "Ha'azinu": "האזינו",
+      "V'Zot HaBerachah": "וזאת הברכה",
+      "VZot HaBerachah": "וזאת הברכה",
+
+      // Combined parashot
+      "Vayakhel-Pekudei": "ויקהל-פקודי",
+      "Tazria-Metzora": "תזריע-מצורע",
+      "Achrei Mot-Kedoshim": "אחרי מות-קדושים",
+      "Behar-Bechukotai": "בהר-בחקותי",
+      "Chukat-Balak": "חקת-בלק",
+      "Matot-Masei": "מטות-מסעי",
+      "Nitzavim-Vayeilech": "ניצבים-וילך",
+
+      // Book names
+      "Bereshit,": "בראשית,",
+      "Shemot,": "שמות,",
+      "Vayikra,": "ויקרא,",
+      "Bamidbar,": "במדבר,",
+      "Devarim,": "דברים,",
+
+      // Aliyah and Maftir
+      "Aliyah": "עלייה",
+      "Maftir": "מפטיר",
+      "Aliyah 1": "ראשון",
+      "Aliyah 2": "שני",
+      "Aliyah 3": "שלישי",
+      "Aliyah 4": "רביעי",
+      "Aliyah 5": "חמישי",
+      "Aliyah 6": "שישי",
+      "Aliyah 7": "שביעי",
+    }
+
 let parshiot = [];
 let currentLang = "he";
 const aliyotURL = 'https://raw.githubusercontent.com/shahar-lazarev/shinantam/refs/heads/main/verse-to-aliyah/aliyotData.json';
@@ -212,6 +297,14 @@ async function loadData() {
 }
 
 function parseReference(ref) {
+  if (checkHebValue(ref) == "hebrew") {
+    let [book, first, second] = ref.split(' ');
+    for (const [k, v] of Object.entries(HEBREW_MAP)) {
+      if (v == book) book = k;
+    }
+    ref = `${book} ${gematriaToInt(first)} ${gematriaToInt(second)}`;
+  }
+
   const pattern = /^([\p{L}\-']+)\s+(\d+)\s*(?::|\s|,)\s*(\d+)$/iu;
   const match = String(ref || '').trim().match(pattern);
   if (!match) return null;
@@ -265,7 +358,7 @@ async function findParasha() {
       for (const a of p.aliyot || []) {
         if (!a.start || !a.end) continue;
         if (inRange(ref.chapter, ref.verse, a.start, a.end)) {
-          resultDiv.innerHTML = `${p.parasha} ${a.aliyah}`;
+          resultDiv.innerHTML = `${p.parasha} ${a.aliyah}<br>${HEBREW_MAP[[p.parasha]]} ${HEBREW_MAP[[a.aliyah]]}`;
           await displayAliyahText(ref, p.book, a.start, a.end);
           return;
         }
@@ -279,7 +372,8 @@ async function findParasha() {
 }
 
 // AUTOCOMPLETE //////////
-const books = ["Bereshit", "Shemot", "Vayikra", "Bamidbar", "Devarim"];
+const books = ["Bereshit", "Shemot", "Vayikra", "Bamidbar", "Devarim",
+  "בראשית", "שמות", "ויקרא", "במדבר", "דברים"];
 
 const inputEl = document.getElementById("reference");
 const autoDiv = document.getElementById("autocomplete");
@@ -298,7 +392,7 @@ inputEl.addEventListener("blur", () => {
 function showAutocomplete() {
   const val = inputEl.value.toLowerCase();
   autoDiv.innerHTML = "";
-  const filtered = books.filter(b => b.toLowerCase().startsWith(val)).slice(0, 5);
+  const filtered = books.filter(b => b.toLowerCase().startsWith(val)).slice(0, 10);
 
   if (filtered.length === 0) {
     autoDiv.style.display = "none";
@@ -333,6 +427,85 @@ inputEl.addEventListener("keydown", function(event) {
   }
 });
 
+// GEMATRIA
+
+const HEBREW_LETTERS = {
+  'א': 1, 'ב': 2, 'ג': 3, 'ד': 4, 'ה': 5, 'ו': 6, 'ז': 7, 'ח': 8, 'ט': 9,
+  'י': 10, 'כ': 20, 'ך': 20, 'ל': 30, 'מ': 40, 'ם': 40, 'נ': 50, 'ן': 50,
+  'ס': 60, 'ע': 70, 'פ': 80, 'ף': 80, 'צ': 90, 'ץ': 90,
+  'ק': 100, 'ר': 200, 'ש': 300, 'ת': 400
+};
+
+const VALUES = Object.entries(HEBREW_LETTERS)
+  .sort((a, b) => b[1] - a[1]);
+
+/**
+ * Convert integer → Hebrew gematria (no niqqud, standard rules).
+ * Adds gershayim (״) for aesthetics and geresh (׳) for thousands.
+ */
+function intToGematria(num) {
+  if (num <= 0) throw new Error("Gematria cannot represent zero or negative numbers");
+
+  let result = "";
+
+  // Handle thousands
+  if (num >= 1000) {
+    const thousands = Math.floor(num / 1000);
+    num %= 1000;
+    result += intToGematria(thousands); // + "׳";
+  }
+
+  // Handle remainder
+  for (const [letter, value] of VALUES) {
+    while (num >= value) {
+      result += letter;
+      num -= value;
+    }
+  }
+
+  // Special case: avoid writing God's name (15=יה, 16=יו)
+  result = result.replace("יה", "טו").replace("יו", "טז");
+
+  // Add gershayim if more than one letter (aesthetic)
+  // if (result.length > 1 && !result.includes("׳")) {
+  //   const last = result.slice(-1);
+  //   result = result.slice(0, -1) + "״" + last;
+  // }
+
+  return result;
+}
+
+/**
+ * Convert Hebrew gematria → integer.
+ */
+function gematriaToInt(gematria) {
+  let total = 0;
+  const clean = gematria.replace(/[״"׳']/g, "");
+
+  for (const ch of clean) {
+    if (HEBREW_LETTERS[ch]) {
+      total += HEBREW_LETTERS[ch];
+    } else {
+      throw new Error(`Invalid Hebrew letter in gematria: ${ch}`);
+    }
+  }
+
+  return total;
+}
+// END GEMATRIA
+
+function checkHebValue(val) {
+  const hebrewRegex = /^[\u0590-\u05FF\s]+$/; // matches only Hebrew letters
+
+  if (!isNaN(val)) {
+    return "number";
+  } else if (typeof val === "string" && hebrewRegex.test(val)) {
+    return "hebrew";
+  } else {
+    return "other";
+  }
+}
+
 // DISPLAY ALIYAH TEXT ///////////
 async function displayAliyahText(ref, book, start, end) {
   const textContainerId = "aliyah-text";
@@ -350,8 +523,6 @@ async function displayAliyahText(ref, book, start, end) {
     textContainer.style.overflowY = "auto";
     textContainer.style.lineHeight = "2";
     textContainer.style.fontSize = "1.1rem";
-    console.log(textContainer.style.textAlign);
-    console.log(textContainer.style.direction);
     
     
     document.querySelector(".card").appendChild(textContainer);
@@ -370,10 +541,9 @@ async function displayAliyahText(ref, book, start, end) {
   textContainer.innerHTML = `<em>טוען את הטקסט של העלייה...</em>`;
 
   try {
-    const sefariaRef = `${book}.${start.replace(":", ".")}-${end.replace(":", ".")}`;
+        const sefariaRef = `${book}.${start.replace(":", ".")}-${end.replace(":", ".")}`;
     // const response = await fetch(`https://www.sefaria.org/api/texts/${sefariaRef}?lang=he&context=0`);
     const response = await fetch(`https://www.sefaria.org/api/texts/${sefariaRef}?lang=${currentLang}&context=0`);
-    console.log(`https://www.sefaria.org/api/texts/${sefariaRef}?lang=${currentLang}&context=0`);
     
     
     const data = await response.json();
