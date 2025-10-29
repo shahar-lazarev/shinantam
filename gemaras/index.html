@@ -88,7 +88,11 @@
     <footer>© 2025 Shinantam</footer>
   </div>
   <script>
-    // const BASE = 'https://raw.githubusercontent.com/shahar-lazarev/Gemara-PDFs/refs/heads/main/';
+    function isCursorOnRight(event) {
+      const midpoint = window.innerWidth * 2 / 3;
+      return event.clientX > midpoint;
+    }
+
     const BASE = './pdfs/';
     const FILES = ['Berakhot.pdf','Shabbat.pdf','Eruvin.pdf','Pesachim.pdf','Shekalim.pdf','Yoma.pdf','Sukkah.pdf','Beitzah.pdf','Rosh Hashanah.pdf','Taanit.pdf','Megillah.pdf','Moed Katan.pdf','Chagigah.pdf','Yevamot.pdf','Ketubot.pdf','Nedarim.pdf','Nazir.pdf','Sotah.pdf','Gittin.pdf','Kiddushin.pdf','Bava Kamma.pdf','Bava Metzia.pdf','Bava Batra.pdf','Sanhedrin.pdf','Makkot.pdf','Shevuot.pdf','Avodah Zarah.pdf','Horayot.pdf','Zevachim.pdf','Menachot.pdf','Chullin.pdf','Bechorot.pdf','Arachin.pdf','Temurah.pdf','Keritot.pdf','Meilah.pdf','Niddah.pdf'];
 
@@ -130,6 +134,13 @@
         const imgPath = `./images/${f.replace('.pdf','.jpg')}`;
         preview.innerHTML = `<img src="${imgPath}" alt="${f.replace('.pdf','')} thumbnail"/>`;
         preview.style.display = 'flex';
+        if (isCursorOnRight(event)) {
+          preview.style.left = '30px';
+          preview.style.right = 'auto';
+        } else { // on the left
+          preview.style.left = 'auto';
+          preview.style.right = '30px';
+        }
       });
 
       card.addEventListener('mouseleave', () => {
