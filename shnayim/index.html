@@ -140,7 +140,7 @@
       align-items: flex-start;
       gap: 20px;
       margin: 1rem 0;
-      background: #f9f9f9;
+      background: #f3fafe;
       border-radius: var(--border-radius);
       padding: 10px 15px;
     }
@@ -402,8 +402,6 @@
 
       
       const onkURL = `https://www.sefaria.org/api/texts/Onkelos_${rangeForApi}?context=0`.replace("Bereshit", "Genesis").replace("Shemot", "Exodus").replace("Vayikra", "Leviticus").replace("Bamidbar", "Numbers").replace("Devarim", "Deuteronomy");
-      console.log(onkURL);
-
 
       try {
         const resp = await fetch(apiUrl);
@@ -422,6 +420,9 @@
         let verseHTMLOnk = (onkData.he || []);
 
         if (!Array.isArray(verseHtml[0])) verseHtml = [verseHtml];
+        // if (!Array.isArray(verseHTMLRashi[0])) verseHTMLRashi = [verseHTMLRashi];
+        // if (!Array.isArray(verseHTMLRashiEng[0])) verseHTMLRashiEng = [verseHTMLRashiEng];
+        // if (!Array.isArray(verseHTMLOnk[0])) verseHTMLOnk = [verseHTMLOnk];
         
         document.getElementById('textDisplay').innerHTML = `<div style="text-align: center;"><b>${parasha} - ${aliyah}</b></div>`;
         let verseNumber = range.split('-')[0].split(':')[1];
@@ -468,9 +469,7 @@
             span.style.display = "inline";
             span.style.marginBottom = "0.5rem";
 
-            
-            console.log(onkData);
-            // span.innerHTML = line;
+                        // span.innerHTML = line;
             span.innerHTML = `<small style="margin-right: 0.5rem; margin-left:0.5rem; vertical-align: 0.2em; font-size:0.8rem">
               ${gematria(verseNumber)}</small>&nbsp;${line} `;
             span.innerHTML += `<span style="color: darkblue">${line}</span> `
@@ -480,7 +479,6 @@
 
             if (rashiLine != "") {
               
-              // console.log("EMPTY");
               const rashiContainer = document.createElement("div");
               rashiContainer.classList.add("rashi-container");
   
@@ -501,7 +499,6 @@
 
               const enText = rashiLineEng.join('<br>');
 
-              // console.log(rashiLineEng);
               // const enParts = rashiLineEng.split('—');
               // const enTitle = toCamelCase(enParts[0].trim());
               // const enCommentary = enParts[1] ? enParts.slice(1).join('—').trim() : '';

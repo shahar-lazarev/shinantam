@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gemara Library — Shnayim PDFs</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+  <style>
+    :root {
+      --bg: #f7fafc;
+      --text: #111111;
+      --muted: #6b7280;
+      --accent: #0057FF;
+      --card: white;
+      --border-radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial;
+      background: linear-gradient(180deg, #fbfdff 0%, #ffffff 100%);
+      color: var(--text);
+      padding: 32px;
+      padding-top: 60px;
+      overflow-x: hidden;
+    }
+    .bsd { position: fixed; top: 10px; right: 20px; font-size: 1rem; font-weight: bold; color: #4b5668; z-index: 1000; background: var(--bg); padding: 4px 8px; border-radius: var(--border-radius);
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: 24px; gap: 10px; }
+    h1 { font-size: 22px; font-weight: 700; }
+    p.lead { color: var(--muted); font-size: 13px; }
+    input.searchBox { border: 1px solid #e6e9ef; padding: 10px 12px; border-radius: 8px; min-width: 220px; }
+    button.btn { border: none; padding: 10px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+    button.btn:hover { transform: translateY(-1px); }
+    button.primary { background: var(--accent); color: #fff; }
+    button.secondary { background: #e5e7eb; color: #111; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; margin-top: 20px; }
+    .card { background: var(--card); border: 1px solid #cbd5e0; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform .15s ease, box-shadow .15s ease; }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.08); }
+    .title { font-weight: 600; font-size: 16px; }
+    .sub { font-size: 13px; color: var(--muted); }
+    .actions { display: flex; gap: 8px; margin-top: auto; }
+    .preview {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 280px;
+      height: 360px;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 10px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      background: #fff;
+      overflow: hidden;
+      z-index: 999;
+      display: none;
+      pointer-events: none; /* prevent mouse events from affecting underlying cards */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .preview img { width: 100%; height: 100%; object-fit: contain; }
+    @media (max-width:700px){ .preview{display:none!important;} }
+  </style>
+</head>
+<body>
+  <div class="bsd">בס״ד</div>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Gemara PDFs</h1>
+        <p class="lead">Click to download. Hover to preview the thumbnail.</p>
+      </div>
+      <div>
+        <input class="searchBox" id="q" placeholder="Search tractate..." />
+        <button class="btn secondary" id="reset">Reset</button>
+      </div>
+    </header>
+    <div id="list" class="grid"></div>
+    <div class="preview" id="preview"></div>
+  </div>
+  <script>
+    // const BASE = 'https://raw.githubusercontent.com/shahar-lazarev/Gemara-PDFs/refs/heads/main/';
+    const BASE = './pdfs/';
+    const FILES = ['Berakhot.pdf','Shabbat.pdf','Eruvin.pdf','Pesachim.pdf','Shekalim.pdf','Yoma.pdf','Sukkah.pdf','Beitzah.pdf','Rosh Hashanah.pdf','Taanit.pdf','Megillah.pdf','Moed Katan.pdf','Chagigah.pdf','Yevamot.pdf','Ketubot.pdf','Nedarim.pdf','Nazir.pdf','Sotah.pdf','Gittin.pdf','Kiddushin.pdf','Bava Kamma.pdf','Bava Metzia.pdf','Bava Batra.pdf','Sanhedrin.pdf','Makkot.pdf','Shevuot.pdf','Avodah Zarah.pdf','Horayot.pdf','Zevachim.pdf','Menachot.pdf','Chullin.pdf','Bechorot.pdf','Arachin.pdf','Temurah.pdf','Keritot.pdf','Meilah.pdf','Niddah.pdf'];
+
+    const list = document.getElementById('list');
+    const preview = document.getElementById('preview');
+
+    let previewTimeout;
+
+    FILES.forEach(f => {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      const title = document.createElement('div');
+      title.className = 'title';
+      title.textContent = f.replace('.pdf', '');
+
+      const sub = document.createElement('div');
+      sub.className = 'sub';
+      sub.textContent = f;
+
+      const actions = document.createElement('div');
+      actions.className = 'actions';
+
+      const open = document.createElement('button');
+      open.className = 'btn secondary';
+      open.textContent = 'Open';
+
+      const dl = document.createElement('button');
+      dl.className = 'btn primary';
+      dl.textContent = 'Download';
+
+      actions.append(dl);
+      card.append(title, sub, actions);
+      list.append(card);
+
+      // Hover preview using local thumbnail images
+      card.addEventListener('mouseenter', () => {
+        clearTimeout(previewTimeout);
+        const imgPath = `./images/${f.replace('.pdf','.jpg')}`;
+        preview.innerHTML = `<img src="${imgPath}" alt="${f.replace('.pdf','')} thumbnail"/>`;
+        preview.style.display = 'flex';
+      });
+
+      card.addEventListener('mouseleave', () => {
+        // Delay hiding so moving cursor over preview doesn't glitch
+        previewTimeout = setTimeout(() => { preview.style.display = 'none'; }, 200);
+      });
+
+      preview.addEventListener('mouseenter', () => {
+        clearTimeout(previewTimeout); // Keep preview visible if cursor is over it
+      });
+
+      preview.addEventListener('mouseleave', () => {
+        preview.style.display = 'none';
+      });
+
+      open.addEventListener('click', (e) => {
+        e.stopPropagation();
+        window.open(BASE + encodeURIComponent(f), '_blank');
+      });
+
+      dl.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const a = document.createElement('a');
+        a.href = BASE + encodeURIComponent(f);
+        a.download = f;
+        a.click();
+      });
+    });
+
+    // search
+    const q = document.getElementById('q');
+    q.addEventListener('input', () => {
+      const val = q.value.toLowerCase();
+      document.querySelectorAll('.card').forEach(c => {
+        const text = c.textContent.toLowerCase();
+        c.style.display = text.includes(val) ? '' : 'none';
+      });
+    });
+
+    document.getElementById('reset').addEventListener('click', () => {
+      q.value = '';
+      q.dispatchEvent(new Event('input'));
+    });
+  </script>
+</body>
+</html
