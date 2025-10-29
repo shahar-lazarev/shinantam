@@ -56,12 +56,14 @@
       z-index: 999;
       display: none;
       pointer-events: none; /* prevent mouse events from affecting underlying cards */
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
     }
     .preview img { width: 100%; height: 100%; object-fit: contain; }
     @media (max-width:700px){ .preview{display:none!important;} }
+    footer { margin-top: 40px; text-align: center; font-size: 0.9rem; color: #718096; }
+    footer a { color: #718096; text-decoration: underline; font-style: italic}
   </style>
 </head>
 <body>
@@ -70,7 +72,8 @@
     <header>
       <div>
         <h1>Gemara PDFs</h1>
-        <p class="lead">Click to download. Hover to preview the thumbnail.</p>
+        <p class="lead">A collection of PDFs of complete Gemaras.</p>
+        <p class="lead">Click to download or open. Hover to preview the thumbnail.</p>
       </div>
       <div>
         <input class="searchBox" id="q" placeholder="Search tractate..." />
@@ -79,6 +82,10 @@
     </header>
     <div id="list" class="grid"></div>
     <div class="preview" id="preview"></div>
+    <footer>
+      PDFs of all the Gemaras were collected from <a href="https://daf-yomi.com/" target="_blank">daf-yomi.com/</a> 
+    </footer>
+    <footer>© 2025 Shinantam</footer>
   </div>
   <script>
     // const BASE = 'https://raw.githubusercontent.com/shahar-lazarev/Gemara-PDFs/refs/heads/main/';
