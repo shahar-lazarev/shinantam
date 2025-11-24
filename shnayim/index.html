@@ -186,6 +186,12 @@
       transition: max-height 0.25s ease, opacity 0.25s ease;
     }
 
+    .rashi-body {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
     .rashi-body.collapsed {
       max-height: 0;
       opacity: 0;
@@ -223,10 +229,9 @@
       transition: width 0.15s ease-out;
     }
 
-    /* Make them stack on small screens */
     @media screen and (max-width: 700px) {
-      .rashi-container {
-        flex-direction: column;
+      .rashi-body {
+        flex-direction: column;   /* stack HE + EN */
       }
       .rashi-he, .rashi-en {
         text-align: center;
