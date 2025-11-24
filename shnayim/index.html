@@ -181,15 +181,7 @@
 
       padding: 10px 15px;
 
-      max-height: 1000px;
-      opacity: 1;
       transition: max-height 0.25s ease, opacity 0.25s ease;
-    }
-
-    .rashi-body {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
     }
 
     .rashi-body.collapsed {
@@ -472,21 +464,16 @@
       
       const apiUrl = `https://www.sefaria.org/api/texts/${rangeForApi}?context=0`;
       const rashiURL = `https://www.sefaria.org/api/texts/Rashi_on_${rangeForApi}?context=0`;
-
-      
       const onkURL = `https://www.sefaria.org/api/texts/Onkelos_${rangeForApi}?context=0`.replace("Bereshit", "Genesis").replace("Shemot", "Exodus").replace("Vayikra", "Leviticus").replace("Bamidbar", "Numbers").replace("Devarim", "Deuteronomy");
 
       try {
-        const resp = await fetch(apiUrl);
-        const data = await resp.json();
 
-        const rashiResp = await fetch(rashiURL);
-        const rashiData = await rashiResp.json();
+        const [data, rashiData, onkData] = await Promise.all([
+          fetch(apiUrl).then(res => res.json()),
+          fetch(rashiURL).then(res => res.json()),
+          fetch(onkURL).then(res => res.json())
+        ]);
 
-        const onkResp = await fetch(onkURL);
-        const onkData = await onkResp.json();
-
-        // let verseHtml = (data.he || []).join(' ');
         let verseHtml = (data.he || []);
         let verseHTMLRashi = (rashiData.he || []);
         let verseHTMLRashiEng = (rashiData.text || []);
@@ -505,12 +492,10 @@
 
         document.getElementById('textDisplay').innerHTML = `<div style="text-align: center;"><b>${parasha} - ${aliyah}</b></div>`;
         let verseNumber = range.split('-')[0].split(':')[1];
-        console.log(rangeForApi);
-        // Bereshit.28.10-28.22
-        // Bereshit.28.10.28.22
+
         let chapters = []
         for (let i = rangeForApi.replace("-", ".").split(".")[1]; i <= rangeForApi.replace("-", ".").split(".")[3]; i++) { 
-          chapters.push(i); 
+          chapters.push(i); // if the range is e.g. chapters 28 and 29, then you'll get chapters = [28, 29]
         }
 
         for (let i = 0; i < verseHtml.length; i++) {
@@ -552,9 +537,10 @@
               }
             // console.log(rashiLine);
 
-            // for (let line of verse.split('׃ ')) {
             if (line.trim() == '<br>') continue;
             if (line.trim() == '' ) continue;
+
+            onkLine = onkLine.replaceAll("<b>", "").replaceAll("</b>", "");
             
             const span = document.createElement("span");
             span.style.display = "block";
