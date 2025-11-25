@@ -448,8 +448,6 @@
 
     function toCamelCase(str) {
       str = str.toLowerCase();
-      // console.log(str.charAt(0).toUpperCase());
-      // return str.charAt(0).toUpperCase() + str.slice(1);
       return str.toLowerCase().split(' ').map((word, i) => i === 0 ? word.charAt(0).toUpperCase() + word.slice(1) : word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
 }
@@ -486,10 +484,6 @@
           verseHTMLOnk = [verseHTMLOnk];
         }
 
-        // if (!Array.isArray(verseHTMLRashi[0])) verseHTMLRashi = [verseHTMLRashi];
-        // if (!Array.isArray(verseHTMLRashiEng[0])) verseHTMLRashiEng = [verseHTMLRashiEng];
-        // if (!Array.isArray(verseHTMLOnk[0])) verseHTMLOnk = [verseHTMLOnk];
-
         document.getElementById('textDisplay').innerHTML = `<div style="text-align: center;"><b>${parasha} - ${aliyah}</b></div>`;
         let verseNumber = range.split('-')[0].split(':')[1];
 
@@ -499,14 +493,11 @@
         }
 
         for (let i = 0; i < verseHtml.length; i++) {
-          // Print the CHAPTER on top
-          // const chapterSpan = document.createElement("span");
-          // chapterSpan.style.display = "inline";
-          // chapterSpan.innerHTML = `<p style="margin-right: 0.5rem; margin-left:0.5rem; vertical-align: 0.2em;">
-          // פרק ${gematria(chapters[i])}</p>`;
-          // document.getElementById('textDisplay').appendChild(chapterSpan);
 
-          document.getElementById('textDisplay').innerHTML += `<div style="text-align: right; margin-right: 0.5rem; font-size: 2.0rem;">פרק ${gematria(chapters[i])}</div>`
+          const chapterDiv = document.createElement('div');
+          chapterDiv.style.cssText = `text-align: right; margin-right: 0.5rem; font-size: 2.0rem;`;
+          chapterDiv.innerText = `פרק ${gematria(chapters[i])}`;
+          document.getElementById('textDisplay').appendChild(chapterDiv);
 
           for (let j = 0; j < verseHtml[i].length; j++) {
 
@@ -526,7 +517,6 @@
               .replaceAll(/&nbsp;/g, " ")
               .replaceAll(/\*\([^)]*\)/g, "")
               .replaceAll(/\s*\(\s*\)\s*/g, "")
-              // .replaceAll("׃,", "׃ ")
               .replaceAll(",", " ")
               .replaceAll("<br>", "")
               .replaceAll(" {פ}", `&nbsp;<span style="color: darkgrey; font-size:1.0rem; vertical-align: 0.15em;">{פ}</span><br>`) // removes {פ}, and replaces it with \t\t
@@ -535,7 +525,6 @@
               for (let el of rashiLine) {
                 el.replaceAll(`:,`, `: `);
               }
-            // console.log(rashiLine);
 
             if (line.trim() == '<br>') continue;
             if (line.trim() == '' ) continue;
