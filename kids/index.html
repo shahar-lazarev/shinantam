@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kids Torah Learning Songs Hub</title>
+  <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+  <style>
+    :root {
+      --primary-color: #1e3a8a; /* deep blue */
+      --accent-color: #60a5fa; /* light blue */
+      --bg-color: #e0f2fe; /* very light blue */
+      --text-color: #1e3a8a; /* deep blue text */
+      --border-radius: 12px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bsd {
+      position: absolute;
+      width: max-content;
+      height: max-content;
+      top: 28px;
+      right: 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--bg-color);
+      z-index: 1000;
+      padding: 4px 8px;
+      border-radius: var(--border-radius);
+    }
+
+    header {
+      background: var(--accent-color);
+      color: #fff;
+      border-bottom: 4px solid var(--primary-color);
+      padding: 2rem 1.5rem 1.75rem;
+      border-bottom-left-radius: var(--border-radius);
+      border-bottom-right-radius: var(--border-radius);
+      box-shadow: 0 6px 18px rgba(0,0,0,.08);
+    }
+
+    .container { max-width: 1100px; width: 80%; margin: 0 auto; }
+
+    h1 { margin: 0 0 .25rem; font-size: 2rem; letter-spacing: .2px; }
+
+    .subtitle { opacity: .95; font-size: .95rem; }
+
+    .controls { margin-top: 1.25rem; display: flex; gap: .75rem; flex-wrap: wrap; }
+
+    .search-input {
+      flex: 1;
+      padding: .65rem .75rem;
+      border-radius: var(--border-radius);
+      border: 2px solid #fff;
+      background: #ffffff;
+      color: var(--primary-color);
+    }
+
+    .search-input::placeholder { color: var(--primary-color); opacity: .7; }
+
+    .pill {
+      padding: .5rem .75rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      font-size: .8rem;
+      background: #ffffff;
+      color: var(--primary-color);
+      transition: transform .15s, opacity .2s;
+    }
+
+    .pill.active,
+    .pill:hover { opacity: .9; transform: translateY(-1px); }
+
+    main { flex: 1; padding: 2rem 1.25rem 3rem; }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .video-card {
+      background: #ffffff;
+      border-radius: var(--border-radius);
+      border: 2px solid var(--accent-color);
+      box-shadow: 0 8px 20px rgba(0,0,0,.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform .25s, box-shadow .25s;
+    }
+
+    .video-card:hover { transform: translateY(-5px); box-shadow: 0 14px 28px rgba(0,0,0,.12); }
+
+    .iframe-wrapper { position: relative; width: 100%; padding-top: 56.25%; background: #bfdbfe; }
+
+    .iframe-wrapper iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; border-top-left-radius: var(--border-radius); border-top-right-radius: var(--border-radius); }
+
+    .card-body { padding: 1rem; display: grid; gap: .5rem; }
+
+    .card-title { font-weight: 600; font-size: 1.1rem; color: var(--primary-color); }
+
+    .tag { align-self: start; font-size: .8rem; padding: .3rem .6rem; border-radius: 999px; background: var(--accent-color); color: #fff; }
+
+    footer { padding: 1.5rem; text-align: center; font-size: .85rem; color: var(--primary-color); }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .video-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .video-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="bsd">בס״ד</div>
+      <h1>Shinantam Kids Hub</h1>
+      <p class="subtitle">Joyful Torah learning for kids — fun, musical learning.</p>
+      <div class="controls">
+        <input class="search-input" id="search" type="search" placeholder="Search videos… (Torah songs, parsha, alef-bet…)" />
+        <div class="pill active" data-filter="all">All</div>
+        <div class="pill" data-filter="chumash">Chumash</div>
+        <div class="pill" data-filter="tanach">Tanach</div>
+        <!-- <div class="pill" data-filter="tefillah">Tefillah</div> -->
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="video-grid" id="videoGrid">
+      <article class="video-card" data-category="chumash" data-title="Sefer Bereshit Song">
+        <div class="iframe-wrapper">
+          <iframe src="https://www.youtube.com/embed/BvWnD1wLdq8" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="card-body">
+          <span class="tag">chumash</span>
+          <div class="card-title">Sefer Bereshit Song</div>
+        </div>
+      </article>
+
+      <article class="video-card" data-category="chumash" data-title="Sefer Shemot Song">
+        <div class="iframe-wrapper">
+          <iframe src="https://www.youtube.com/embed/VjGuQoQPIXw" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="card-body">
+          <span class="tag">chumash</span>
+          <div class="card-title">Sefer Shemot Song</div>
+        </div>
+      </article>
+
+      <article class="video-card" data-category="chumash" data-title="Sefer Vayikra Song">
+        <div class="iframe-wrapper">
+          <iframe src="https://www.youtube.com/embed/D-mmTlSRgjo" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="card-body">
+          <span class="tag">chumash</span>
+          <div class="card-title">Sefer Vayikra Song</div>
+        </div>
+      </article>
+
+      <article class="video-card" data-category="chumash" data-title="Sefer Bamidbar Song">
+        <div class="iframe-wrapper">
+          <iframe src="https://www.youtube.com/embed/G1W-gRE6Oo8" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="card-body">
+          <span class="tag">chumash</span>
+          <div class="card-title">Sefer Bamidbar Song</div>
+        </div>
+      </article>
+
+      <article class="video-card" data-category="chumash" data-title="Sefer Devarim Song">
+        <div class="iframe-wrapper">
+          <iframe src="https://www.youtube.com/embed/Y1SmG0RQ60Y" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="card-body">
+          <span class="tag">chumash</span>
+          <div class="card-title">Sefer Devarim Song</div>
+        </div>
+      </article>
+
+      <article class="video-card" data-category="tanach" data-title="Tanach Song">
+        <div class="iframe-wrapper">
+          <iframe src="https://www.youtube.com/embed/_o3_NMI-EcE " allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="card-body">
+          <span class="tag">Tanach</span>
+          <div class="card-title">Tanach Song</div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>Enjoy these Torah learning songs for kids!</footer>
+
+  <script>
+    const searchInput = document.getElementById('search');
+    const pills = document.querySelectorAll('.pill');
+    const cards = document.querySelectorAll('.video-card');
+
+    function applyFilters() {
+      const term = searchInput.value.toLowerCase().trim();
+      const activePill = document.querySelector('.pill.active');
+      const category = activePill?.dataset.filter || 'all';
+      cards.forEach(card => {
+        const title = card.dataset.title.toLowerCase();
+        const cardCategory = card.dataset.category;
+        const matchText = !term || title.includes(term);
+        const matchCategory = category === 'all' || cardCategory === category;
+        card.style.display = (matchText && matchCategory) ? 'flex' : 'none';
+      });
+    }
+
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        pills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        applyFilters();
+      });
+    });
+
+    searchInput.addEventListener('input', applyFilters);
+  </script>
+</body>
+</html>
