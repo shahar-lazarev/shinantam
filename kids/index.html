@@ -30,7 +30,7 @@
       position: absolute;
       width: max-content;
       height: max-content;
-      top: 28px;
+      top: 32px;
       right: 20px;
       font-size: 1rem;
       font-weight: bold;
@@ -70,8 +70,9 @@
     .search-input::placeholder { color: var(--primary-color); opacity: .7; }
 
     .pill {
+      align-content: center;
+      height: 40px;
       padding: .5rem .75rem;
-      padding-top: 0.75rem;
       border-radius: 999px;
       border: none;
       cursor: pointer;
@@ -80,10 +81,13 @@
       background: #ffffff;
       color: var(--primary-color);
       transition: transform .15s, opacity .2s;
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
+      margin: 4px; /* Default margin to allow space for movement */
+      transition: all 0.1s ease; /* Smooth transition */
     }
 
     .pill.active,
-    .pill:hover { opacity: .9; transform: translateY(-1px); }
+    .pill:hover { box-shadow: 0 0 0 rgba(0, 0, 0, 0.8); margin: 6px 2px 2px 6px; ;opacity: .9; transform: translateY(-1px); }
 
     main { flex: 1; padding: 2rem 1.25rem 3rem; }
 
