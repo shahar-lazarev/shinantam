@@ -93,7 +93,8 @@
     }
 
     .copy-button {
-      display: flex;
+      /* display: flex; */
+      display: none; /* hide for now */
       align-items: center;
       gap: 8px;
       padding: 10px 16px;
@@ -162,10 +163,23 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 0;
 
       /* subtle divider like part of the same box */
       border-bottom: 1px solid rgba(0,0,0,0.1);
       background: #f3fafe;  /* same background as old container */
+    }
+
+    .rashi-header:hover {
+      background: #e1f0fb;
+    }
+
+    /* keeps arrow + buttons grouped tightly */
+    .rashi-controls {
+      margin-inline-start: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     /* Arrow */
@@ -173,10 +187,31 @@
       transition: transform 0.2s ease;
       font-size: 1rem;
       opacity: 0.7;
+      margin-right: 10px;
+      margin-top: 5px;
     }
 
     .rashi-arrow.rotated {
       transform: rotate(90deg);
+    }
+
+    .rashi-action-btn {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid #2b6cb0;
+      background: #2b6cb0;
+      color: white;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .rashi-action-btn:hover {
+      background: #2c5282;
+    }
+
+    .rashi-action-btn:active {
+      transform: scale(0.97);
     }
 
     /* Collapsible body: THIS preserves your side-by-side layout */
@@ -210,7 +245,7 @@
 
     /* Your original English Rashi */
     .rashi-en {
-      flex: 1;
+      flex: 1.8;
       direction: ltr;
       text-align: left;
       font-size: 1.1rem;
@@ -265,7 +300,7 @@
   <footer>
     Text provided by <a href="https://www.sefaria.org" target="_blank">Sefaria</a> • Parasha data by <a href="https://www.hebcal.com" target="_blank">Hebcal</a>
   </footer>
-  <footer>© 2025 Shinantam</footer>
+  <footer>© 2026 Shinantam</footer>
 
   <script>
     HEBREW_MAP = {
@@ -491,7 +526,7 @@
           verseHTMLOnk = [verseHTMLOnk];
         }
 
-        document.getElementById('textDisplay').innerHTML = `<div style="text-align: center;"><b>${parasha} - ${aliyah}</b></div>`;
+        document.getElementById('textDisplay').innerHTML = `<div style="text-align: center;"><b>${parasha} ${aliyah}</b></div>`;
         let verseNumber = range.split('-')[0].split(':')[1];
 
         let chapters = []
@@ -509,8 +544,16 @@
           for (let j = 0; j < verseHtml[i].length; j++) {
 
             let line = verseHtml[i][j];
-            let rashiLine = verseHTMLRashi[i][j].join(' ');
-            let rashiLineEng = verseHTMLRashiEng[i][j];
+            let rashiLine = "";
+            let rashiLineEng = "";
+            try {
+              rashiLine = verseHTMLRashi[i][j].join(' ');
+              rashiLineEng = verseHTMLRashiEng[i][j];
+
+            } catch (typeError) {
+              let rashiLine = "";
+              let rashiLineEng = "";
+            }
             let onkLine = verseHTMLOnk[i][j];
             
             line = line
@@ -529,9 +572,9 @@
               .replaceAll(" {פ}", `&nbsp;<span style="color: darkgrey; font-size:1.0rem; vertical-align: 0.15em;">{פ}</span><br>`) // removes {פ}, and replaces it with \t\t
               .trim();
 
-              for (let el of rashiLine) {
-                el.replaceAll(`:,`, `: `);
-              }
+            for (let el of rashiLine) {
+              el.replaceAll(`:,`, `: `);
+            }
 
             if (line.trim() == '<br>') continue;
             if (line.trim() == '' ) continue;
@@ -561,15 +604,45 @@
               const header = document.createElement("div");
               header.classList.add("rashi-header");
 
-              const label = document.createElement("span");
-              label.textContent = "רש\"י";
+              // Controls group
+              const controls = document.createElement("div");
+              controls.classList.add("rashi-controls");
 
+              // Arrow
               const arrow = document.createElement("span");
               arrow.classList.add("rashi-arrow");
               arrow.textContent = "▶";
 
+              // Collapse All
+              const collapseAllBtn = document.createElement("button");
+              collapseAllBtn.textContent = "Collapse all";
+              collapseAllBtn.classList.add("rashi-action-btn");
+              collapseAllBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                collapseAllRashi();
+              });
+
+              // Expand All
+              const expandAllBtn = document.createElement("button");
+              expandAllBtn.textContent = "Expand all";
+              expandAllBtn.classList.add("rashi-action-btn");
+              expandAllBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                expandAllRashi();
+              });
+
+              // Label
+              const label = document.createElement("span");
+              label.textContent = "רש\"י";
+
+              // --- assemble ---
+              controls.appendChild(collapseAllBtn);
+              controls.appendChild(expandAllBtn);
+              controls.appendChild(arrow);
+
               header.appendChild(label);
-              header.appendChild(arrow);
+              header.appendChild(controls);
+
 
               // === Collapsible BODY ===
               const body = document.createElement("div");
@@ -622,6 +695,16 @@
         console.error('Error fetching text:', err);
         document.getElementById('textDisplay').innerText = 'Error loading text.';
       }
+    }
+
+    function expandAllRashi() {
+      document.querySelectorAll(".rashi-body").forEach(b => b.classList.remove("collapsed"));
+      document.querySelectorAll(".rashi-arrow").forEach(a => a.classList.add("rotated"));
+    }
+
+    function collapseAllRashi() {
+      document.querySelectorAll(".rashi-body").forEach(b => b.classList.add("collapsed"));
+      document.querySelectorAll(".rashi-arrow").forEach(a => a.classList.remove("rotated"));
     }
 
     function copyText(button) {
