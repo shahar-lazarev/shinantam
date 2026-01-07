@@ -6,6 +6,13 @@
 <title>Verse to Aliyah</title>
 <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 <style>
+@font-face {
+  font-family: "SBL Hebrew";
+  src: url("../fonts/SBL_Hbrw.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --primary-color: #1a202c;
   --accent-color: #2b6cb0;
@@ -522,7 +529,7 @@ async function displayAliyahText(ref, book, start, end) {
     textContainer.style.maxHeight = "300px";
     textContainer.style.overflowY = "auto";
     textContainer.style.lineHeight = "2";
-    textContainer.style.fontSize = "1.1rem";
+    textContainer.style.fontSize = "1.4rem";
     
     
     document.querySelector(".card").appendChild(textContainer);
@@ -531,7 +538,7 @@ async function displayAliyahText(ref, book, start, end) {
   if (currentLang === "he") {
     textContainer.style.textAlign = "right";
     textContainer.style.direction = "rtl";
-    textContainer.style.fontFamily = "'Noto Sans Hebrew', 'Arial', sans-serif";
+    textContainer.style.fontFamily = "'SBL Hebrew', 'Noto Sans Hebrew', 'Arial', sans-serif";
   } else {
     textContainer.style.textAlign = "left";
     textContainer.style.direction = "ltr";

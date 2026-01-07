@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "SBL Hebrew";
+  src: url("../fonts/SBL_Hbrw.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 *,
 *::before,
 *::after {
@@ -616,7 +623,7 @@ p#top-quote {
     /* opacity: 50%; */
     position: relative;
 
-    font-family: "times";
+    font-family: "SBL Hebrew", "times";
 }
 
 .nonFirst {
