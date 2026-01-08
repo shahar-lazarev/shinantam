@@ -391,6 +391,23 @@
     const aliyotURL = 'https://raw.githubusercontent.com/shahar-lazarev/shinantam/refs/heads/main/shnayim/Aliyot.txt';
     let aliyotMap = {};
 
+    const STORAGE_KEYS = {
+      PARASHA: "shnayim_last_parasha",
+      ALIYAH: "shnayim_current_aliyah"
+    };
+
+    function saveProgress(parasha, aliyah) {
+      localStorage.setItem(STORAGE_KEYS.PARASHA, parasha);
+      localStorage.setItem(STORAGE_KEYS.ALIYAH, aliyah);
+    }
+
+    function loadProgress() {
+      return {
+        lastParasha: localStorage.getItem(STORAGE_KEYS.PARASHA),
+        currentAliyah: localStorage.getItem(STORAGE_KEYS.ALIYAH),
+      };
+    }
+
     async function loadData() {
       try {
         const resp = await fetch(aliyotURL);
@@ -398,9 +415,29 @@
         parseAliyot(text);
 
         const currentParasha = await getCurrentParasha();
+        const progress = loadProgress();
+
         populateSeferDropdown(currentParasha);
+
+        // Decide which aliyah to load
+        setTimeout(() => {
+          const parashaSelect = document.getElementById("parashaSelect");
+          const aliyahSelect = document.getElementById("aliyahSelect");
+
+          const isNewParasha =
+            !progress.lastParasha || progress.lastParasha !== currentParasha;
+
+          if (isNewParasha) {
+            aliyahSelect.value = "Aliyah 1";
+            saveProgress(currentParasha, "Aliyah 1");
+          } else if (progress.currentAliyah) {
+            aliyahSelect.value = progress.currentAliyah;
+          }
+          displayAliyahText();
+        }, 0);
+
       } catch (err) {
-        console.error('Error loading Aliyot:', err);
+        console.error("Error loading Aliyot:", err);
       }
     }
 
@@ -475,24 +512,35 @@
     }
 
     function populateAliyahDropdown() {
-      const parasha = document.getElementById('parashaSelect').value;
-      
-      const aliyahSelect = document.getElementById('aliyahSelect');
+      const parasha = document.getElementById("parashaSelect").value;
+      const aliyahSelect = document.getElementById("aliyahSelect");
       const aliyot = aliyotMap[parasha] || {};
 
       aliyahSelect.innerHTML = Object.keys(aliyot)
         .map(a => `<option value="${a}">${a}</option>`)
-        .join('');
+        .join("");
 
-      aliyahSelect.addEventListener('change', displayAliyahText);
-      displayAliyahText();
+      aliyahSelect.addEventListener("change", () => {
+        saveProgress(parasha, aliyahSelect.value);
+        displayAliyahText();
+      });
+
+      // console.log("RUN 3");
+      // displayAliyahText();
     }
+
+    document.getElementById("parashaSelect").addEventListener("change", () => {
+      saveProgress(
+        document.getElementById("parashaSelect").value,
+        "Aliyah 1"
+      );
+    });
 
     function toCamelCase(str) {
       str = str.toLowerCase();
       return str.toLowerCase().split(' ').map((word, i) => i === 0 ? word.charAt(0).toUpperCase() + word.slice(1) : word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
-}
+    }
 
     async function displayAliyahText() {
       const parasha = document.getElementById('parashaSelect').value;
