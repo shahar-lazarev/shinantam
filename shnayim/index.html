@@ -433,7 +433,8 @@
           } else if (progress.currentAliyah) {
             aliyahSelect.value = progress.currentAliyah;
           }
-          displayAliyahText();
+          // console.log("RUN 1");
+          // displayAliyahText();
         }, 0);
 
       } catch (err) {
@@ -525,15 +526,11 @@
         displayAliyahText();
       });
 
-      // console.log("RUN 3");
-      // displayAliyahText();
+      displayAliyahText();
     }
 
     document.getElementById("parashaSelect").addEventListener("change", () => {
-      saveProgress(
-        document.getElementById("parashaSelect").value,
-        "Aliyah 1"
-      );
+      saveProgress(document.getElementById("parashaSelect").value, "Aliyah 1");
     });
 
     function toCamelCase(str) {
