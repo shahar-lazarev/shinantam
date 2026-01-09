@@ -433,8 +433,7 @@
           } else if (progress.currentAliyah) {
             aliyahSelect.value = progress.currentAliyah;
           }
-          // console.log("RUN 1");
-          // displayAliyahText();
+          displayAliyahText();
         }, 0);
 
       } catch (err) {
@@ -490,7 +489,10 @@
         seferSelect.value = sefer;
       }
 
-      seferSelect.addEventListener('change', () => populateParashaDropdown());
+      seferSelect.addEventListener('change', () => {
+        populateParashaDropdown();
+        displayAliyahText();
+      });
       populateParashaDropdown(preferredParasha);
     }
 
@@ -507,8 +509,10 @@
         parashaSelect.value = preferredParasha;
       }
 
-
-      parashaSelect.addEventListener('change', populateAliyahDropdown);
+      parashaSelect.addEventListener('change', () => {
+        populateAliyahDropdown();
+        displayAliyahText()
+      });
       populateAliyahDropdown();
     }
 
@@ -526,7 +530,8 @@
         displayAliyahText();
       });
 
-      displayAliyahText();
+      // console.log("RUN 3");
+      // displayAliyahText();
     }
 
     document.getElementById("parashaSelect").addEventListener("change", () => {
