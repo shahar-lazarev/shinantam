@@ -608,7 +608,7 @@
             
             line = line
               .replaceAll(/<span[^>]*>\{פ\}<\/span>/g, "{פ}") // removes <span>{פ}</span>, and replaces it with {פ}
-              .replaceAll(/<span[^>]*>.*?<\/span>/g, "")
+              // .replaceAll(/<span[^>]*>.*?<\/span>/g, "")
               .replaceAll(/&nbsp;/g, " ")
               .replaceAll(/\*\([^)]*\)/g, "")
               .replaceAll(/\s*\(\s*\)\s*/g, "")
