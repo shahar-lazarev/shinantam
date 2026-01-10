@@ -245,7 +245,7 @@
 
     /* Your original English Rashi */
     .rashi-en {
-      flex: 1.8;
+      flex: 1.6;
       direction: ltr;
       text-align: left;
       font-size: 1.1rem;
@@ -544,6 +544,27 @@
       .join(' ');
     }
 
+    function countChars(text) {
+      return text.replace(/\s+/g, ' ') // normalize whitespace
+        .trim()
+        .length;
+    }
+
+    function estimateEnglishFlex(heText, enText) {
+      const heChars = countChars(heText);
+      const enChars = countChars(enText);
+      
+      const hebrewDensity = 1.0;
+      const englishDensity = 0.72;
+      
+      const fontRatio = 1.4 / 1.1;
+
+      const heScore = heChars * hebrewDensity;
+      const enScore = enChars * englishDensity * fontRatio;
+
+      return enScore / heScore;
+    }
+
     async function displayAliyahText() {
       const parasha = document.getElementById('parashaSelect').value;
       const aliyah = document.getElementById('aliyahSelect').value;
@@ -725,6 +746,9 @@
               rashiContainer.appendChild(header);
               rashiContainer.appendChild(body);
               document.getElementById('textDisplay').appendChild(rashiContainer);
+
+              const ratio = estimateEnglishFlex(span_rashi.innerText, span_rashi_eng.innerText);
+              span_rashi_eng.style.flex = Math.min(Math.max(ratio, 1.4), 2.6);
 
               // Toggle on header click
               header.addEventListener("click", () => {
