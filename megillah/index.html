@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <title>Megillah</title>
 <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
 :root {
@@ -55,10 +56,16 @@ html, body {
   letter-spacing: 0.3px;
 }
 
-.pdf-container iframe {
+/* .pdf-container iframe {
   flex: 1;
   border: none;
   background: #e2e8f0;
+} */
+
+.pdf-container object {
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
 /* ---------- AUDIO PANEL ---------- */
@@ -163,6 +170,25 @@ audio {
     min-height: 0;
   }
 }
+
+@media (max-width: 900px) {
+  audio {
+    /* transform: scale(.15); */
+    width: 100%;
+    min-height: 36px;
+  }
+
+  .audio-item {
+    padding: 4px;
+  }
+
+  .audio-item label {
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+  }
+}
+
+
 </style>
 </head>
 
@@ -173,7 +199,13 @@ audio {
     <div class="pdf-container">
       <div class="pdf-header">Tikkun Korim</div>
       <!-- Replace with your PDF -->
-      <iframe src="Tikkun of Megillat Esther.pdf"></iframe>
+      <!-- <iframe src="Tikkun of Megillat Esther.pdf"></iframe> -->
+      <object data="Tikkun of Megillat Esther.pdf" type="application/pdf">
+        <p style="padding:16px;">
+          PDF not supported.
+          <a href="Tikkun of Megillat Esther.pdf" target="_blank">Open PDF</a>
+        </p>
+      </object>
     </div>
 
     <!-- AUDIO PANEL -->
