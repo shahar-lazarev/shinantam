@@ -204,7 +204,65 @@ audio {
   }
 }
 
-@media (hover: none) and (pointer: coarse) {
+.is-touch .pdf-frame {
+  display: none;
+}
+
+.is-touch .pdf-image-wrapper {
+  display: block;
+}
+
+.is-touch .app {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 60vh 35vh;
+  height: 100vh;
+}
+
+.is-touch .pdf-container {
+  min-height: 0;
+}
+
+.is-touch .audio-container {
+  min-height: 0;
+}
+
+.is-touch .pdf-image-wrapper::after {
+  content: "Pinch to zoom";
+  position: sticky;
+  bottom: 8px;
+  display: block;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #718096;
+  opacity: 0.7;
+}
+
+.is-touch audio {
+  /* transform: scale(.15); */
+  width: 100%;
+  min-height: 36px;
+}
+
+.is-touch .audio-item {
+  padding: 4px;
+}
+
+.is-touch .audio-item label {
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+
+.is-touch .pdf-frame {
+  display: none;
+}
+
+.is-touch .pdf-image-wrapper {
+  display: block;
+}
+
+
+/* @media (hover: none) and (pointer: coarse) {
   .app {
     display: grid;
     grid-template-columns: 1fr;
@@ -219,7 +277,7 @@ audio {
   .audio-container {
     min-height: 0;
   }
-  
+
   .pdf-image-wrapper::after {
     content: "Pinch to zoom";
     position: sticky;
@@ -232,7 +290,7 @@ audio {
   }
 
   audio {
-    /* transform: scale(.15); */
+    // transform: scale(.15); 
     width: 100%;
     min-height: 36px;
   }
@@ -252,7 +310,7 @@ audio {
   .pdf-image-wrapper {
     display: block;
   }
-}
+} */
 
 
 </style>
@@ -339,4 +397,16 @@ audio {
 
   </div>
 </body>
+  <script>
+    (function () {
+      const isTouch =
+        'ontouchstart' in window ||
+        navigator.maxTouchPoints > 0 ||
+        navigator.msMaxTouchPoints > 0;
+
+      if (isTouch) {
+        document.documentElement.classList.add('is-touch');
+      }
+    })();
+  </script>
 </html>
