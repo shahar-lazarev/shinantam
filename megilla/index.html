@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>PDF + Audio Viewer</title>
+
+<style>
+:root {
+  --primary-color: #1a202c;
+  --accent-color: #2b6cb0;
+  --bg-color: #f7fafc;
+  --text-color: #2d3748;
+  --border-radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(180deg, #edf2f7, var(--bg-color));
+  color: var(--text-color);
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 2.3fr 1fr;
+  gap: 20px;
+  padding: 20px;
+  height: 100%;
+}
+
+/* ---------- PDF PANEL ---------- */
+.pdf-container {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.05),
+    0 2px 6px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.pdf-header {
+  padding: 14px 18px;
+  background: var(--primary-color);
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+}
+
+.pdf-container iframe {
+  flex: 1;
+  border: none;
+  background: #e2e8f0;
+}
+
+/* ---------- AUDIO PANEL ---------- */
+.audio-container {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.05),
+    0 2px 6px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.audio-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 14px 18px;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    #111827
+  );
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+}
+
+.audio-list {
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ---------- AUDIO CARD ---------- */
+.audio-item {
+  background: var(--bg-color);
+  padding: 12px 14px;
+  border-radius: var(--border-radius);
+  border: 1px solid #e2e8f0;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.audio-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-color);
+  box-shadow: 0 6px 18px rgba(43, 108, 176, 0.15);
+}
+
+.audio-item label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--primary-color);
+}
+
+audio {
+  width: 100%;
+  outline: none;
+}
+
+/* ---------- SCROLLBAR ---------- */
+.audio-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.audio-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.audio-list::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 6px;
+}
+
+.audio-list::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1100px) {
+  .app {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 60vh 35vh;
+    height: 100vh;
+  }
+
+  .pdf-container {
+    min-height: 0;
+  }
+
+  .audio-container {
+    min-height: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- PDF PANEL -->
+    <div class="pdf-container">
+      <div class="pdf-header">Tikkun Korim</div>
+      <!-- Replace with your PDF -->
+      <iframe src="Tikkun of Megillat Esther.pdf"></iframe>
+    </div>
+
+    <!-- AUDIO PANEL -->
+    <div class="audio-container">
+      <div class="audio-header">Perakim Audio (Rav Moshe Habusha)</div>
+
+      <div class="audio-list">
+        <!-- Replace audio paths as needed -->
+        <div class="audio-item">
+          <label>Perek 1</label>
+          <audio controls src="P1 megilat Esther moshe habusha.ogg"></audio>
+        </div>
+        <div class="audio-item">
+          <label>Perek 2</label>
+          <audio controls src="P2 megilat Esther moshe habusha.ogg"></audio>
+        </div>
+        <div class="audio-item">
+          <label>Perek 3</label>
+          <audio controls src="P3 megilat Esther moshe habusha.ogg"></audio>
+        </div>
+        <div class="audio-item">
+          <label>Perek 4</label>
+          <audio controls src="P4 megilat Esther moshe habusha.ogg"></audio>
+        </div>
+        <div class="audio-item">
+          <label>Perek 5</label>
+          <audio controls src="P5 megilat Esther moshe habusha.ogg"></audio>
+        </div>
+        <div class="audio-item">
+          <label>Perek 6</label>
+          <audio controls src="P6 megilat Esther moshe habusha.ogg"></audio>
+        </div>
+        <div class="audio-item">
+          <label>Perek 7</label>
+          <audio controls src="P7 megilat Esther moshe habusha.ogg"></audio>
+        </div>
+        <div class="audio-item">
+          <label>Perek 8</label>
+          <audio controls src="P8 megilat Esther moshe habusha.ogg"></audio>
+        </div>
+        <div class="audio-item">
+          <label>Perek 9</label>
+          <audio controls src="P9 megilat Esther moshe habusha.ogg"></audio>
+        </div>
+        <div class="audio-item">
+          <label>Perek 10</label>
+          <audio controls src="P10 megilat Esther moshe habusha.ogg"></audio>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
