@@ -68,6 +68,26 @@ html, body {
   border: none;
 }
 
+.pdf-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.pdf-image-wrapper {
+  display: none;
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: #e2e8f0;
+}
+
+.pdf-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* ---------- AUDIO PANEL ---------- */
 .audio-container {
   background: white;
@@ -171,7 +191,22 @@ audio {
   }
 }
 
-@media (max-width: 900px) {
+@media (hover: none) and (pointer: coarse) {
+  .app {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 60vh 35vh;
+    height: 100vh;
+  }
+
+  .pdf-container {
+    min-height: 0;
+  }
+
+  .audio-container {
+    min-height: 0;
+  }
+
   audio {
     /* transform: scale(.15); */
     width: 100%;
@@ -186,6 +221,13 @@ audio {
     font-size: 0.95rem;
     margin-bottom: 6px;
   }
+  .pdf-frame {
+    display: none;
+  }
+
+  .pdf-image-wrapper {
+    display: block;
+  }
 }
 
 
@@ -199,13 +241,25 @@ audio {
     <div class="pdf-container">
       <div class="pdf-header">Tikkun Korim</div>
       <!-- Replace with your PDF -->
-      <!-- <iframe src="Tikkun of Megillat Esther.pdf"></iframe> -->
-      <object data="Tikkun of Megillat Esther.pdf" type="application/pdf">
+      <iframe class="pdf-frame" src="Tikkun of Megillat Esther.pdf"></iframe>
+      <!-- <object data="Tikkun of Megillat Esther.pdf" type="application/pdf">
         <p style="padding:16px;">
           PDF not supported.
           <a href="Tikkun of Megillat Esther.pdf" target="_blank">Open PDF</a>
         </p>
-      </object>
+      </object> -->
+      <div class="pdf-image-wrapper">
+        <img src="megillah tikkun p1.png" alt="Document" class="pdf-image" />
+        <img src="megillah tikkun p2.png" alt="Document" class="pdf-image" />
+        <img src="megillah tikkun p3.png" alt="Document" class="pdf-image" />
+        <img src="megillah tikkun p4.png" alt="Document" class="pdf-image" />
+        <img src="megillah tikkun p5.png" alt="Document" class="pdf-image" />
+        <img src="megillah tikkun p6.png" alt="Document" class="pdf-image" />
+        <img src="megillah tikkun p7.png" alt="Document" class="pdf-image" />
+        <img src="megillah tikkun p8.png" alt="Document" class="pdf-image" />
+        <img src="megillah tikkun p9.png" alt="Document" class="pdf-image" />
+        <img src="megillah tikkun p10.png" alt="Document" class="pdf-image" />
+      </div>
     </div>
 
     <!-- AUDIO PANEL -->
