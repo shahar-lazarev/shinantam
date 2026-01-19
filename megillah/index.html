@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <title>Megillah</title>
 <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <style>
 :root {
@@ -77,9 +77,22 @@ html, body {
 .pdf-image-wrapper {
   display: none;
   height: 100%;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   -webkit-overflow-scrolling: touch;
   background: #e2e8f0;
+
+  overflow: auto; 
+  touch-action: pan-x pan-y pinch-zoom; /* Allow touch gestures inside */
+}
+
+.zoomable {
+  width: 100%;
+  height: auto;
+  display: block;
+
+  /* Required for iOS */
+  touch-action: pinch-zoom;
+  user-select: none;
 }
 
 .pdf-image {
@@ -206,6 +219,17 @@ audio {
   .audio-container {
     min-height: 0;
   }
+  
+  .pdf-image-wrapper::after {
+    content: "Pinch to zoom";
+    position: sticky;
+    bottom: 8px;
+    display: block;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #718096;
+    opacity: 0.7;
+  }
 
   audio {
     /* transform: scale(.15); */
@@ -251,16 +275,16 @@ audio {
         </p>
       </object> -->
       <div class="pdf-image-wrapper">
-        <img src="megillah tikkun p1.png" alt="Document" class="pdf-image" />
-        <img src="megillah tikkun p2.png" alt="Document" class="pdf-image" />
-        <img src="megillah tikkun p3.png" alt="Document" class="pdf-image" />
-        <img src="megillah tikkun p4.png" alt="Document" class="pdf-image" />
-        <img src="megillah tikkun p5.png" alt="Document" class="pdf-image" />
-        <img src="megillah tikkun p6.png" alt="Document" class="pdf-image" />
-        <img src="megillah tikkun p7.png" alt="Document" class="pdf-image" />
-        <img src="megillah tikkun p8.png" alt="Document" class="pdf-image" />
-        <img src="megillah tikkun p9.png" alt="Document" class="pdf-image" />
-        <img src="megillah tikkun p10.png" alt="Document" class="pdf-image" />
+        <img src="megillah tikkun p1.png" alt="Document" class="pdf-image" class="zoomable"/>
+        <img src="megillah tikkun p2.png" alt="Document" class="pdf-image" class="zoomable"/>
+        <img src="megillah tikkun p3.png" alt="Document" class="pdf-image" class="zoomable"/>
+        <img src="megillah tikkun p4.png" alt="Document" class="pdf-image" class="zoomable"/>
+        <img src="megillah tikkun p5.png" alt="Document" class="pdf-image" class="zoomable"/>
+        <img src="megillah tikkun p6.png" alt="Document" class="pdf-image" class="zoomable"/>
+        <img src="megillah tikkun p7.png" alt="Document" class="pdf-image" class="zoomable"/>
+        <img src="megillah tikkun p8.png" alt="Document" class="pdf-image" class="zoomable"/>
+        <img src="megillah tikkun p9.png" alt="Document" class="pdf-image" class="zoomable"/>
+        <img src="megillah tikkun p10.png" alt="Document" class="pdf-image" class="zoomable"/>
       </div>
     </div>
 
