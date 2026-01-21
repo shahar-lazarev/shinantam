@@ -27,6 +27,7 @@ html, body {
   color: var(--text-color);
 }
 
+/* ---------- APP LAYOUT ---------- */
 .app {
   display: grid;
   grid-template-columns: 2.3fr 1fr;
@@ -47,6 +48,7 @@ html, body {
   flex-direction: column;
 }
 
+/* Header */
 .pdf-header {
   padding: 14px 18px;
   background: var(--primary-color);
@@ -54,51 +56,95 @@ html, body {
   font-weight: 600;
   font-size: 0.95rem;
   letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-/* .pdf-container iframe {
+/* ---------- TABS ---------- */
+.tab-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.tab-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tab-btn:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+.tab-btn.active {
+  background: white;
+  color: var(--primary-color);
+  border-color: white;
+  font-weight: 600;
+}
+
+/* ---------- VIEWER ---------- */
+.pdf-viewer {
+  position: relative;
   flex: 1;
-  border: none;
+  min-height: 0; /* CRITICAL */
   background: #e2e8f0;
-} */
-
-.pdf-container object {
-  width: 100%;
-  height: 100%;
-  border: none;
 }
 
-.pdf-frame {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
+/* All viewers overlap */
+.pdf-frame,
+.tikkun-frame,
 .pdf-image-wrapper {
-  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
   height: 100%;
-  /* overflow-y: auto; */
-  -webkit-overflow-scrolling: touch;
-  background: #e2e8f0;
-
-  overflow: auto; 
-  touch-action: pan-x pan-y pinch-zoom; /* Allow touch gestures inside */
+  display: none;
 }
 
-.zoomable {
-  width: 100%;
-  height: auto;
+/* Active tab */
+.show {
   display: block;
+}
 
-  /* Required for iOS */
-  touch-action: pinch-zoom;
-  user-select: none;
+/* PDF + iframe */
+.pdf-frame {
+  border: none;
+}
+
+/* Image viewer */
+.pdf-image-wrapper {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y pinch-zoom;
 }
 
 .pdf-image {
   width: 100%;
   height: auto;
   display: block;
+}
+
+.zoomable {
+  user-select: none;
+}
+
+/* Mobile hint */
+.is-touch .pdf-image-wrapper.show::after {
+  content: "Pinch to zoom";
+  position: sticky;
+  bottom: 8px;
+  display: block;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #718096;
+  opacity: 0.7;
 }
 
 /* ---------- AUDIO PANEL ---------- */
@@ -130,7 +176,7 @@ html, body {
 }
 
 .audio-list {
-  padding: 16px;
+  padding: 16px 10px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -140,7 +186,7 @@ html, body {
 /* ---------- AUDIO CARD ---------- */
 .audio-item {
   background: var(--bg-color);
-  padding: 12px 14px;
+  padding: 12px 10px;
   border-radius: var(--border-radius);
   border: 1px solid #e2e8f0;
   transition:
@@ -173,10 +219,6 @@ audio {
   width: 8px;
 }
 
-.audio-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
 .audio-list::-webkit-scrollbar-thumb {
   background: #cbd5e0;
   border-radius: 6px;
@@ -189,77 +231,50 @@ audio {
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 1100px) {
   .app {
-    display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 60vh 35vh;
+    grid-template-rows: 68vh;
     height: 100vh;
   }
 
-  .pdf-container {
-    min-height: 0;
-  }
-
+  .pdf-container,
   .audio-container {
     min-height: 0;
   }
 }
 
-.is-touch .pdf-frame {
-  display: none;
+/* ---------- ZOOM CONTROLS ---------- */
+.zoom-controls {
+  position: absolute;
+  right: 20px;
+  bottom: 12px;
+  display: none;  /* hidden by default */
+  flex-direction: column;
+  gap: 6px;
+  z-index: 20;
+  pointer-events: auto;
 }
 
-.is-touch .pdf-image-wrapper {
-  display: block;
+.zoom-btn {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  transition: background 0.15s ease;
 }
 
-.is-touch .app {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 60vh 35vh;
-  height: 100vh;
+.zoom-btn:hover {
+  background: rgba(0, 0, 0, 0.7);
 }
 
-.is-touch .pdf-container {
-  min-height: 0;
-}
-
-.is-touch .audio-container {
-  min-height: 0;
-}
-
-.is-touch .pdf-image-wrapper::after {
-  content: "Pinch to zoom";
-  position: sticky;
-  bottom: 8px;
-  display: block;
-  text-align: center;
-  font-size: 0.75rem;
-  color: #718096;
-  opacity: 0.7;
-}
-
-.is-touch audio {
-  /* transform: scale(.15); */
-  width: 100%;
-  min-height: 36px;
-}
-
-.is-touch .audio-item {
-  padding: 4px;
-}
-
-.is-touch .audio-item label {
-  font-size: 0.95rem;
-  margin-bottom: 6px;
-}
-
-.is-touch .pdf-frame {
-  display: none;
-}
-
-.is-touch .pdf-image-wrapper {
-  display: block;
-}
 
 
 /* @media (hover: none) and (pointer: coarse) {
@@ -321,28 +336,39 @@ audio {
 
     <!-- PDF PANEL -->
     <div class="pdf-container">
-      <div class="pdf-header">Tikkun Korim</div>
-      <!-- Replace with your PDF -->
-      <iframe class="pdf-frame" src="Tikkun of Megillat Esther.pdf"></iframe>
-      <!-- <iframe class="pdf-frame" src="https://tikkun.io/#/h/esther" loading="lazy" referrerpolicy="no-referrer"></iframe> -->
-       
-      <!-- <object data="Tikkun of Megillat Esther.pdf" type="application/pdf">
-        <p style="padding:16px;">
-          PDF not supported.
-          <a href="Tikkun of Megillat Esther.pdf" target="_blank">Open PDF</a>
-        </p>
-      </object> -->
-      <div class="pdf-image-wrapper">
-        <img src="megillah tikkun p1.png" alt="Document" class="pdf-image" class="zoomable"/>
-        <img src="megillah tikkun p2.png" alt="Document" class="pdf-image" class="zoomable"/>
-        <img src="megillah tikkun p3.png" alt="Document" class="pdf-image" class="zoomable"/>
-        <img src="megillah tikkun p4.png" alt="Document" class="pdf-image" class="zoomable"/>
-        <img src="megillah tikkun p5.png" alt="Document" class="pdf-image" class="zoomable"/>
-        <img src="megillah tikkun p6.png" alt="Document" class="pdf-image" class="zoomable"/>
-        <img src="megillah tikkun p7.png" alt="Document" class="pdf-image" class="zoomable"/>
-        <img src="megillah tikkun p8.png" alt="Document" class="pdf-image" class="zoomable"/>
-        <img src="megillah tikkun p9.png" alt="Document" class="pdf-image" class="zoomable"/>
-        <img src="megillah tikkun p10.png" alt="Document" class="pdf-image" class="zoomable"/>
+      <div class="pdf-header">
+        <span class="pdf-title">Tikkun Korim</span>
+        <div class="tab-buttons">
+          <button class="tab-btn" data-tab="pdf">PDF</button>
+          <button class="tab-btn" data-tab="image">Image</button>
+          <button class="tab-btn" data-tab="tikkun">Tikkun.io</button>
+        </div>
+      </div>
+
+      <!-- THIS WRAPPER IS REQUIRED -->
+      <div class="pdf-viewer">
+
+        <iframe class="pdf-frame" src="Tikkun of Megillat Esther.pdf"></iframe>
+
+        <iframe class="pdf-frame tikkun-frame" src="https://tikkun.io/#/h/esther" loading="lazy" referrerpolicy="no-referrer"></iframe>
+
+        <div class="pdf-image-wrapper">
+          <img src="megillah tikkun p1.png" class="pdf-image zoomable" />
+          <img src="megillah tikkun p2.png" class="pdf-image zoomable" />
+          <img src="megillah tikkun p3.png" class="pdf-image zoomable" />
+          <img src="megillah tikkun p4.png" class="pdf-image zoomable" />
+          <img src="megillah tikkun p5.png" class="pdf-image zoomable" />
+          <img src="megillah tikkun p6.png" class="pdf-image zoomable" />
+          <img src="megillah tikkun p7.png" class="pdf-image zoomable" />
+          <img src="megillah tikkun p8.png" class="pdf-image zoomable" />
+          <img src="megillah tikkun p9.png" class="pdf-image zoomable" />
+          <img src="megillah tikkun p10.png" class="pdf-image zoomable" />
+        </div>
+        <div class="zoom-controls">
+          <button class="zoom-btn zoom-in">+</button>
+          <button class="zoom-btn zoom-out">−</button>
+        </div>
+
       </div>
     </div>
 
@@ -398,15 +424,79 @@ audio {
   </div>
 </body>
   <script>
-    (function () {
-      const isTouch =
-        'ontouchstart' in window ||
-        navigator.maxTouchPoints > 0 ||
-        navigator.msMaxTouchPoints > 0;
+(function () {
+  const isTouch =
+    'ontouchstart' in window ||
+    navigator.maxTouchPoints > 0 ||
+    navigator.msMaxTouchPoints > 0;
 
-      if (isTouch) {
-        document.documentElement.classList.add('is-touch');
-      }
-    })();
-  </script>
+  if (isTouch) {
+    document.documentElement.classList.add('is-touch');
+  }
+
+  const buttons = document.querySelectorAll('.tab-btn');
+  const pdfFrame = document.querySelector('.pdf-frame:not(.tikkun-frame)');
+  const tikkunFrame = document.querySelector('.tikkun-frame');
+  const imageWrapper = document.querySelector('.pdf-image-wrapper');
+
+  function activateTab(tab) {
+    buttons.forEach(btn =>
+      btn.classList.toggle('active', btn.dataset.tab === tab)
+    );
+
+    pdfFrame.classList.remove('show');
+    tikkunFrame.classList.remove('show');
+    imageWrapper.classList.remove('show');
+
+    if (tab === 'pdf') pdfFrame.classList.add('show');
+    if (tab === 'image') imageWrapper.classList.add('show');
+    if (tab === 'tikkun') tikkunFrame.classList.add('show');
+
+    // --- SHOW/HIDE ZOOM CONTROLS ---
+    const zoomControls = document.querySelector('.zoom-controls');
+    if (tab === 'image') {
+      zoomControls.style.display = 'flex';  // show for image tab
+    } else {
+      zoomControls.style.display = 'none';  // hide for all other tabs
+    }
+  }
+  
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      activateTab(btn.dataset.tab);
+    });
+  });
+
+  // Default tab
+  if (isTouch) {
+    activateTab('image');   // Mobile default
+  } else {
+    activateTab('pdf');     // Desktop default
+  }
+})();
+
+(function() {
+  const imageWrapper = document.querySelector('.pdf-image-wrapper');
+  const images = imageWrapper.querySelectorAll('.pdf-image');
+  let scale = 1;
+  const step = 0.1;
+  const minScale = 0.5;
+  const maxScale = 3;
+
+  function setScale(newScale) {
+    scale = Math.min(maxScale, Math.max(minScale, newScale));
+    images.forEach(img => {
+      img.style.width = `${scale * 100}%`; // scales image width
+      img.style.height = 'auto';
+    });
+  }
+
+  const zoomInBtn = document.querySelector('.zoom-in');
+  const zoomOutBtn = document.querySelector('.zoom-out');
+
+  zoomInBtn.addEventListener('click', () => setScale(scale + step));
+  zoomOutBtn.addEventListener('click', () => setScale(scale - step));
+})();
+
+</script>
 </html>
