@@ -9,7 +9,7 @@
 *::before,
 *::after {
     box-sizing: border-box;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: 'Heebo', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     direction: rtl;
 }
 
@@ -1020,6 +1020,18 @@ button.text-btn {
 
 #textarea-submit-btn:active {
     background-color: #aaa;
+}
+
+.footnote p {
+    direction: ltr; 
+    text-align: center;
+    font-size: 0.9rem;
+    color: #7c7c7c;
+}
+
+.footnote a {
+    color: #2065ae;
+    text-decoration: none;
 }
 
 
