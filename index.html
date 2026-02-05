@@ -1,239 +1,299 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="he">
 <head>
-  <meta charset="utf-8">
-  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="description" content="Memorize Mishnayot and any other text word-for-word! Print option available too!">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Shinantam</title>
-  <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
-  <link type="text/css" href="styles/styles.css" media="all" rel="stylesheet">
-  <link type="text/css" href="styles/print.css" media="print" rel="stylesheet">
-  <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
-  <link href="//fonts.googleapis.com/css2?family=Noto+Rashi+Hebrew:wght@900&display=swap" rel="stylesheet">
-  <link href="//fonts.googleapis.com/css2?family=Heebo&display=swap" rel="stylesheet">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script defer src=" scripts/utils.js"></script>
-  <script defer src=" scripts/pane.js"></script>
-  <script defer src=" scripts/main-ui.js"></script>
-  <script defer src=" scripts/script.js"></script>
-  <!-- <link rel=" stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BMM2NTY71V"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shinantam</title>
 
-    gtag('config', 'G-BMM2NTY71V');
-  </script>
+    <!-- Google Font: Noto Rashi Hebrew -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Noto+Rashi+Hebrew&d isplay=swap" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Rashi+Hebrew:wght@900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #1a202c;
+            --accent-color: #2b6cb0;
+            --bg-color: #f7fafc;
+            --text-color: #2d3748;
+            --border-radius: 12px;
+            --hover-bg: #e1f0fb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", system-ui, sans-serif;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 20px 0;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Title */
+        h1 {
+            margin-bottom: 40px;
+            font-size: 5.2rem;
+            color: var(--primary-color);
+            font-family: "Noto Rashi Hebrew", serif;
+            direction: rtl;
+        }
+
+        /* Base Button Style */
+        .btn {
+            display: block;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 24px 16px;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background: var(--hover-bg);
+            transform: translateY(-3px);
+            border-color: var(--accent-color);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+            color: var(--accent-color);
+        }
+
+        /* Main App */
+        .main-app {
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .main-app .btn {
+            width: 100%;
+            max-width: 500px;
+            font-size: 1.8rem;
+            padding: 36px 20px;
+            font-weight: 600;
+        }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        /* App Item Wrapper */
+        .app-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: center;
+        }
+
+        /* Description Text */
+        .desc {
+            font-size: 0.95rem;
+            color: #718096;
+            line-height: 1.4;
+            transition: all 0.25s ease;
+            padding: 0 8px;
+        }
+
+        /* Hover Interaction */
+        .app-item:hover .desc {
+            color: var(--accent-color);
+            font-weight: 600;
+            transform: translateY(-1px);
+        }
+
+
+        /* Shine Effect */
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(43,108,176,0.12),
+                transparent
+            );
+            transition: 0.6s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        /* Footer */
+        .site-footer {
+            width: 100%;
+            margin-top: 60px;
+            padding: 20px 10px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            color: #718096;
+            font-size: 0.95rem;
+        }
+
+        .cool-link {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .cool-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+
+        /* Mobile */
+        @media (max-width: 600px) {
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .main-app .btn {
+                font-size: 1.5rem;
+                padding: 30px 16px;
+            }
+
+            .btn {
+                font-size: 1.1rem;
+                padding: 20px 14px;
+            }
+        }
+    </style>
 </head>
-<body>    
-  <div id="cover"></div>
-  <!-- והיו הדברים האלה אשר אנכי מצוך היום על לבבך ושננתם...<br><br> -->
 
-  <div style="height: 60px;"></div>
-  <!-- <h1 style="font-weight: bold; margin-top: 50px;">משנה על לבבך</h1> -->
-  <p id="top-quote">
-  שיהו דברי תורה מחודדים בפיך. שאם ישאל לך אדם דבר אל תגמגם ותאמר לו, אלא אמור לו מיד.
-  <br id="top-quote-br"><span id="reference" style="color: #898989;">קידושין&nbsp;ל.</span></p>
+<body>
 
-  <button style="font-family: 'Times new roman'" class="expand">How to use this site</button>
-  <div class="expand-content">
-    <p>The <img class="in-text" src="images/button.png"> button in the bottom-right transforms the text to only show
-      the first letter of each word, the "Rashei Teivot."
-    </p>
-    <ol>
-      <li style="font-family: 'Times new roman'">
-        Read the original text a few times to get used to the text.
-        If the Mishna feels too long (more than 1 or 2 lines), then break it up into smaller parts and 
-        memorize them one part at a time.</li>
-      <li style="font-family: 'Times new roman'">
-        Next click the <img class="in-text" src="images/button.png"> button and practice saying the text using 
-      the "Rashei Teivot" about 2 to 5 times, or until you are comfortable saying 
-      the whole text easily.</li>
-      <li style="font-family: 'Times new roman'">Try saying the text by heart!</li>
-    </ol> 
-    <p> On the left-hand side: <br>
-    Click <img class="in-text" src="images/small_personal.png"> to enter your own custom text! <br>
-    Click <img class="in-text" src="images/small_print.png"> to print the text in a special memory-friendly format! <br>
-    Click <img class="in-text" src="images/small_increase.png"> to increase, and <img class="in-text" src="images/small_decrease.png"> to decrease the text size.</p>
-  </div>
+    <div class="container">
 
-  <div id="mishna-content"></div>
+        <h1 style="user-select: none;">שִׁנַּנְתָּם</h1>
 
-  <button type="button" class="text-btn" id="shinantam-button" onclick="makeAcronym()">
-    <img id="shinantam-button-img" src="images/favicon.png" alt="↻"></button>
+        <!-- Main App -->
+        <div class="main-app">
+            <div class="app-item">
+                <a class="btn" href="https://shinantam.com/learn/">
+                    📘 Learn
+                </a>
+                <div class="desc">
+                    A structured app to memorize Mishnayot and other texts easily.
+                </div>
+            </div>
+        </div>
 
-  <div id="option-container" onmouseleave="hideOptions()">
-    
-    <button type="button" class="text-btn" id="personal-button" onclick="displayInputUI()">
-      <img id="personal-button-img" src="images/personal.png" alt="👤"></button>
-    <button type="button" class="text-btn" id="print-button" onclick="window.print()">
-      <img id="print-button-img" src="images/print.svg" alt="🖶"></button>
-    <button type="button" class="text-btn" id="plus-button" onclick="changeFontSize(2)">
-      <img id="plus-button-img" src="images/increase.svg" alt="א+"></button>
-    <button type="button" class="text-btn" id="minus-button" onclick="changeFontSize(-2)">
-      <img id="minus-button-img" src="images/decrease.svg" alt="א–"></button>
-    <button type="button" class="text-btn" id="options-button" onclick="toggleOptions()" onmouseover="showOptions()">
-      <img id="options-button-img" src="images/gear.svg" alt="•••"></button>
-  </div>
+        <!-- Other Apps -->
+        <div class="grid">
 
-  <div id="BSD">בס"ד</div>
+            <div class="app-item">
+                <a class="btn" href="https://shinantam.com/kids/">
+                    🧒 Kids
+                </a>
+                <div class="desc">
+                    A learning platform for kids!
+                </div>
+            </div>
 
-<nav id="nav-bar">
-  <h1 style="font-weight: bold; user-select: none;">שִׁנַּנְתָּם</h1>
-  <div id="nav-box">
-    <button class="arrow-btn" onclick="switchToPrevPerek()">
-      <img id="arrow-btn-img" src="images/right_arrow.png" alt="→"></button>
+            <div class="app-item">
+                <a class="btn" href="https://shinantam.com/shnayim/">
+                    📖 Shnayim Mikra
+                </a>
+                <div class="desc">
+                    Learn Shnayim Mikra with Onkelos and Rashi.
+                </div>
+            </div>
 
-    <button id="mishna-nav-new" onclick="togglePane()">    <!-- new -->
-      <div class="perek-nav-text-container">
-        <div id="mishna-nav" class="perek-nav-text">אבות</div>
-        <!-- <div style="width: 0px; height: 50%; display: inline-block; border-right: #333 2px solid  ; margin: 0 0.5px; position: relative; "></div> -->
-        <div style="width: 2px; height: 80%; display: inline-block; background-color: rgb(120, 120, 120); margin: 0 1px; position: relative; "></div>
-        <div id="perek-nav" class="perek-nav-text">א</div>
-      </div>
-    </button>   <!-- new -->
+            <div class="app-item">
+                <a class="btn" href="https://shinantam.com/verse-to-aliyah/">
+                    📜 Verse to Aliyah
+                </a>
+                <div class="desc">
+                    Trace each Chapter and Verse to its Aliyah.
+                </div>
+            </div>
 
-    <!-- <div id="mishna-nav-container"> -->
-      <!-- <button id="mishna-nav" onclick="togglePane()">אבות</button> -->
-    <!-- </div> -->
-    <!-- <div id="perek-nav-container"> -->
-      <!-- <button id="perek-nav" onclick="togglePane()">א</button> -->
-    <!-- </div>    perek-nav-container -->
-    <button class="arrow-btn" onclick="switchToNextPerek()"><img id="arrow-btn-img" src="images/left_arrow.png" alt="←"></button>
-  </div> <!-- nav box-->
-  
-</nav>
+            <div class="app-item">
+                <a class="btn" href="https://shinantam.com/chumash-russian/">
+                    🇷🇺 Chumash (Russian)
+                </a>
+                <div class="desc">
+                    A Beautiful Chumash application in Russian.
+                </div>
+            </div>
 
-<div class="nav-pane nav-pane--hide">
-  <button class="exit-btn" onclick="togglePane()">&times;</button>
-  <div class="nav-pane__section nav-pane__t-section nav-pane__r-section"><div class="nav-pane__title">מסכת</div></div>
-  <div class="nav-pane__section nav-pane__t-section nav-pane__l-section"><div class="nav-pane__title">פרק</div></div>
-  <div class="nav-pane__section nav-pane__b-section nav-pane__r-section">
-    <div class="nav-pane__seder">
-      <div class="nav-pane__seder__title">זרעים</div>
+            <div class="app-item">
+                <a class="btn" href="https://shinantam.com/gemaras/">
+                    📚 Gemaras
+                </a>
+                <div class="desc">
+                    Download full Gemara PDFs.
+                </div>
+            </div>
 
-      <button class="nav-pane__item">ברכות</button>
-      <button class="nav-pane__item">פאה</button>
-      <button class="nav-pane__item">דמאי</button>
-      <button class="nav-pane__item">כלאים</button>
-      <button class="nav-pane__item">שביעית</button>
-      <button class="nav-pane__item">תרומות</button>
-      <button class="nav-pane__item">מעשרות</button>
-      <button class="nav-pane__item">מעשר שני</button>
-      <button class="nav-pane__item">חלה</button>
-      <button class="nav-pane__item">ערלה</button>
-      <button class="nav-pane__item">בכורים</button>
-      
+            <div class="app-item">
+                <a class="btn" href="https://shinantam.com/megillah/">
+                    📕 Megillah
+                </a>
+                <div class="desc">
+                    Practice reading Megillat Esther with recordings from professional Chazzanim.
+                </div>
+            </div>
 
-    </div> <!-- nav-pane__seder -->
-    <div class="nav-pane__seder">
-      <div class="nav-pane__seder__title">מועד</div>
+        </div>
 
-      <div class="nav-pane__item">שבת</div>
-      <div class="nav-pane__item">עירובין</div>
-      <div class="nav-pane__item">פסחים</div>
-      <div class="nav-pane__item">שקלים</div>
-      <div class="nav-pane__item">יומא</div>
-      <div class="nav-pane__item">סוכה</div>
-      <div class="nav-pane__item">ביצה</div>
-      <div class="nav-pane__item">ראש השנה</div>
-      <div class="nav-pane__item">תענית</div>
-      <div class="nav-pane__item">מגילה</div>
-      <div class="nav-pane__item">מועד קטן</div>
-      <div class="nav-pane__item">חגיגה</div>
-    </div> <!-- nav-pane__seder -->
-    <div class="nav-pane__seder">
-      <div class="nav-pane__seder__title">נשים</div>
 
-      <div class="nav-pane__item">יבמות</div>
-      <div class="nav-pane__item">כתובות</div>
-      <div class="nav-pane__item">נדרים</div>
-      <div class="nav-pane__item">נזיר</div>
-      <div class="nav-pane__item">סוטה</div>
-      <div class="nav-pane__item">גיטין</div>
-      <div class="nav-pane__item">קידושין</div>
-    </div> <!-- nav-pane__seder -->
-    <div class="nav-pane__seder">
-      <div class="nav-pane__seder__title">נזיקין</div>
-      <div class="nav-pane__item">בבא קמא</div>
-      <div class="nav-pane__item">בבא מציעא</div>
-      <div class="nav-pane__item">בבא בתרא</div>
-      <div class="nav-pane__item">סנהדרין</div>
-      <div class="nav-pane__item">מכות</div>
-      <div class="nav-pane__item">שבועות</div>
-      <div class="nav-pane__item">עדיות</div>
-      <div class="nav-pane__item">עבודה זרה</div>
-      <div class="nav-pane__item nav-pane__item--select">אבות</div>
-      <div class="nav-pane__item">הוריות</div>
-    </div> <!-- nav-pane__seder -->
-    <div class="nav-pane__seder">
-      <div class="nav-pane__seder__title">קדשים</div>
-      
-      <div class="nav-pane__item">זבחים</div>
-      <div class="nav-pane__item">מנחות</div>
-      <div class="nav-pane__item">חולין</div>
-      <div class="nav-pane__item">בכורות</div>
-      <div class="nav-pane__item">ערכין</div>
-      <div class="nav-pane__item">תמורה</div>
-      <div class="nav-pane__item">כריתות</div>
-      <div class="nav-pane__item">מעילה</div>
-      <div class="nav-pane__item">תמיד</div>
-      <div class="nav-pane__item">מדות</div>
-      <div class="nav-pane__item">קנים</div>
-    </div> <!-- nav-pane__seder -->
-    <div class="nav-pane__seder">
-      <div class="nav-pane__seder__title">טהרות</div>
+    </div>
 
-      <div class="nav-pane__item">כלים</div>
-      <div class="nav-pane__item">אוהלות</div>
-      <div class="nav-pane__item">נגעים</div>
-      <div class="nav-pane__item">פרה</div>
-      <div class="nav-pane__item">טהרות</div>
-      <div class="nav-pane__item">מקוות</div>
-      <div class="nav-pane__item">נידה</div>
-      <div class="nav-pane__item">מכשירין</div>
-      <div class="nav-pane__item">זבים</div>
-      <div class="nav-pane__item">טבול יום</div>
-      <div class="nav-pane__item">ידים</div>
-      <div class="nav-pane__item">עוקצים</div>
-    </div> <!-- nav-pane__seder --> 
+    <script>
+        // Click animation
+        document.querySelectorAll(".btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                btn.style.transform = "scale(0.97)";
+                setTimeout(() => {
+                    btn.style.transform = "";
+                }, 120);
+            });
+        });
+    </script>
 
-    <div style="float: right;width: 80%; height: 40px;"></div>
+<footer class="site-footer">
+    <div class="footer-content">
+        © 2026 Shinantam <br> <a class="cool-link" href="mailto:shaharlazarev@gmail.com">shaharlazarev@gmail.com</a>
+    </div>
+</footer>
+</body>
 
-  </div> <!-- nav-pane__section -->
-  <div class="nav-pane__section nav-pane__b-section nav-pane__l-section">
-    <div class="nav-pane__item nav-pane__item--select">א</div>
-    <div class="nav-pane__item">ב</div>
-    <div class="nav-pane__item">ג</div>
-    <div class="nav-pane__item">ד</div>
-    <div class="nav-pane__item">ה</div>
-    <div class="nav-pane__item">ו</div>
-    <div style="float: right;width: 80%; height: 40px;"></div>
-  </div>
-  </div>
-  
-</div> <!-- nav-pane -->
 
-<div id="all-mishna"></div> <!-- Javascript fills the content here -->
 
-<div class="footnote">
-  <div id="loading" style="height: 80vh; width: 5px;"></div> <!-- only appears when fetching text -->
-  <p style="direction: ltr; text-align: center;">Please consider visiting <a class="normal" href="http://www.knowthetorahbyheart.com/">KnowTheTorahByHeart.com</a>. Unaffiliated. It is a great resource.</p>
-  <p style="direction: ltr; text-align: center;">Thank you to <a class="normal" href="https://tikkun.io/">https://tikkun.io/</a> for the inspiration for this project!</p>
-</div>
-
-<div class="footnote" style="padding-bottom: 100px; width: 50px;"></div>
-<footer>© 2026 Shinantam</footer>
-
-    <!-- <script src="main.js"></script> -->
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
-  </body>
 
 </html>
