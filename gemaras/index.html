@@ -101,7 +101,7 @@
 
     let previewTimeout;
 
-    await async function getFileSize(url) {
+    async function getFileSize(url) {
       try {
         const res = await fetch(url, { method: "HEAD" });
         const size = res.headers.get("content-length");
