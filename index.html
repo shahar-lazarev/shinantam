@@ -292,6 +292,18 @@
         © 2026 Shinantam <br> <a class="cool-link" href="mailto:shaharlazarev@gmail.com">shaharlazarev@gmail.com</a>
     </div>
 </footer>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js")
+      .then(reg => console.log("Service Worker registered"))
+      .catch(err => console.log("SW error:", err));
+  });
+}
+</script>
+
+
 </body>
 
 
