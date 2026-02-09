@@ -101,6 +101,19 @@
 
     let previewTimeout;
 
+    await async function getFileSize(url) {
+      try {
+        const res = await fetch(url, { method: "HEAD" });
+        const size = res.headers.get("content-length");
+
+        if (!size) return null;
+
+        return (size / (1024 * 1024)).toFixed(1); // MB (1 decimal)
+      } catch {
+        return null;
+      }
+    }
+
     FILES.forEach(f => {
       const card = document.createElement('div');
       card.className = 'card';
@@ -111,7 +124,16 @@
 
       const sub = document.createElement('div');
       sub.className = 'sub';
-      sub.textContent = f;
+      sub.textContent = f + " | loading...";
+
+      // Get file size
+      getFileSize(BASE + encodeURIComponent(f)).then(size => {
+        if (size) {
+          sub.textContent = `${f} | ${size} MB`;
+        } else {
+          sub.textContent = f;
+        }
+      });
 
       const actions = document.createElement('div');
       actions.className = 'actions';
