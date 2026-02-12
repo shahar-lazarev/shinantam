@@ -25,23 +25,115 @@
       padding-top: 60px;
       overflow-x: hidden;
     }
-    .bsd { position: fixed; top: 10px; right: 20px; font-size: 1rem; font-weight: bold; color: #4b5668; z-index: 1000; background: var(--bg); padding: 4px 8px; border-radius: var(--border-radius);
+    .bsd {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #4b5668;
+      z-index: 1000;
+      background: var(--bg);
+      padding: 4px 8px;
+      border-radius: var(--border-radius);
     }
-    .container { max-width: 1200px; margin: 0 auto; }
-    header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: 24px; gap: 10px; }
-    h1 { font-size: 22px; font-weight: 700; }
-    p.lead { color: var(--muted); font-size: 13px; }
-    input.searchBox { border: 1px solid #e6e9ef; padding: 10px 12px; border-radius: 8px; min-width: 220px; }
-    button.btn { border: none; padding: 10px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
-    button.btn:hover { transform: translateY(-1px); }
-    button.primary { background: var(--accent); color: #fff; }
-    button.secondary { background: #e5e7eb; color: #111; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; margin-top: 20px; }
-    .card { background: var(--card); border: 1px solid #cbd5e0; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform .15s ease, box-shadow .15s ease; }
-    .card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.08); }
-    .title { font-weight: 600; font-size: 16px; }
-    .sub { font-size: 13px; color: var(--muted); }
-    .actions { display: flex; gap: 8px; margin-top: auto; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      gap: 10px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    p.lead {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    input.searchBox {
+      border: 1px solid #e6e9ef;
+      padding: 10px 12px;
+      border-radius: 8px;
+      min-width: 220px;
+    }
+
+    button.btn {
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    button.btn:hover {
+      transform: translateY(-1px);
+    }
+
+    button.primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    button.secondary {
+      background: #e5e7eb;
+      color: #111;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid #cbd5e0;
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+    }
+
+    .title {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+    }
+
     .preview {
       position: fixed;
       bottom: 30px;
@@ -55,15 +147,33 @@
       overflow: hidden;
       z-index: 999;
       display: none;
-      pointer-events: none; /* prevent mouse events from affecting underlying cards */
-      display: none;
+      pointer-events: none;
       align-items: center;
       justify-content: center;
     }
-    .preview img { width: 100%; height: 100%; object-fit: contain; }
-    @media (max-width:700px){ .preview{display:none!important;} }
-    footer { margin-top: 40px; text-align: center; font-size: 0.9rem; color: #718096; }
-    footer a { color: #718096; text-decoration: underline; font-style: italic}
+
+    .preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    @media (max-width:700px){
+      .preview{display:none!important;}
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #718096;
+    }
+
+    footer a {
+      color: #718096;
+      text-decoration: underline;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -83,7 +193,8 @@
     <div id="list" class="grid"></div>
     <div class="preview" id="preview"></div>
     <footer>
-      PDFs of all the Gemaras were collected from <a href="https://daf-yomi.com/" target="_blank">daf-yomi.com/</a> 
+      PDFs of all the Gemaras were collected from
+      <a href="https://daf-yomi.com/" target="_blank">daf-yomi.com/</a>
     </footer>
     <footer>© 2026 Shinantam</footer>
   </div>
@@ -94,25 +205,63 @@
     }
 
     const BASE = './pdfs/';
-    const FILES = ['Berakhot.pdf','Shabbat.pdf','Eruvin.pdf','Pesachim.pdf','Shekalim.pdf','Yoma.pdf','Sukkah.pdf','Beitzah.pdf','Rosh Hashanah.pdf','Taanit.pdf','Megillah.pdf','Moed Katan.pdf','Chagigah.pdf','Yevamot.pdf','Ketubot.pdf','Nedarim.pdf','Nazir.pdf','Sotah.pdf','Gittin.pdf','Kiddushin.pdf','Bava Kamma.pdf','Bava Metzia.pdf','Bava Batra.pdf','Sanhedrin.pdf','Makkot.pdf','Shevuot.pdf','Avodah Zarah.pdf','Horayot.pdf','Zevachim.pdf','Menachot.pdf','Chullin.pdf','Bechorot.pdf','Arachin.pdf','Temurah.pdf','Keritot.pdf','Meilah.pdf','Niddah.pdf'];
+
+    const FILES = [
+      'Berakhot.pdf','Shabbat.pdf','Eruvin.pdf','Pesachim.pdf','Shekalim.pdf',
+      'Yoma.pdf','Sukkah.pdf','Beitzah.pdf','Rosh Hashanah.pdf','Taanit.pdf',
+      'Megillah.pdf','Moed Katan.pdf','Chagigah.pdf','Yevamot.pdf','Ketubot.pdf',
+      'Nedarim.pdf','Nazir.pdf','Sotah.pdf','Gittin.pdf','Kiddushin.pdf',
+      'Bava Kamma.pdf','Bava Metzia.pdf','Bava Batra.pdf','Sanhedrin.pdf',
+      'Makkot.pdf','Shevuot.pdf','Avodah Zarah.pdf','Horayot.pdf','Zevachim.pdf',
+      'Menachot.pdf','Chullin.pdf','Bechorot.pdf','Arachin.pdf','Temurah.pdf',
+      'Keritot.pdf','Meilah.pdf','Niddah.pdf'
+    ];
+
+    /* PDF size lookup object */
+    const pdf_sizes = {
+      "Rosh Hashanah.pdf": 9.5,
+      "Shevuot.pdf": 13.0,
+      "Menachot.pdf": 31.2,
+      "Sukkah.pdf": 14.4,
+      "Makkot.pdf": 7.4,
+      "Kiddushin.pdf": 14.6,
+      "Megillah.pdf": 9.6,
+      "Taanit.pdf": 8.5,
+      "Sotah.pdf": 8.4,
+      "Yevamot.pdf": 20.9,
+      "Arachin.pdf": 6.8,
+      "Avodah Zarah.pdf": 13.1,
+      "Zevachim.pdf": 24.1,
+      "Bechorot.pdf": 10.9,
+      "Chagigah.pdf": 7.2,
+      "Gittin.pdf": 15.7,
+      "Horayot.pdf": 2.5,
+      "Bava Batra.pdf": 31.6,
+      "Chullin.pdf": 37.0,
+      "Niddah.pdf": 12.3,
+      "Meilah.pdf": 3.9,
+      "Keritot.pdf": 5.2,
+      "Moed Katan.pdf": 7.8,
+      "Bava Metzia.pdf": 18.8,
+      "Nazir.pdf": 20.6,
+      "Berakhot.pdf": 17.9,
+      "Yoma.pdf": 25.3,
+      "Beitzah.pdf": 6.5,
+      "Sanhedrin.pdf": 28.9,
+      "Eruvin.pdf": 19.8,
+      "Bava Kamma.pdf": 20.4,
+      "Pesachim.pdf": 21.5,
+      "Nedarim.pdf": 23.0,
+      "Temurah.pdf": 6.5,
+      "Shabbat.pdf": 28.9,
+      "Shekalim.pdf": 3.5,
+      "Ketubot.pdf": 28.4
+    };
 
     const list = document.getElementById('list');
     const preview = document.getElementById('preview');
 
     let previewTimeout;
-
-    async function getFileSize(url) {
-      try {
-        const res = await fetch(url, { method: "HEAD" });
-        const size = res.headers.get("content-length");
-
-        if (!size) return null;
-
-        return (size / (1024 * 1024)).toFixed(1); // MB (1 decimal)
-      } catch {
-        return null;
-      }
-    }
 
     FILES.forEach(f => {
       const card = document.createElement('div');
@@ -124,16 +273,13 @@
 
       const sub = document.createElement('div');
       sub.className = 'sub';
-      sub.textContent = f + " | loading...";
 
-      // Get file size
-      getFileSize(BASE + encodeURIComponent(f)).then(size => {
-        if (size) {
-          sub.textContent = `${f} | ${size} MB`;
-        } else {
-          sub.textContent = f;
-        }
-      });
+      /* Get size from object instead of fetch */
+      if (pdf_sizes[f]) {
+        sub.textContent = `${f} | ${pdf_sizes[f]} MB`;
+      } else {
+        sub.textContent = f;
+      }
 
       const actions = document.createElement('div');
       actions.className = 'actions';
@@ -150,39 +296,50 @@
       card.append(title, sub, actions);
       list.append(card);
 
-      // Hover preview using local thumbnail images
-      card.addEventListener('mouseenter', () => {
+      /* Hover preview */
+
+      card.addEventListener('mouseenter', (event) => {
+
         clearTimeout(previewTimeout);
         const imgPath = `./images/${f.replace('.pdf','.jpg')}`;
-        preview.innerHTML = `<img src="${imgPath}" alt="${f.replace('.pdf','')} thumbnail"/>`;
+
+        preview.innerHTML =
+          `<img src="${imgPath}" alt="${f.replace('.pdf','')} thumbnail"/>`;
+
         preview.style.display = 'flex';
         if (isCursorOnRight(event)) {
           preview.style.left = '30px';
           preview.style.right = 'auto';
-        } else { // on the left
+        } else {
           preview.style.left = 'auto';
           preview.style.right = '30px';
         }
       });
 
       card.addEventListener('mouseleave', () => {
-        // Delay hiding so moving cursor over preview doesn't glitch
-        previewTimeout = setTimeout(() => { preview.style.display = 'none'; }, 200);
+
+        previewTimeout = setTimeout(() => {
+          preview.style.display = 'none';
+        }, 200);
+
       });
 
       preview.addEventListener('mouseenter', () => {
-        clearTimeout(previewTimeout); // Keep preview visible if cursor is over it
+        clearTimeout(previewTimeout);
       });
 
       preview.addEventListener('mouseleave', () => {
         preview.style.display = 'none';
       });
-
+      /* Open */
       open.addEventListener('click', (e) => {
         e.stopPropagation();
-        window.open(BASE + encodeURIComponent(f), '_blank');
+        window.open(
+          BASE + encodeURIComponent(f),
+          '_blank'
+        );
       });
-
+      /* Download */
       dl.addEventListener('click', (e) => {
         e.stopPropagation();
         const a = document.createElement('a');
@@ -192,7 +349,8 @@
       });
     });
 
-    // search
+    /* Search */
+
     const q = document.getElementById('q');
     q.addEventListener('input', () => {
       const val = q.value.toLowerCase();
@@ -201,11 +359,14 @@
         c.style.display = text.includes(val) ? '' : 'none';
       });
     });
+    document.getElementById('reset')
+      .addEventListener('click', () => {
 
-    document.getElementById('reset').addEventListener('click', () => {
-      q.value = '';
-      q.dispatchEvent(new Event('input'));
-    });
+        q.value = '';
+        q.dispatchEvent(new Event('input'));
+
+      });
+
   </script>
 </body>
-</html
+</html>
