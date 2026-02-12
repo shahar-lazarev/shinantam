@@ -156,7 +156,7 @@
     /* Header bar ABOVE the Hebrew/English */
     .rashi-header {
       padding: 10px 15px;
-      cursor: pointer;
+      /* cursor: pointer; */
       
       /* match Hebrew text color/style */
       font-size: 1.3rem;
@@ -172,9 +172,9 @@
       background: #f3fafe;  /* same background as old container */
     }
 
-    .rashi-header:hover {
+    /* .rashi-header:hover {
       background: #e1f0fb;
-    }
+    } */
 
     /* keeps arrow + buttons grouped tightly */
     .rashi-controls {
@@ -265,6 +265,96 @@
       transition: width 0.15s ease-out;
     }
 
+    /* ===== Rashi Toggle Switch ===== */
+
+    .rashi-toggle-container {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin: 10px 0 15px 0;
+      justify-content: flex-start;
+      width: fit-content;
+      max-width: 100%;
+      align-self: flex-start;
+    }
+
+    /* Switch wrapper */
+    .rashi-switch {
+      position: relative;
+      display: inline-block;
+      width: 46px !important;
+      min-width: 46px !important;
+      max-width: 46px !important;
+      height: 24px ;
+    }
+
+    /* Hide default checkbox */
+    .rashi-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    /* Slider track */
+    .rashi-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: #cbd5e0;
+      border-radius: 24px;
+      transition: 0.3s;
+      width: 46px !important;
+      min-width: 46px !important;
+      max-width: 46px !important;
+      box-sizing: border-box;
+    }
+
+    /* Knob */
+    .rashi-slider::before {
+      content: "";
+      position: absolute;
+      height: 18px;
+      width: 18px !important;
+      min-width: 18px !important;
+      max-width: 18px !important;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    /* ON state */
+    .rashi-switch input:checked + .rashi-slider {
+      background-color: var(--accent-color);
+    }
+
+    .rashi-switch input:checked + .rashi-slider::before {
+      transform: translateX(22px);
+    }
+
+    .rashi-toggle-text {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    /* Remove Rashi expand/collapse UI */
+
+    .rashi-toggle-btn,
+    .rashi-arrow,
+    .rashi-expand-btn,
+    .rashi-collapse-btn {
+      display: none !important;
+    }
+
+    /* If arrows are pseudo-elements */
+    .rashi-header::after,
+    .rashi-header::before {
+      display: none !important;
+      content: none !important;
+    }
+
     @media screen and (max-width: 700px) {
       .rashi-body {
         flex-direction: column;   /* stack HE + EN */
@@ -296,6 +386,15 @@
   <button class="copy-button" onclick="copyText(this)">
     <span class="copy-icon">📋</span> Copy Text
   </button>
+
+  <div class="rashi-toggle-container">
+    <span class="rashi-toggle-text">Show Rashi:</span>
+
+    <label class="rashi-switch">
+      <input type="checkbox" id="rashiToggle">
+      <span class="rashi-slider"></span>
+    </label>
+  </div>
 
   <div id="textDisplay" class="text-display"></div>
 
@@ -599,7 +698,61 @@
           verseHTMLOnk = [verseHTMLOnk];
         }
 
-        document.getElementById('textDisplay').innerHTML = `<div style="text-align: center;"><b>${parasha} ${aliyah}</b></div>`;
+        // document.getElementById('textDisplay').innerHTML = `<div style="text-align: center;"><b>${parasha} ${aliyah}</b></div>`;
+        
+        // Create the heading
+        document.getElementById('textDisplay').innerHTML = "";
+        const heading = document.createElement('div');
+        heading.style.textAlign = "center";
+        heading.style.fontWeight = "bold";
+        // heading.style.cursor = "pointer";
+        heading.innerHTML = `${parasha} ${aliyah}`;
+        heading.style.userSelect = "none";
+        document.getElementById('textDisplay').appendChild(heading);
+
+        // Count total pesukim in this Aliyah
+        let totalPesukim = 0;
+        for (let i = 0; i < verseHtml.length; i++) {
+          totalPesukim += verseHtml[i].length;
+        }
+
+        // Create a hidden tooltip element
+        const tooltip = document.createElement('div');
+        tooltip.innerText = `${totalPesukim} Pesukim`;
+        tooltip.style.position = "absolute";
+        tooltip.style.transform = "translateX(-50%) translateY(-80%)"; // truly center it
+        // tooltip.style.transform = ""; // truly center it
+        tooltip.style.top = "30px";
+        tooltip.style.background = "#2b6cb0";
+        tooltip.style.color = "white";
+        tooltip.style.padding = "6px 10px";
+        tooltip.style.borderRadius = "8px";
+        tooltip.style.fontSize = "0.85rem";
+        tooltip.style.display = "none";
+        tooltip.style.zIndex = "10000";
+        document.body.appendChild(tooltip);
+
+        // Show/hide tooltip on heading click
+        heading.addEventListener("click", (e) => {
+          if (tooltip.style.display === "none") {
+            // Position above the heading
+            const rect = heading.getBoundingClientRect();
+            tooltip.style.left = rect.left + window.scrollX + rect.width/2 - tooltip.offsetWidth/2 + "px";
+            tooltip.style.top = rect.top + window.scrollY - tooltip.offsetHeight - 6 + "px";
+            tooltip.style.display = "block";
+          } else {
+            tooltip.style.display = "none";
+          }
+        });
+
+        // Optional: hide tooltip when clicking anywhere else
+        document.addEventListener("click", (e) => {
+          if (!heading.contains(e.target) && !tooltip.contains(e.target)) {
+            tooltip.style.display = "none";
+          }
+        });
+
+
         let verseNumber = range.split('-')[0].split(':')[1];
 
         let chapters = []
@@ -620,7 +773,8 @@
             let rashiLine = "";
             let rashiLineEng = "";
             try {
-              rashiLine = verseHTMLRashi[i][j].join(' ');
+              // rashiLine = verseHTMLRashi[i][j].join(' ');
+              rashiLine = verseHTMLRashi[i][j].map(line => `<div style="margin-bottom: 0.7rem;">${line}</div>`).join('');
               rashiLineEng = verseHTMLRashiEng[i][j];
 
             } catch (typeError) {
@@ -631,6 +785,7 @@
             
             line = line
               .replaceAll(/<span[^>]*>\{פ\}<\/span>/g, "{פ}") // removes <span>{פ}</span>, and replaces it with {פ}
+              .replaceAll(/<span[^>]*>\{ס\}<\/span>/g, "{ס}") // removes <span>{ס}</span>, and replaces it with {ס}
               // .replaceAll(/<span[^>]*>.*?<\/span>/g, "")
               .replaceAll(/&nbsp;/g, " ")
               .replaceAll(/\*\([^)]*\)/g, "")
@@ -643,6 +798,7 @@
               .replaceAll(",", " ")
               .replaceAll("<br>", "")
               .replaceAll(" {פ}", `&nbsp;<span style="color: darkgrey; font-size:1.0rem; vertical-align: 0.15em;">{פ}</span><br>`) // removes {פ}, and replaces it with \t\t
+              .replaceAll(" {ס}", `&nbsp;<span style="color: darkgrey; font-size:1.0rem; vertical-align: 0.15em;">{ס}</span><br>`) // removes {ס}, and replaces it with \t\t
               .trim();
 
             for (let el of rashiLine) {
@@ -658,7 +814,7 @@
             span.style.display = "block";
             span.style.height = "auto";
             span.style.marginBottom = "0.5rem";
-            span.style.marginTop = "0.5rem";
+            span.style.marginTop = "1.4rem";
 
             span.innerHTML = `<small style="display: inline-block; margin:0 0.5rem; font-size:0.8rem; 
             vertical-align: 0.2em">${gematria(verseNumber)}</small>&nbsp;${line} `;
@@ -668,7 +824,7 @@
             document.getElementById('textDisplay').appendChild(span);
 
             // === RASHI ===
-            if (rashiLine != "") {
+            if (rashiLine != "") { // there is a Rashi
 
               const rashiContainer = document.createElement("div");
               rashiContainer.classList.add("rashi-container");
@@ -707,19 +863,21 @@
               // Label
               const label = document.createElement("span");
               label.textContent = "רש\"י";
+              label.style.userSelect = "none";
 
               // --- assemble ---
-              controls.appendChild(collapseAllBtn);
-              controls.appendChild(expandAllBtn);
-              controls.appendChild(arrow);
+              // controls.appendChild(collapseAllBtn);
+              // controls.appendChild(expandAllBtn);
+              // controls.appendChild(arrow);
 
               header.appendChild(label);
-              header.appendChild(controls);
+              // header.appendChild(controls);
 
 
               // === Collapsible BODY ===
               const body = document.createElement("div");
-              body.classList.add("rashi-body", "collapsed");   // collapsed by default
+              body.classList.add("rashi-body");   // collapsed by default
+              // body.classList.add("rashi-body", "expanded");   // expanded by default
 
               // Hebrew
               const span_rashi = document.createElement("div");
@@ -753,13 +911,14 @@
               span_rashi_eng.style.flex = Math.min(Math.max(ratio, 1.4), 2.6);
 
               // Toggle on header click
-              header.addEventListener("click", () => {
-                body.classList.toggle("collapsed");
-                arrow.classList.toggle("rotated");
-              });
+              // header.addEventListener("click", () => {
+              //   body.classList.toggle("collapsed");
+              //   arrow.classList.toggle("rotated");
+              // });
 
-            } else {
-              document.getElementById('textDisplay').appendChild(document.createElement("br"));
+            } 
+            else {
+              // document.getElementById('textDisplay').appendChild(document.createElement("br"));
             }
             // RASHI END
 
@@ -767,6 +926,9 @@
             }
           verseNumber = 1;
           }
+          // Re-apply Rashi toggle after rendering
+          applyRashiToggle();
+
       } catch (err) {
         console.error('Error fetching text:', err);
         document.getElementById('textDisplay').innerText = 'Error loading text.';
@@ -838,6 +1000,24 @@
 
       return result;
     }
+    // ===== Rashi Toggle Logic =====
+
+    let rashiVisible = false;
+
+    const rashiToggle = document.getElementById("rashiToggle");
+
+    function applyRashiToggle() {
+      document.querySelectorAll(".rashi-container").forEach(el => {
+        el.style.display = rashiVisible ? "block" : "none";
+      });
+    }
+
+    // Handle toggle change
+    rashiToggle.addEventListener("change", () => {
+      rashiVisible = rashiToggle.checked;
+      applyRashiToggle();
+    });
+
   </script>
 </body>
 </html>
