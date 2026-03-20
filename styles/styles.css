@@ -514,6 +514,34 @@ p#top-quote {
     display: none;
 }
 
+.home-button {
+  position: absolute;
+  top: 0px;
+  left: 20px;
+  z-index: 2000;
+  display: inline-block;
+}
+
+.home-button img {
+  /* width: 36px; */
+  height: 36px;
+  display: block;
+}
+
+.home-button:active {
+  transform: scale(0.95);
+}
+
+@media screen and (max-width: 600px) {
+  .home-button {
+    top: 15px;
+    left: 15px;
+  }
+  .home-button img {
+    height: 26px;
+  }
+}
+
 .expand {
     border: none;
     font-size: 18px;

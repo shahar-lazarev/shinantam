@@ -45,6 +45,34 @@
       border-radius: var(--border-radius);
     }
 
+    .home-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 2000;
+      display: inline-block;
+    }
+
+    .home-button img {
+      /* width: 36px; */
+      height: 36px;
+      display: block;
+    }
+
+    .home-button:active {
+      transform: scale(0.95);
+    }
+
+    @media screen and (max-width: 600px) {
+      .home-button {
+        top: 15px;
+        left: 15px;
+      }
+      .home-button img {
+        height: 26px;
+      }
+    }
+
     h1 {
       text-align: center;
       color: var(--primary-color);
@@ -369,6 +397,7 @@
 <body>
   <div id="progressBar"></div>
   <div class="bsd">בס״ד</div>
+  <a href="/" class="home-button"><img src="../images/logo.svg" alt="Home"></a>
   <h1>Shnayim Mikrah</h1>
 
   <div class="dropdown-container">

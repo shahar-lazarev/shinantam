@@ -22,7 +22,7 @@
       background: linear-gradient(180deg, #fbfdff 0%, #ffffff 100%);
       color: var(--text);
       padding: 32px;
-      padding-top: 60px;
+      padding-top: 80px;
       overflow-x: hidden;
     }
     .bsd {
@@ -36,6 +36,34 @@
       background: var(--bg);
       padding: 4px 8px;
       border-radius: var(--border-radius);
+    }
+
+    .home-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 2000;
+      display: inline-block;
+    }
+
+    .home-button img {
+      /* width: 36px; */
+      height: 36px;
+      display: block;
+    }
+
+    .home-button:active {
+      transform: scale(0.95);
+    }
+
+    @media screen and (max-width: 600px) {
+      .home-button {
+        top: 15px;
+        left: 15px;
+      }
+      .home-button img {
+        height: 26px;
+      }
     }
 
     .container {
@@ -178,6 +206,7 @@
 </head>
 <body>
   <div class="bsd">בס״ד</div>
+  <a href="/" class="home-button"><img src="../images/logo.svg" alt="Home"></a>
   <div class="container">
     <header>
       <div>
