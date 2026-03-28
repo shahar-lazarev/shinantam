@@ -273,6 +273,11 @@
       color: #222;
     }
 
+    .rashi-he b {
+      color: #2b6cb0;
+      font-size: 1.5rem;
+    }
+
     /* Your original English Rashi */
     .rashi-en {
       flex: 1.6;
@@ -282,6 +287,13 @@
       line-height: 1.6;
       color: #333;
     }
+
+    .rashi-en b {
+      font-weight: 900;
+      color: #2b6cb0;
+      font-size: 1.2rem;
+    }
+
     #progressBar {
       position: fixed;
       top: 0;
@@ -705,19 +717,25 @@
       
       const apiUrl = `https://www.sefaria.org/api/texts/${rangeForApi}?context=0`;
       const rashiURL = `https://www.sefaria.org/api/texts/Rashi_on_${rangeForApi}?context=0`;
+      const rashiEngURL = `https://www.sefaria.org/api/v3/texts/Rashi_on_${rangeForApi}?version=english%7CRashi_Chumash%2C_Metsudah_Publications%2C_2009`;
       const onkURL = `https://www.sefaria.org/api/texts/Onkelos_${rangeForApi}?context=0`.replace("Bereshit", "Genesis").replace("Shemot", "Exodus").replace("Vayikra", "Leviticus").replace("Bamidbar", "Numbers").replace("Devarim", "Deuteronomy");
 
+// https://www.sefaria.org/api/texts/Rashi_on_Vayikra.6.1-6.11?version=english%7CRashi_Chumash%2C_Metsudah_Publications%2C_2009?context=0
+// https://www.sefaria.org/api/v3/texts/Rashi_on_Vayikra.6.1-6.11?version=english%7CRashi_Chumash%2C_Metsudah_Publications%2C_2009
+
+      console.log(rashiEngURL);
       try {
 
-        const [data, rashiData, onkData] = await Promise.all([
+        const [data, rashiData, rashiEngData, onkData] = await Promise.all([
           fetch(apiUrl).then(res => res.json()),
           fetch(rashiURL).then(res => res.json()),
+          fetch(rashiEngURL).then(res => res.json()),
           fetch(onkURL).then(res => res.json())
         ]);
 
         let verseHtml = (data.he || []);
         let verseHTMLRashi = (rashiData.he || []);
-        let verseHTMLRashiEng = (rashiData.text || []);
+        let verseHTMLRashiEng = (rashiEngData.versions[0].text || []);
         let verseHTMLOnk = (onkData.he || []);
 
         if (!Array.isArray(verseHtml[0])) {
@@ -917,15 +935,17 @@
               const span_rashi_eng = document.createElement("div");
               span_rashi_eng.classList.add("rashi-en");
 
-              // Process English commentary
-              rashiLineEng = rashiLineEng.map(line => {
-                const parts = line.split('—');
-                const title = toCamelCase(parts[0].trim());
-                const commentary = parts[1] ? parts.slice(1).join('—').trim() : '';
-                return `<b>${title}</b>${commentary ? ' — ' + commentary : ''}`;
-              });
+              console.log("Rashi Eng Raw:", rashiLineEng);
 
-              span_rashi_eng.innerHTML = rashiLineEng.join('<br>');
+              // Process English commentary
+              // rashiLineEng = rashiLineEng.map(line => {
+              //   const parts = line.split('—');
+              //   const title = toCamelCase(parts[0].trim());
+              //   const commentary = parts[1] ? parts.slice(1).join('—').trim() : '';
+              //   return `<b>${title}</b>${commentary ? ' — ' + commentary : ''}`;
+              // });
+
+              span_rashi_eng.innerHTML = rashiLineEng.join('<br><br>');
 
               // Put Hebrew + English in the body
               body.appendChild(span_rashi);
