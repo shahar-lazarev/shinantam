@@ -720,10 +720,6 @@
       const rashiEngURL = `https://www.sefaria.org/api/v3/texts/Rashi_on_${rangeForApi}?version=english%7CRashi_Chumash%2C_Metsudah_Publications%2C_2009`;
       const onkURL = `https://www.sefaria.org/api/texts/Onkelos_${rangeForApi}?context=0`.replace("Bereshit", "Genesis").replace("Shemot", "Exodus").replace("Vayikra", "Leviticus").replace("Bamidbar", "Numbers").replace("Devarim", "Deuteronomy");
 
-// https://www.sefaria.org/api/texts/Rashi_on_Vayikra.6.1-6.11?version=english%7CRashi_Chumash%2C_Metsudah_Publications%2C_2009?context=0
-// https://www.sefaria.org/api/v3/texts/Rashi_on_Vayikra.6.1-6.11?version=english%7CRashi_Chumash%2C_Metsudah_Publications%2C_2009
-
-      console.log(rashiEngURL);
       try {
 
         const [data, rashiData, rashiEngData, onkData] = await Promise.all([
@@ -934,8 +930,6 @@
               // English
               const span_rashi_eng = document.createElement("div");
               span_rashi_eng.classList.add("rashi-en");
-
-              console.log("Rashi Eng Raw:", rashiLineEng);
 
               // Process English commentary
               // rashiLineEng = rashiLineEng.map(line => {
