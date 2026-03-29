@@ -530,7 +530,8 @@
       document.getElementById("progressBar").style.width = progress + "%";
     });
 
-    const aliyotURL = 'https://raw.githubusercontent.com/shahar-lazarev/shinantam/refs/heads/main/shnayim/Aliyot.txt';
+    // const aliyotURL = 'https://raw.githubusercontent.com/shahar-lazarev/shinantam/refs/heads/main/shnayim/Aliyot.txt';
+    const aliyotURL = './Aliyot.txt';
     let aliyotMap = {};
 
     const STORAGE_KEYS = {
@@ -587,12 +588,15 @@
       const lines = text.split('\n');
       let shortParasha = '';
       let currentParasha = '';
+      let currentSefer = '';
       for (const line of lines) {
         if (!line.trim()) continue;
         if (!line.startsWith('Aliyah') && !line.startsWith('Maftir')) {
           shortParasha = line.split(',')[0];
           currentParasha = line.trim();
+          currentSefer = line.split(',')[1].split(" ")[1];
           aliyotMap[shortParasha] = {};
+          aliyotMap[shortParasha]['currentSefer'] = currentSefer;
         } else {          
           const [aliyahName, range] = line.split(',');
           if (shortParasha && range) {
@@ -601,6 +605,7 @@
         }
       }
       
+      
     }
 
     async function getCurrentParasha() {
@@ -608,6 +613,7 @@
       const resp = await fetch(url);
       const data = await resp.json();
       const item = data.items.find(it => it.category === 'parashat');
+      console.log();
       if (!item || !item.title) return null;
       return item.title.replace('Parashat ', '').trim();
     }
@@ -639,6 +645,7 @@
     }
 
     function populateParashaDropdown(preferredParasha) {
+      
       const sefer = document.getElementById('seferSelect').value;
       const parashaSelect = document.getElementById('parashaSelect');
       const parashot = Object.keys(aliyotMap).filter(p => {
@@ -649,6 +656,12 @@
       parashaSelect.innerHTML = parashot.map(p => `<option>${p.split(',')[0]}</option>`).join('');
       if (preferredParasha && parashot.includes(preferredParasha)) {
         parashaSelect.value = preferredParasha;
+      }
+
+      let index = parashaSelect.innerHTML.indexOf("<option>Pesach I</option>");
+
+      if (index != -1) {
+        parashaSelect.innerHTML = parashaSelect.innerHTML.slice(0, index) + `<hr> <option>Pesach I</option>` + parashaSelect.innerHTML.slice(index + `<option>Pesach I</option>`.length);
       }
 
       parashaSelect.addEventListener('change', () => {
@@ -662,6 +675,7 @@
       const parasha = document.getElementById("parashaSelect").value;
       const aliyahSelect = document.getElementById("aliyahSelect");
       const aliyot = aliyotMap[parasha] || {};
+      delete aliyot.currentSefer; // remove the 'currentSefer' property which is not an actual aliyah
 
       aliyahSelect.innerHTML = Object.keys(aliyot)
         .map(a => `<option value="${a}">${a}</option>`)
@@ -671,9 +685,6 @@
         saveProgress(parasha, aliyahSelect.value);
         displayAliyahText();
       });
-
-      // console.log("RUN 3");
-      // displayAliyahText();
     }
 
     document.getElementById("parashaSelect").addEventListener("change", () => {
@@ -951,7 +962,8 @@
               document.getElementById('textDisplay').appendChild(rashiContainer);
 
               const ratio = estimateEnglishFlex(span_rashi.innerText, span_rashi_eng.innerText);
-              span_rashi_eng.style.flex = Math.min(Math.max(ratio, 1.4), 2.6);
+              span_rashi_eng.style.flex = Math.min(Math.max(ratio, 1.25), 2.6);
+              console.log(Math.min(Math.max(ratio, 1.1), 2.6));
 
               // Toggle on header click
               // header.addEventListener("click", () => {

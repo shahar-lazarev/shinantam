@@ -606,3 +606,53 @@ Aliyah 5, Devarim 31:7-31:13
 Aliyah 6, Devarim 31:14-31:19
 Aliyah 7, Devarim 31:20-31:30
 Maftir, Devarim 31:28-31:30
+
+Pesach I, Vayikra
+Aliyah 1, Shemot 12:21-12:24
+Aliyah 2, Shemot 12:25-12:28
+Aliyah 3, Shemot 12:29-12:36
+Aliyah 4, Shemot 12:37-12:42
+Aliyah 5, Shemot 12:43-12:51
+Maftir, Bamidbar 28:16-28:25
+
+Pesach II (CH’’M), Vayikra
+Aliyah 1, Vayikra 22:26-23:8
+Aliyah 2, Vayikra 23:9-23:14
+Aliyah 3, Vayikra 23:15-23:44
+Aliyah 4, Bamidbar 28:19-28:25
+
+Pesach Shabbat Chol ha-Moed, Vayikra
+Aliyah 1, Shemot 33:12-33:16
+Aliyah 2, Shemot 33:17-33:19
+Aliyah 3, Shemot 33:20-33:23
+Aliyah 4, Shemot 34:1-34:3
+Aliyah 5, Shemot 34:4-34:10  
+Aliyah 6, Shemot 34:11-34:17
+Aliyah 7, Shemot 34:18-34:26
+Maftir, Bamidbar 28:19-28:25
+
+Pesach IV (CH’’M), Vayikra
+Aliyah 1, Shemot 22:24-22:26
+Aliyah 2, Shemot 22:27-23:5
+Aliyah 3, Shemot 23:6-23:19
+Aliyah 4, Bamidbar 28:19-28:25
+
+Pesach V (CH’’M), Vayikra
+Aliyah 1, Shemot 34:1-34:10
+Aliyah 2, Shemot 34:11-34:17
+Aliyah 3, Shemot 34:18-34:26
+Aliyah 4, Bamidbar 28:19-28:25
+
+Pesach VI (CH’’M), Vayikra
+Aliyah 1, Bamidbar 9:1-9:5
+Aliyah 2, Bamidbar 9:6-9:8
+Aliyah 3, Bamidbar 9:9-9:14
+Aliyah 4, Bamidbar 28:19-28:25
+
+Pesach VII, Vayikra
+Aliyah 1, Shemot 13:17-13:22
+Aliyah 2, Shemot 14:1-14:8
+Aliyah 3, Shemot 14:9-14:14
+Aliyah 4, Shemot 14:15-14:25
+Aliyah 5, Shemot 14:26-15:26
+Maftir, Bamidbar 28:19-28:25
