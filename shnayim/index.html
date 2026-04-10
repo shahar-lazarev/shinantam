@@ -561,6 +561,8 @@
         const progress = loadProgress();
 
         populateSeferDropdown(currentParasha);
+        populateParashaDropdown(currentParasha);
+        populateAliyahDropdown(currentParasha)
 
         // Decide which aliyah to load
         setTimeout(() => {
@@ -571,9 +573,11 @@
             !progress.lastParasha || progress.lastParasha !== currentParasha;
 
           if (isNewParasha) {
+            parashaSelect.value = currentParasha;
             aliyahSelect.value = "Aliyah 1";
             saveProgress(currentParasha, "Aliyah 1");
           } else if (progress.currentAliyah) {
+            parashaSelect.value = progress.lastParasha;
             aliyahSelect.value = progress.currentAliyah;
           }
           displayAliyahText();
@@ -613,7 +617,6 @@
       const resp = await fetch(url);
       const data = await resp.json();
       const item = data.items.find(it => it.category === 'parashat');
-      console.log();
       if (!item || !item.title) return null;
       return item.title.replace('Parashat ', '').trim();
     }
@@ -638,43 +641,43 @@
       }
 
       seferSelect.addEventListener('change', () => {
-        populateParashaDropdown();
+        populateParashaDropdown(preferredParasha);
         displayAliyahText();
       });
-      populateParashaDropdown(preferredParasha);
     }
 
     function populateParashaDropdown(preferredParasha) {
-      
       const sefer = document.getElementById('seferSelect').value;
       const parashaSelect = document.getElementById('parashaSelect');
       const parashot = Object.keys(aliyotMap).filter(p => {
         const firstRange = Object.values(aliyotMap[p])[0];
         return firstRange.startsWith(sefer);
       });
-
       parashaSelect.innerHTML = parashot.map(p => `<option>${p.split(',')[0]}</option>`).join('');
-      if (preferredParasha && parashot.includes(preferredParasha)) {
-        parashaSelect.value = preferredParasha;
-      }
 
+      // Add a separator before Pesach I if it exists in the dropdown
       let index = parashaSelect.innerHTML.indexOf("<option>Pesach I</option>");
 
       if (index != -1) {
         parashaSelect.innerHTML = parashaSelect.innerHTML.slice(0, index) + `<hr> <option>Pesach I</option>` + parashaSelect.innerHTML.slice(index + `<option>Pesach I</option>`.length);
       }
 
+      if (preferredParasha && parashot.includes(preferredParasha)) {
+        parashaSelect.value = preferredParasha;
+      }
+      
       parashaSelect.addEventListener('change', () => {
-        populateAliyahDropdown();
+        populateAliyahDropdown(null);
         displayAliyahText()
       });
-      populateAliyahDropdown();
     }
 
-    function populateAliyahDropdown() {
-      const parasha = document.getElementById("parashaSelect").value;
+    function populateAliyahDropdown(preferredParasha) {
+      if (preferredParasha == null) {
+        preferredParasha = document.getElementById("parashaSelect").value;
+      }
       const aliyahSelect = document.getElementById("aliyahSelect");
-      const aliyot = aliyotMap[parasha] || {};
+      const aliyot = aliyotMap[preferredParasha] || {};
       delete aliyot.currentSefer; // remove the 'currentSefer' property which is not an actual aliyah
 
       aliyahSelect.innerHTML = Object.keys(aliyot)
@@ -682,14 +685,16 @@
         .join("");
 
       aliyahSelect.addEventListener("change", () => {
-        saveProgress(parasha, aliyahSelect.value);
+        if (preferredParasha == document.getElementById("parashaSelect").value) {
+          saveProgress(preferredParasha, aliyahSelect.value);
+        }
         displayAliyahText();
       });
     }
-
-    document.getElementById("parashaSelect").addEventListener("change", () => {
-      saveProgress(document.getElementById("parashaSelect").value, "Aliyah 1");
-    });
+    
+    // document.getElementById("parashaSelect").addEventListener("change", () => {
+    //   saveProgress(document.getElementById("parashaSelect").value, "Aliyah 1");
+    // });
 
     function toCamelCase(str) {
       str = str.toLowerCase();
@@ -810,7 +815,7 @@
         let verseNumber = range.split('-')[0].split(':')[1];
 
         let chapters = []
-        for (let i = rangeForApi.replace("-", ".").split(".")[1]; i <= rangeForApi.replace("-", ".").split(".")[3]; i++) { 
+        for (let i = parseInt(rangeForApi.replace("-", ".").split(".")[1]); i <= parseInt(rangeForApi.replace("-", ".").split(".")[3]); i++) { 
           chapters.push(i); // if the range is e.g. chapters 28 and 29, then you'll get chapters = [28, 29]
         }
 
@@ -963,7 +968,6 @@
 
               const ratio = estimateEnglishFlex(span_rashi.innerText, span_rashi_eng.innerText);
               span_rashi_eng.style.flex = Math.min(Math.max(ratio, 1.25), 2.6);
-              console.log(Math.min(Math.max(ratio, 1.1), 2.6));
 
               // Toggle on header click
               // header.addEventListener("click", () => {
