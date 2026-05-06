@@ -379,6 +379,8 @@
       color: var(--text-color);
     }
 
+    /* ===== END Rashi Toggle Switch ===== */
+
     /* Remove Rashi expand/collapse UI */
 
     .rashi-toggle-btn,
@@ -429,10 +431,19 @@
   </button>
 
   <div class="rashi-toggle-container">
-    <span class="rashi-toggle-text">Show Rashi:</span>
+    <span class="rashi-toggle-text">Rashi:</span>
 
     <label class="rashi-switch">
       <input type="checkbox" id="rashiToggle">
+      <span class="rashi-slider"></span>
+    </label>
+  </div>
+
+  <div style="margin-left: 1rem;" class="rashi-toggle-container">
+    <span class="rashi-toggle-text">English:</span>
+
+    <label class="rashi-switch">
+      <input type="checkbox" id="englishToggle" checked>
       <span class="rashi-slider"></span>
     </label>
   </div>
@@ -732,29 +743,33 @@
       const rangeForApi = range.replace(/\s+/g, '.').replaceAll(':', '.').replace('-', '-');
       
       const apiUrl = `https://www.sefaria.org/api/texts/${rangeForApi}?context=0`;
+      const engURL = `https://www.sefaria.org/api/v3/texts/${rangeForApi}?version=english%7CThe_Rashi_chumash_by_Rabbi_Shraga_Silverstein&return_format=text_only`;
       const rashiURL = `https://www.sefaria.org/api/texts/Rashi_on_${rangeForApi}?context=0`;
       const rashiEngURL = `https://www.sefaria.org/api/v3/texts/Rashi_on_${rangeForApi}?version=english%7CRashi_Chumash%2C_Metsudah_Publications%2C_2009`;
       const onkURL = `https://www.sefaria.org/api/texts/Onkelos_${rangeForApi}?context=0`.replace("Bereshit", "Genesis").replace("Shemot", "Exodus").replace("Vayikra", "Leviticus").replace("Bamidbar", "Numbers").replace("Devarim", "Deuteronomy");
 
       try {
-
-        const [data, rashiData, rashiEngData, onkData] = await Promise.all([
+        const [data, rashiData, rashiEngData, onkData, engData] = await Promise.all([
           fetch(apiUrl).then(res => res.json()),
           fetch(rashiURL).then(res => res.json()),
           fetch(rashiEngURL).then(res => res.json()),
-          fetch(onkURL).then(res => res.json())
+          fetch(onkURL).then(res => res.json()),
+          fetch(engURL).then(res => res.json())
         ]);
 
         let verseHtml = (data.he || []);
         let verseHTMLRashi = (rashiData.he || []);
         let verseHTMLRashiEng = (rashiEngData.versions[0].text || []);
         let verseHTMLOnk = (onkData.he || []);
+        let verseHTMLEng = (engData.versions[0].text || []);
+        // let verseHTMLEng = (engData.text || []); // TODO
 
         if (!Array.isArray(verseHtml[0])) {
           verseHtml = [verseHtml];
           verseHTMLRashi = [verseHTMLRashi];
           verseHTMLRashiEng = [verseHTMLRashiEng];
           verseHTMLOnk = [verseHTMLOnk];
+          verseHTMLEng = [verseHTMLEng];
         }
 
         // document.getElementById('textDisplay').innerHTML = `<div style="text-align: center;"><b>${parasha} ${aliyah}</b></div>`;
@@ -841,6 +856,7 @@
               let rashiLineEng = "";
             }
             let onkLine = verseHTMLOnk[i][j];
+            let engLine = verseHTMLEng[i][j] || "";
             
             line = line
               .replaceAll(/<span[^>]*>\{פ\}<\/span>/g, "{פ}") // removes <span>{פ}</span>, and replaces it with {פ}
@@ -868,6 +884,8 @@
             if (line.trim() == '' ) continue;
 
             onkLine = onkLine.replaceAll("<b>", "").replaceAll("</b>", "");
+
+            engLine = engLine.replace(/\[(.*?)\]/g, `<span style="font-size: 1.1rem; color: #9a3728; opacity: 0.5;">[$1]</span>`);
             
             const span = document.createElement("span");
             span.style.display = "block";
@@ -876,11 +894,16 @@
             span.style.marginTop = "1.4rem";
 
             span.innerHTML = `<small style="display: inline-block; margin:0 0.5rem; font-size:0.8rem; 
-            vertical-align: 0.2em">${gematria(verseNumber)}</small>&nbsp;${line} `;
-            span.innerHTML += `<span style="color: #2b6cb0">${line}</span> `
-            span.innerHTML += `<span style="color: #2f855a">${onkLine}</span> `
+            vertical-align: 0.2em">${gematria(verseNumber)}</small>&nbsp;${line} `; // Pasuk
+            span.innerHTML += `<span style="color: #2b6cb0">${line}</span> ` // Pasuk again
+            span.innerHTML += `<span style="color: #2f855a">${onkLine}</span> ` // ONKELOS
+            // span.innerHTML += `</br><span dir="ltr" style="unicode-bidi: isolate-override; font-size: 1.5rem; color: #dd6b20">${engLine}</span>`;
+            span.innerHTML += `<br><span class="english-text"dir="ltr" style="direction: ltr; unicode-bidi: isolate-override; display: inline-block;
+                            text-align: left; font-size: 1.4rem; color: #9a3728; margin-top: 0rem">${engLine}</span>`;
             // span.innerHTML += ` <span style="color: skyblue">${line}</span>`;
             document.getElementById('textDisplay').appendChild(span);
+
+            // #8c2e33
 
             // === RASHI ===
             if (rashiLine != "") { // there is a Rashi
@@ -988,6 +1011,11 @@
           // Re-apply Rashi toggle after rendering
           applyRashiToggle();
 
+          const isVisible = document.getElementById("englishToggle")?.checked;
+          document.querySelectorAll(".english-text").forEach(el => {
+            el.style.display = isVisible ? "block" : "none";
+          });
+
       } catch (err) {
         console.error('Error fetching text:', err);
         document.getElementById('textDisplay').innerText = 'Error loading text.';
@@ -1075,6 +1103,15 @@
     rashiToggle.addEventListener("change", () => {
       rashiVisible = rashiToggle.checked;
       applyRashiToggle();
+    });
+
+    const englishToggle = document.getElementById("englishToggle");
+
+    englishToggle.addEventListener("change", () => {
+      const isVisible = englishToggle.checked;
+      document.querySelectorAll(".english-text").forEach(el => {
+        el.style.display = isVisible ? "block" : "none";
+      });
     });
 
   </script>
