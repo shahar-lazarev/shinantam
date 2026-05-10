@@ -893,8 +893,14 @@
             span.style.marginBottom = "0.5rem";
             span.style.marginTop = "1.4rem";
 
-            span.innerHTML = `<small style="display: inline-block; margin:0 0.5rem; font-size:0.8rem; 
-            vertical-align: 0.2em">${gematria(verseNumber)}</small>&nbsp;${line} `; // Pasuk
+            // span.innerHTML = `<small style="display: inline-block; margin:0 0.5rem; font-size:0.8rem; 
+            // vertical-align: 0.2em">${gematria(verseNumber)}</small>&nbsp;${line} `; // Pasuk
+
+            span.innerHTML = `<small class="verse-number" data-english="${encodeURIComponent(engLine)}"
+              style=" display:inline-block; margin:0 0.5rem; font-size:0.8rem; vertical-align:0.2em; cursor:pointer; 
+              user-select:none; padding:0.1rem 0.35rem; border-radius:6px;">${gematria(verseNumber)}</small>&nbsp;${line}`;
+
+
             span.innerHTML += `<span style="color: #2b6cb0">${line}</span> ` // Pasuk again
             span.innerHTML += `<span style="color: #2f855a">${onkLine}</span> ` // ONKELOS
             // span.innerHTML += `</br><span dir="ltr" style="unicode-bidi: isolate-override; font-size: 1.5rem; color: #dd6b20">${engLine}</span>`;
@@ -903,7 +909,55 @@
             // span.innerHTML += ` <span style="color: skyblue">${line}</span>`;
             document.getElementById('textDisplay').appendChild(span);
 
-            // #8c2e33
+            // CLICK FUNCTIONALITY FOR ENGLISH TRANSLATION =====
+            const verseNumEl = span.querySelector(".verse-number");
+            const englishEl = span.querySelector(".english-text");
+
+            let pressTimer = null;
+
+            // LONG PRESS START
+            const startPress = () => {
+              pressTimer = setTimeout(() => {
+                if (englishEl.style.display === "none") {
+                  englishEl.style.display = "inline-block";
+                } else {
+                  englishEl.style.display = "none";
+                }
+              }, 500); // 500ms long press
+            };
+
+            // CANCEL PRESS
+            const cancelPress = () => {
+              clearTimeout(pressTimer);
+            };
+
+            // Desktop
+            verseNumEl.addEventListener("mousedown", startPress);
+            // verseNumEl.addEventListener("mouseup", cancelPress);
+            // verseNumEl.addEventListener("mouseleave", cancelPress);
+
+            // Mobile
+            verseNumEl.addEventListener("touchstart", startPress);
+            // verseNumEl.addEventListener("touchend", cancelPress);
+            // verseNumEl.addEventListener("touchcancel", cancelPress);
+
+            // Optional: tap again to hide
+            // verseNumEl.addEventListener("click", () => {
+            //   if (englishEl.style.display !== "none") {
+            //     englishEl.style.display = "none";
+            //   }
+            // });
+            
+            verseNumEl.addEventListener("mousedown", () => {
+              verseNumEl.style.background = "#e2e8f0";
+            });
+
+            verseNumEl.addEventListener("mouseup", () => {
+              verseNumEl.style.background = "";
+            });
+
+            // CLICK FUNCTIONALITY FOR ENGLISH TRANSLATION END =======
+
 
             // === RASHI ===
             if (rashiLine != "") { // there is a Rashi
@@ -1020,7 +1074,7 @@
         console.error('Error fetching text:', err);
         document.getElementById('textDisplay').innerText = 'Error loading text.';
       }
-    }
+    } // END displayAliyahText()
 
     function expandAllRashi() {
       document.querySelectorAll(".rashi-body").forEach(b => b.classList.remove("collapsed"));
