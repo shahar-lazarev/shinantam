@@ -624,10 +624,17 @@
     }
 
     async function getCurrentParasha() {
-      const url = 'https://www.hebcal.com/shabbat?cfg=json&geonameid=3448439&M=on';
+      // const url = 'https://www.hebcal.com/shabbat?cfg=json&geonameid=5128581&M=on'; // geonameid=5128581 is for New York City
+      const url = 'https://www.hebcal.com/shabbat?cfg=json&geonameid=281184&M=on'; // genonameid=281184 is for Jerusalem
       const resp = await fetch(url);
       const data = await resp.json();
-      const item = data.items.find(it => it.category === 'parashat');
+      let item = data.items.find(it => it.category === 'parashat');
+      console.log(item);
+      if (!item) {
+        item = data.items.find(it => it.yomtov === true);
+        console.log(item);
+        return item.title.trim();
+      }
       if (!item || !item.title) return null;
       return item.title.replace('Parashat ', '').trim();
     }
@@ -672,6 +679,15 @@
       if (index != -1) {
         parashaSelect.innerHTML = parashaSelect.innerHTML.slice(0, index) + `<hr> <option>Pesach I</option>` + parashaSelect.innerHTML.slice(index + `<option>Pesach I</option>`.length);
       }
+      // end of add a separator
+
+      // Add a separator before Shavuot I if it exists in the dropdown
+      index = parashaSelect.innerHTML.indexOf("<option>Shavuot I</option>");
+
+      if (index != -1) {
+        parashaSelect.innerHTML = parashaSelect.innerHTML.slice(0, index) + `<hr> <option>Shavuot I</option>` + parashaSelect.innerHTML.slice(index + `<option>Shavuot I</option>`.length);
+      }
+      // end of add a separator
 
       if (preferredParasha && parashot.includes(preferredParasha)) {
         parashaSelect.value = preferredParasha;
