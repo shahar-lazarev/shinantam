@@ -629,10 +629,8 @@
       const resp = await fetch(url);
       const data = await resp.json();
       let item = data.items.find(it => it.category === 'parashat');
-      console.log(item);
       if (!item) {
         item = data.items.find(it => it.yomtov === true);
-        console.log(item);
         return item.title.trim();
       }
       if (!item || !item.title) return null;
@@ -772,13 +770,14 @@
           fetch(onkURL).then(res => res.json()),
           fetch(engURL).then(res => res.json())
         ]);
-
-        let verseHtml = (data.he || []);
-        let verseHTMLRashi = (rashiData.he || []);
-        let verseHTMLRashiEng = (rashiEngData.versions[0].text || []);
-        let verseHTMLOnk = (onkData.he || []);
-        let verseHTMLEng = (engData.versions[0].text || []);
+        
+        let verseHtml = data?.he ?? [];
+        let verseHTMLRashi = rashiData?.he ?? [];
+        let verseHTMLRashiEng = rashiEngData?.versions?.[0]?.text ?? [];
+        let verseHTMLOnk = onkData?.he ?? [];
+        let verseHTMLEng = engData?.versions?.[0]?.text ?? [];
         // let verseHTMLEng = (engData.text || []); // TODO
+        
 
         if (!Array.isArray(verseHtml[0])) {
           verseHtml = [verseHtml];
