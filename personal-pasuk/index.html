@@ -250,6 +250,9 @@
         .replace(/<[^>]+>/g, ' ')
         .replace(/&nbsp;/g, ' ')
         .replace(/\s+/g, ' ')
+        .replaceAll(/\{פ\}/g, "") // removes <span>{פ}</span>
+        .replaceAll(/\{ס\}/g, "") // removes <span>{ס}</span>
+
         .trim();
     }
 
@@ -270,9 +273,6 @@
       textBlocks.forEach((block) => {
         chapter++;
         pasuk = 0;
-        // console.log(block);
-        // console.log(ref);
-        // console.log(chapter);
         if (Array.isArray(block)) {
           block.forEach((verse) => {
             pasuk++;
@@ -295,7 +295,6 @@
           });
         }
       });
-    //   console.log(verses);
 
       return verses;
     }
@@ -315,7 +314,6 @@
           }
 
           const data = await response.json();
-        //   console.log(data);
           const verses = extractVerseEntries(data, ref)
             .filter((entry) => entry.text.length > 0);
           return verses;
@@ -341,13 +339,10 @@
         return;
       }
 
-    //   console.log(matches);
-
       const list = document.createElement('div');
       list.className = 'results-list';
 
       matches.forEach((verse) => {
-        // console.log(verse);
         const item = document.createElement('div');
         item.className = 'result-item';
         item.innerHTML = `
@@ -387,7 +382,6 @@
           const normalizedVerse = normalizeHebrew(text);
           return normalizedVerse && normalizedVerse[0] === firstLetter && normalizedVerse[normalizedVerse.length - 1] === lastLetter;
         });
-        // console.log(verses);
 
         renderResults(matches);
         statusEl.textContent = `נמצאו ${matches.length} פסוקים התואמים לאות ${firstLetter} ולאות ${lastLetter}`;
