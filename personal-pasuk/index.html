@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Personal Pasuk</title>
+  <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#2b6cb0" />
+  <style>
+    @font-face {
+      font-family: "SBL Hebrew";
+      src: url("../fonts/SBL_Hbrw.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    :root {
+      --primary-color: #1a202c;
+      --accent-color: #2b6cb0;
+      --bg-color: #f7fafc;
+      --text-color: #2d3748;
+      --border-color: #dbe4f0;
+      --card-color: #ffffff;
+      --border-radius: 12px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f7fafc 0%, #eef4fb 100%);
+      color: var(--text-color);
+      padding: 24px;
+      max-width: 900px;
+      margin: 0 auto 60px;
+      line-height: 1.6;
+    }
+
+    .home-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 2000;
+      display: inline-block;
+    }
+
+    .home-button img {
+      height: 36px;
+      display: block;
+    }
+
+    .home-button:active { transform: scale(0.95); }
+
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 30px;
+    }
+
+    .app-card {
+      margin-top: 44px;
+      background: var(--card-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      box-shadow: 0 12px 30px rgba(43, 108, 176, 0.08);
+      padding: 24px;
+    }
+
+    h1 {
+      margin-top: 0;
+      color: var(--primary-color);
+      font-size: 2rem;
+      font-family: "SBL Hebrew", "Segoe UI", sans-serif;
+    }
+
+    .intro {
+      margin-bottom: 16px;
+      color: #4a5568;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    input {
+      flex: 1;
+      min-width: 220px;
+      padding: 12px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 1rem;
+      direction: rtl;
+      font-family: "SBL Hebrew", "Segoe UI", sans-serif;
+    }
+
+    button {
+      border: 0;
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: var(--accent-color);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button:hover { filter: brightness(1.05); }
+
+    .status {
+      min-height: 1.5rem;
+      color: #4a5568;
+      margin-bottom: 16px;
+    }
+
+    .results-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .result-item {
+      padding: 14px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: #fbfdff;
+    }
+
+    .result-text {
+      font-size: 1.25rem;
+      font-family: "SBL Hebrew", "Segoe UI", sans-serif;
+      line-height: 1.8;
+      color: #1f2937;
+    }
+
+    .result-meta {
+      font-size: 0.9rem;
+      color: #718096;
+      margin-top: 8px;
+    }
+    
+    .ltr {
+        direction: ltr;
+        text-align: left;
+    }
+
+    .empty-state {
+      padding: 20px;
+      text-align: center;
+      color: #718096;
+      border: 1px dashed var(--border-color);
+      border-radius: 10px;
+      background: #fcfeff;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 16px; }
+      .app-card { padding: 16px; }
+      h1 { font-size: 1.6rem; }
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #718096;
+    }
+  </style>
+</head>
+<body>
+  <a href="/" class="home-button"><img src="../images/logo.svg" alt="Home"></a>
+
+  <div class="app-card">
+    <h1>Personal Pasuk</h1>
+    <p class="intro ltr">
+      Enter a name in Hebrew to find the pesukim in Tanach that begin with the first letter of the name and end with its last letter.
+    </p>
+    <p class="intro">
+        הכנס שם בעברית כדי למצוא את הפסוקים בתנ"ך המתחילים באות הראשונה של השם ומסתיימים באות האחרונה שלו.
+    </p>
+
+
+    <form id="search-form" class="controls">
+      <input id="name-input" type="text" maxlength="40" placeholder="לדוגמה: שרה" autocomplete="off" />
+      <button type="submit">חפש פסוקים</button>
+    </form>
+
+    <div id="status" class="status">מוכן לחיפוש</div>
+    <div id="results" class="results-list"></div>
+  </div>
+
+  <footer>
+    Text provided by <a href="https://www.sefaria.org" target="_blank">Sefaria</a></footer>
+  <footer>© 2026 Shinantam</footer>
+
+  <script>
+    const form = document.getElementById('search-form');
+    const nameInput = document.getElementById('name-input');
+    const statusEl = document.getElementById('status');
+    const resultsEl = document.getElementById('results');
+
+    const state = { verses: [] };
+
+    const tanakhBooks = [
+      { ref: 'Genesis.1-50', title: 'בראשית' },
+      { ref: 'Exodus.1-40', title: 'שמות' },
+      { ref: 'Leviticus.1-27', title: 'ויקרא' },
+      { ref: 'Numbers.1-36', title: 'במדבר' },
+      { ref: 'Deuteronomy.1-34', title: 'דברים' },
+      { ref: 'Joshua.1-24', title: 'יהושע' },
+      { ref: 'Judges.1-21', title: 'שופטים' },
+      { ref: 'I_Samuel.1-31', title: 'שמואל א' },
+      { ref: 'II_Samuel.1-24', title: 'שמואל ב' },
+      { ref: 'I_Kings.1-22', title: 'מלכים א' },
+      { ref: 'II_Kings.1-25', title: 'מלכים ב' },
+      { ref: 'Isaiah.1-66', title: 'ישעיהו' },
+      { ref: 'Jeremiah.1-52', title: 'ירמיהו' },
+      { ref: 'Ezekiel.1-48', title: 'יחזקאל' },
+      { ref: 'Hosea.1-14', title: 'הושע' },
+      { ref: 'Joel.1-4', title: 'יואל' },
+      { ref: 'Amos.1-9', title: 'עמוס' },
+      { ref: 'Obadiah.1-1', title: 'עובדיה' },
+      { ref: 'Jonah.1-4', title: 'יונה' },
+      { ref: 'Micah.1-7', title: 'מיכה' },
+      { ref: 'Nahum.1-3', title: 'נחום' },
+      { ref: 'Habakkuk.1-3', title: 'חבקוק' },
+      { ref: 'Zephaniah.1-3', title: 'צפניה' },
+      { ref: 'Haggai.1-2', title: 'חגי' },
+      { ref: 'Zechariah.1-14', title: 'זכריה' },
+      { ref: 'Malachi.1-3', title: 'מלאכי' },
+      { ref: 'Psalms.1-150', title: 'תהילים' },
+      { ref: 'Proverbs.1-31', title: 'משלי' },
+      { ref: 'Job.1-42', title: 'איוב' },
+      { ref: 'Song_of_Songs.1-8', title: 'שיר השירים' },
+      { ref: 'Ruth.1-4', title: 'רות' },
+      { ref: 'Lamentations.1-5', title: 'איכה' },
+      { ref: 'Ecclesiastes.1-12', title: 'קהלת' },
+      { ref: 'Esther.1-10', title: 'אסתר' },
+      { ref: 'Daniel.1-12', title: 'דניאל' },
+      { ref: 'Ezra.1-10', title: 'עזרא' },
+      { ref: 'Nehemiah.1-13', title: 'נחמיה' },
+      { ref: 'I_Chronicles.1-29', title: 'דברי הימים א' },
+      { ref: 'II_Chronicles.1-36', title: 'דברי הימים ב' }
+    ];
+
+    function stripMarkup(text) {
+      return String(text || '')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function normalizeHebrew(text) {
+      return String(text || '')
+        .normalize('NFKD')
+        .replace(/[\u0591-\u05C7]/g, '')
+        .replace(/[^\u05D0-\u05EA]/g, '');
+    }
+
+    function extractVerseEntries(data, ref) {
+      const versions = Array.isArray(data?.versions) ? data.versions : [];
+      const textBlocks = versions[0]?.text || [];
+      const verses = [];
+      let chapter = 0;
+      let pasuk = 0;
+
+      textBlocks.forEach((block) => {
+        chapter++;
+        pasuk = 0;
+        // console.log(block);
+        // console.log(ref);
+        // console.log(chapter);
+        if (Array.isArray(block)) {
+          block.forEach((verse) => {
+            pasuk++;
+            if (typeof verse === 'string' && verse.trim()) {
+              verses.push({
+                text: stripMarkup(verse),
+                ref: data?.ref || ref,
+                title: ref,
+                realRef: `${ref.split('.')[0]} ${chapter}:${pasuk}`,
+                chapter: chapter,
+                pasuk: pasuk
+              });
+            }
+          });
+        } else if (typeof block === 'string' && block.trim()) {
+          verses.push({
+            text: stripMarkup(block),
+            ref: data?.ref || ref,
+            title: ref
+          });
+        }
+      });
+    //   console.log(verses);
+
+      return verses;
+    }
+
+    async function loadTanakh() {
+      if (state.verses.length) {
+        return state.verses;
+      }
+
+      statusEl.textContent = 'טוען את התנ"ך מה-API של ספריא...';
+
+      const settledResults = await Promise.allSettled(
+        tanakhBooks.map(async ({ ref, title }) => {
+          const response = await fetch(`https://www.sefaria.org/api/v3/texts/${ref}?lang=he`);
+          if (!response.ok) {
+            throw new Error(`Failed to load ${title}`);
+          }
+
+          const data = await response.json();
+        //   console.log(data);
+          const verses = extractVerseEntries(data, ref)
+            .filter((entry) => entry.text.length > 0);
+          return verses;
+        })
+      );
+
+      const verses = [];
+      settledResults.forEach((result) => {
+        if (result.status === 'fulfilled') {
+          verses.push(...result.value);
+        }
+      });
+
+      state.verses = verses;
+      return verses;
+    }
+
+    function renderResults(matches) {
+      resultsEl.innerHTML = '';
+
+      if (!matches.length) {
+        resultsEl.innerHTML = '<div class="empty-state">לא נמצאו פסוקים התואמים את האות הראשונה והאחרונה של השם.</div>';
+        return;
+      }
+
+    //   console.log(matches);
+
+      const list = document.createElement('div');
+      list.className = 'results-list';
+
+      matches.forEach((verse) => {
+        // console.log(verse);
+        const item = document.createElement('div');
+        item.className = 'result-item';
+        item.innerHTML = `
+          <div class="result-text">${verse.text}</div>
+          <div class="result-meta">${verse.realRef}</div>
+        `;
+        list.appendChild(item);
+      });
+
+      resultsEl.appendChild(list);
+    }
+
+    async function runSearch(event) {
+      event.preventDefault();
+
+      const rawName = nameInput.value.trim();
+      if (!rawName) {
+        statusEl.textContent = 'יש להזין שם בעברית';
+        resultsEl.innerHTML = '';
+        return;
+      }
+
+      const normalizedName = normalizeHebrew(rawName);
+      if (!normalizedName) {
+        statusEl.textContent = 'יש להזין אותיות עבריות בלבד';
+        resultsEl.innerHTML = '';
+        return;
+      }
+
+      const firstLetter = normalizedName[0];
+      const lastLetter = normalizedName[normalizedName.length - 1];
+
+      try {
+        statusEl.textContent = 'מחפש פסוקים...';
+        const verses = await loadTanakh();
+        const matches = verses.filter(({ text }) => {
+          const normalizedVerse = normalizeHebrew(text);
+          return normalizedVerse && normalizedVerse[0] === firstLetter && normalizedVerse[normalizedVerse.length - 1] === lastLetter;
+        });
+        // console.log(verses);
+
+        renderResults(matches);
+        statusEl.textContent = `נמצאו ${matches.length} פסוקים התואמים לאות ${firstLetter} ולאות ${lastLetter}`;
+      } catch (error) {
+        console.error(error);
+        statusEl.textContent = 'אירעה שגיאה בטעינת הנתונים. נסה שוב במועד מאוחר יותר.';
+      }
+    }
+
+    form.addEventListener('submit', runSearch);
+  </script>
+</body>
+</html>
