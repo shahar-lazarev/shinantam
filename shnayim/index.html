@@ -122,6 +122,36 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
 
+    .kamatz-katan {
+      /* font-size: 2.2rem; */
+      /* font-weight: bold; */
+      color: #2b6cb0;
+      /* margin-right: -0.3em;  /* Adjusts horizontal position over the Lamed */
+      position: relative;
+      left: 0.22em;           /* Adjusts horizontal position */
+      top: 0em;            /* Adjusts vertical position */
+    }
+
+    .kk-enlarged {
+      position: relative;
+      display: inline-block;
+      visibility: hidden;
+      /* color: transparent; /* Hides the native small Kamatz Katan */
+      width: 0;           /* Prevents the vowel from pushing the next letter away */
+    }
+
+    /* Create the custom, oversized Kamatz Katan */
+    .kk-enlarged::before {
+      content: "\05C7";      
+      position: relative;
+      visibility: visible;
+      font-size: 1.3em;      
+      
+      /* Fine-tune exact alignment under the Lamed in SBL Hebrew */
+      left: 0.17em;        
+      /* top: 0.12em; */
+    }
+
     .copy-button {
       /* display: flex; */
       display: none; /* hide for now */
@@ -318,6 +348,57 @@
       align-self: flex-start;
     }
 
+    /* Controls + nav layout for desktop: toggles stacked, nav buttons to the right */
+    .controls-and-nav {
+      display: flex;
+      align-items: flex-start; /* align to top */
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .controls-column {
+      display: flex;
+      flex-direction: row; /* put toggles on the same line */
+      gap: 18px;
+      align-items: center;
+    }
+
+    /* Make nav buttons fill remaining horizontal space and align to top */
+    .controls-and-nav .nav-buttons-container {
+      display: flex;
+      gap: 10px; /* space between prev/next */
+      margin-top: 0;
+      justify-content: flex-end;
+      align-items: flex-start; /* align to top of toggles */
+      flex: 1; /* take remaining horizontal space */
+    }
+
+    /* Keep existing nav-buttons-container styles for other uses, but ensure flex children sizing */
+    .nav-buttons-container {
+      display: flex;
+      gap: 10px; /* space between prev/next */
+      margin-top: 40px;
+      justify-content: center;
+    }
+
+    .nav-button {
+      flex: 1; /* each button takes equal share of the available space */
+      height: 36px; /* match toggle height visually */
+      padding: 0 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      background-color: var(--accent-color);
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-width: 60px;
+    }
+
     /* Switch wrapper */
     .rashi-switch {
       position: relative;
@@ -406,6 +487,84 @@
       }
     }
 
+    .nav-buttons-container {
+      display: flex;
+      gap: 10px; /* add space between buttons */
+      margin-top: 40px;
+      justify-content: center;
+    }
+
+    .nav-button {
+      flex: none;
+      max-width: 160px;
+      padding: 10px 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      background-color: var(--accent-color);
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .nav-button:hover:not(:disabled) {
+      background-color: #2c5282;
+      /* transform: translateY(-2px); */
+    }
+
+    .nav-button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .nav-button:disabled {
+      background-color: #cbd5e0;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .nav-button.prev {
+      border-radius: var(--border-radius) 0 0 var(--border-radius);
+      order: 1;
+    }
+
+    .nav-button.next {
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+      order: 2;
+    }
+
+    @media screen and (max-width: 600px) {
+      .nav-button {
+        padding: 12px;
+        font-size: 1rem;
+        gap: 0px;
+        flex-direction: column-reverse; /* put label above arrow */
+      }
+
+      .nav-button > span {
+        display: block;
+        margin-top: -4px;
+        margin-bottom: -2px;
+        text-align: center;
+      }
+    }
+
+    /* Very small screens: stack toggles vertically so English moves below Rashi */
+    @media screen and (max-width: 432px) {
+      .controls-column {
+        flex-direction: column;
+        gap: 6px;
+        align-items: flex-start;
+      }
+
+      .controls-column .rashi-toggle-container {
+        margin: 4px 0;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -430,25 +589,51 @@
     <span class="copy-icon">📋</span> Copy Text
   </button>
 
-  <div class="rashi-toggle-container">
-    <span class="rashi-toggle-text">Rashi:</span>
+  <div class="controls-and-nav">
+    <div class="controls-column">
+      <div class="rashi-toggle-container">
+        <span class="rashi-toggle-text">Rashi:</span>
 
-    <label class="rashi-switch">
-      <input type="checkbox" id="rashiToggle">
-      <span class="rashi-slider"></span>
-    </label>
-  </div>
+        <label class="rashi-switch">
+          <input type="checkbox" id="rashiToggle">
+          <span class="rashi-slider"></span>
+        </label>
+      </div>
 
-  <div style="margin-left: 1rem;" class="rashi-toggle-container">
-    <span class="rashi-toggle-text">English:</span>
+      <div class="rashi-toggle-container">
+        <span class="rashi-toggle-text">English:</span>
 
-    <label class="rashi-switch">
-      <input type="checkbox" id="englishToggle">
-      <span class="rashi-slider"></span>
-    </label>
+        <label class="rashi-switch">
+          <input type="checkbox" id="englishToggle">
+          <span class="rashi-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="nav-buttons-container controls-nav-top">
+      <button class="nav-button prev" id="prevButtonTop" onclick="navigatePrev()">
+        <span>←</span>
+        <span>Prev</span>
+      </button>
+      <button class="nav-button next" id="nextButtonTop" onclick="navigateNext()">
+        <span>Next</span>
+        <span>→</span>
+      </button>
+    </div>
   </div>
 
   <div id="textDisplay" class="text-display"></div>
+
+  <div class="nav-buttons-container">
+    <button class="nav-button prev" id="prevButton" onclick="navigatePrev()">
+      <span>←</span>
+      <span>Prev</span>
+    </button>
+    <button class="nav-button next" id="nextButton" onclick="navigateNext()">
+      <span>Next</span>
+      <span>→</span>
+    </button>
+  </div>
 
   <footer>
     Text provided by <a href="https://www.sefaria.org" target="_blank">Sefaria</a> • Parasha data by <a href="https://www.hebcal.com" target="_blank">Hebcal</a>
@@ -550,6 +735,18 @@
       ALIYAH: "shnayim_current_aliyah"
     };
 
+    // Debounce mechanism for displayAliyahText
+    let displayAliyahTimeout = null;
+    const DISPLAY_DEBOUNCE_DELAY = 300; // milliseconds
+
+    function debouncedDisplayAliyahText() {
+      clearTimeout(displayAliyahTimeout);
+      displayAliyahTimeout = setTimeout(() => {
+        displayAliyahText();
+        updateNavButtonStates();
+      }, DISPLAY_DEBOUNCE_DELAY);
+    }
+
     function saveProgress(parasha, aliyah) {
       localStorage.setItem(STORAGE_KEYS.PARASHA, parasha);
       localStorage.setItem(STORAGE_KEYS.ALIYAH, aliyah);
@@ -592,6 +789,7 @@
             aliyahSelect.value = progress.currentAliyah;
           }
           displayAliyahText();
+          updateNavButtonStates();
         }, 0);
 
       } catch (err) {
@@ -658,7 +856,7 @@
 
       seferSelect.addEventListener('change', () => {
         populateParashaDropdown(preferredParasha);
-        displayAliyahText();
+        debouncedDisplayAliyahText();
       });
     }
 
@@ -693,7 +891,7 @@
       
       parashaSelect.addEventListener('change', () => {
         populateAliyahDropdown(null);
-        displayAliyahText()
+        debouncedDisplayAliyahText();
       });
     }
 
@@ -713,7 +911,7 @@
         if (preferredParasha == document.getElementById("parashaSelect").value) {
           saveProgress(preferredParasha, aliyahSelect.value);
         }
-        displayAliyahText();
+        debouncedDisplayAliyahText();
       });
     }
     
@@ -889,6 +1087,8 @@
               .replaceAll("<br>", "")
               .replaceAll(" {פ}", `&nbsp;<span style="color: darkgrey; font-size:1.0rem; vertical-align: 0.15em;">{פ}</span><br>`) // removes {פ}, and replaces it with \t\t
               .replaceAll(" {ס}", `&nbsp;<span style="color: darkgrey; font-size:1.0rem; vertical-align: 0.15em;">{ס}</span><br>`) // removes {ס}, and replaces it with \t\t
+              // .replaceAll(/\u05C7/g, '<span class="kamatz-katan">&#x05C7;</span>') // puts a span around the kamatz katan character, so that it can be styled with CSS
+              .replaceAll(/\u05C7/g, '<span class="kk-enlarged">\u05C7</span>')
               .trim();
 
             for (let el of rashiLine) {
@@ -1111,6 +1311,104 @@
         icon.textContent = '📋';
         button.disabled = false;
       }, 1500);
+    }
+
+    function updateNavButtonStates() {
+      const parashaSelect = document.getElementById('parashaSelect');
+      const aliyahSelect = document.getElementById('aliyahSelect');
+      const prevButtons = [document.getElementById('prevButton'), document.getElementById('prevButtonTop')];
+      const nextButtons = [document.getElementById('nextButton'), document.getElementById('nextButtonTop')];
+
+      const currentParasha = parashaSelect.value;
+      const currentAliyah = aliyahSelect.value;
+      const parashaOptions = parashaSelect.querySelectorAll('option');
+      const aliyahOptions = aliyahSelect.querySelectorAll('option');
+      const currentParashaIndex = Array.from(parashaOptions).findIndex(opt => opt.value === currentParasha);
+      const currentAliyahIndex = Array.from(aliyahOptions).findIndex(opt => opt.value === currentAliyah);
+
+      // Disable Prev button only if we're at the first parasha AND first aliyah
+      if (currentParashaIndex === 0 && currentAliyahIndex === 0) {
+        prevButtons.forEach(btn => btn.disabled = true);
+      } else {
+        prevButtons.forEach(btn => btn.disabled = false);
+      }
+
+      // Disable Next button only if we're at the last parasha AND last aliyah
+      if (currentParashaIndex === parashaOptions.length - 1 && currentAliyahIndex === aliyahOptions.length - 1) {
+        nextButtons.forEach(btn => btn.disabled = true);
+      } else {
+        nextButtons.forEach(btn => btn.disabled = false);
+      }
+    }
+
+    function navigatePrev() {
+      const parashaSelect = document.getElementById('parashaSelect');
+      const aliyahSelect = document.getElementById('aliyahSelect');
+      const currentAliyahIndex = aliyahSelect.selectedIndex;
+
+      if (currentAliyahIndex > 0) {
+        // Just go to the previous aliyah in the current parasha
+        aliyahSelect.selectedIndex = currentAliyahIndex - 1;
+        saveProgress(parashaSelect.value, aliyahSelect.options[aliyahSelect.selectedIndex].value);
+      } else {
+        // We're at the first aliyah, so go to the previous parasha's last aliyah
+        const parashaOptions = parashaSelect.querySelectorAll('option');
+        const currentParashaIndex = parashaSelect.selectedIndex;
+
+        if (currentParashaIndex > 0) {
+          parashaSelect.selectedIndex = currentParashaIndex - 1;
+          
+          // Update aliyah dropdown for the previous parasha
+          const preferredParasha = parashaSelect.value;
+          const aliyot = aliyotMap[preferredParasha] || {};
+          const aliyotArray = Object.keys(aliyot).filter(a => a !== 'currentSefer');
+          const lastAliyahIndex = aliyotArray.length - 1;
+          
+          if (lastAliyahIndex >= 0) {
+            aliyahSelect.selectedIndex = lastAliyahIndex;
+            saveProgress(preferredParasha, aliyotArray[lastAliyahIndex]);
+          }
+        }
+      }
+      
+      updateNavButtonStates();
+      debouncedDisplayAliyahText();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function navigateNext() {
+      const parashaSelect = document.getElementById('parashaSelect');
+      const aliyahSelect = document.getElementById('aliyahSelect');
+      const currentAliyahIndex = aliyahSelect.selectedIndex;
+      const aliyahOptions = aliyahSelect.querySelectorAll('option');
+
+      if (currentAliyahIndex < aliyahOptions.length - 1) {
+        // Just go to the next aliyah in the current parasha
+        aliyahSelect.selectedIndex = currentAliyahIndex + 1;
+        saveProgress(parashaSelect.value, aliyahSelect.options[aliyahSelect.selectedIndex].value);
+      } else {
+        // We're at the last aliyah, so go to the next parasha's first aliyah
+        const parashaOptions = parashaSelect.querySelectorAll('option');
+        const currentParashaIndex = parashaSelect.selectedIndex;
+
+        if (currentParashaIndex < parashaOptions.length - 1) {
+          parashaSelect.selectedIndex = currentParashaIndex + 1;
+          
+          // Update aliyah dropdown for the next parasha
+          const preferredParasha = parashaSelect.value;
+          const aliyot = aliyotMap[preferredParasha] || {};
+          const aliyotArray = Object.keys(aliyot).filter(a => a !== 'currentSefer');
+          
+          if (aliyotArray.length > 0) {
+            aliyahSelect.selectedIndex = 0;
+            saveProgress(preferredParasha, aliyotArray[0]);
+          }
+        }
+      }
+      
+      updateNavButtonStates();
+      debouncedDisplayAliyahText();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     loadData();
