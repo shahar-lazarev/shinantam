@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chazzanut</title>
+<link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+
+<style>
+:root {
+  --primary-color: #1a202c;
+  --accent-color: #2b6cb0;
+  --bg-color: #f7fafc;
+  --text-color: #2d3748;
+  --border-radius: 12px;
+}
+
+@font-face {
+  font-family: "SBL Hebrew";
+  src: url("../fonts/SBL_Hbrw.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+} 
+
+body {
+  margin: 0;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+  padding-top: 40px;
+}
+
+.bsd {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #4b5668;
+  z-index: 1000;
+  background: var(--bg-color);
+  padding: 4px 8px;
+  border-radius: var(--border-radius);
+}
+
+.home-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 2000;
+  display: inline-block;
+}
+
+.home-button img {
+  /* width: 36px; */
+  height: 36px;
+  display: block;
+}
+
+.home-button:active {
+  transform: scale(0.95);
+}
+
+h1 {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
+header {
+  background: var(--primary-color);
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.player-container {
+  width: min(1000px, 95%);
+  margin: 30px auto;
+  background: white;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.player-container iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: none;
+  display: block;
+}
+
+.placeholder {
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  background: #e2e8f0;
+  text-align: center;
+  padding: 20px;
+}
+
+.grid {
+  padding: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.card img {
+  width: 100%;
+  display: block;
+  cursor: pointer;
+}
+
+.info {
+  padding: 15px;
+}
+
+.info h3 {
+  margin: 0 0 10px;
+  color: var(--primary-color);
+}
+
+.info p {
+  margin: 5px 0;
+  color: #666;
+}
+
+footer {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #718096;
+}
+
+</style>
+</head>
+<body>
+
+
+<div class="bsd">בס״ד</div>
+
+  <h1>Chazzanut Library</h1>
+
+
+<a href="/" class="home-button"><img src="../images/logo.svg" alt="Home"></a>
+
+<div class="player-container" id="playerContainer">
+  <div class="placeholder">
+    <div>
+      <h2>Select a Recording</h2>
+      <p>Click any thumbnail below to play it here.</p>
+    </div>
+  </div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<script>
+// =============================
+// ADD YOUR VIDEOS HERE
+// =============================
+const videos = [
+  {
+    title: "הרב יהוידע בוטא- טעמי ההפטרה (ירושלמי)",
+    cantor: "הרב יהוידע בוטא",
+    category: "Taamei Hamikra",
+    youtubeId: "LOnq80RjxrE"
+  }
+
+  // Add more videos here
+];
+// =============================
+
+const grid = document.getElementById("grid");
+const playerContainer = document.getElementById("playerContainer");
+
+videos.forEach(video => {
+  const card = document.createElement("div");
+  card.className = "card";
+
+  card.innerHTML = `
+    <img
+      src="https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg"
+      alt="${video.title}"
+    >
+    <div class="info">
+      <h3>${video.title}</h3>
+      <p><strong>Cantor:</strong> ${video.cantor}</p>
+      <p>${video.category}</p>
+    </div>
+  `;
+
+  card.querySelector("img").onclick = () => {
+    playerContainer.innerHTML = `
+      <iframe
+        src="https://www.youtube.com/embed/${video.youtubeId}?autoplay=1"
+        title="${video.title}"
+        allow="autoplay; encrypted-media"
+        allowfullscreen>
+      </iframe>
+    `;
+
+    playerContainer.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  };
+
+  grid.appendChild(card);
+});
+</script>
+
+<footer>© 2026 Shinantam</footer>
+
+</body>
+</html>
